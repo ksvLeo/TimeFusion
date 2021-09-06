@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace FusionIT.TimeFusion.WebUI
 {
-    public class Startup
+    public class Startup 
     {
         public Startup(IConfiguration configuration)
         {
