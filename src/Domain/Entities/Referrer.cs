@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Domain.Entities
 {
-    public class CurrencyReference : AuditableEntity
+    public class Referrer : AuditableEntity
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public string Alpha3Code { get; set; }
+        public string Email { get; set; }
 
-        public string Symbol { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

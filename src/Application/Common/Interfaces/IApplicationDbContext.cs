@@ -13,6 +13,10 @@ namespace FusionIT.TimeFusion.Application.Common.Interfaces
 
         DbSet<CurrencyReference> CurrencyReferences { get; set; }
 
+        DbSet<Referrer> Referrers { get; set; }
+
+        DbSet<Customer> Customers { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

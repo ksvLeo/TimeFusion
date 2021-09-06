@@ -1,7 +1,8 @@
-﻿using FusionIT.TimeFusion.Application.Common.Exceptions;
+﻿
+using FluentAssertions;
+using FusionIT.TimeFusion.Application.Common.Exceptions;
 using FusionIT.TimeFusion.Application.TodoLists.Commands.CreateTodoList;
 using FusionIT.TimeFusion.Domain.Entities;
-using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;

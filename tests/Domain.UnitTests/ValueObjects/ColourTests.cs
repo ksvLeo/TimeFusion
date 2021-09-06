@@ -1,6 +1,7 @@
-﻿using FusionIT.TimeFusion.Domain.Exceptions;
-using FusionIT.TimeFusion.Domain.ValueObjects;
+﻿
 using FluentAssertions;
+using FusionIT.TimeFusion.Domain.Exceptions;
+using FusionIT.TimeFusion.Domain.ValueObjects;
 using NUnit.Framework;
 
 namespace FusionIT.TimeFusion.Domain.UnitTests.ValueObjects

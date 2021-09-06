@@ -37,6 +37,10 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
 
         public DbSet<CurrencyReference> CurrencyReferences { get; set; }
 
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<Referrer> Referrers { get; set; }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
