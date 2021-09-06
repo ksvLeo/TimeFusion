@@ -1,0 +1,26 @@
+﻿using FusionIT.TimeFusion.Application.Customers.Commands.CreateCustomer;
+using FusionIT.TimeFusion.Application.Customers.Dtos;
+using FusionIT.TimeFusion.Application.Customers.Queries;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace FusionIT.TimeFusion.WebUI.Controllers
+{
+    public class CustomerController : ApiControllerBase
+    {
+        [HttpGet]
+        public async Task<ActionResult<List<CustomerDto>>> GetCustomersByName([FromQuery] GetCustomersByNameQuery query)
+        {
+            return await Mediator.Send(query);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateCustomer(CreateCustomerCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+    }
+}
