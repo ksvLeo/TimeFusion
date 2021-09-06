@@ -18,8 +18,4 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Domain\FusionIT.TimeFusion.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

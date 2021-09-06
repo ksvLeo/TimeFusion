@@ -30,8 +30,4 @@
     <PackageReference Include="Respawn" Version="3.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\WebUI\FusionIT.TimeFusion.WebUI.csproj" />
-  </ItemGroup>
-
 </Project>
