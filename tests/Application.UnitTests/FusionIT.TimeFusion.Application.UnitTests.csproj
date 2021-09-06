@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Application\FusionIT.TimeFusion,Application.csproj" />
+    <ProjectReference Include="..\..\src\Application\FusionIT.TimeFusion.Application.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\FusionIT.TimeFusion.Infrastructure.csproj" />
   </ItemGroup>
 

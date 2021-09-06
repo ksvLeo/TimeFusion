@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\FusionIT.TimeFusion,Application.csproj" />
+    <ProjectReference Include="..\Application\FusionIT.TimeFusion.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\FusionIT.TimeFusion.Infrastructure.csproj" />
   </ItemGroup>
 
