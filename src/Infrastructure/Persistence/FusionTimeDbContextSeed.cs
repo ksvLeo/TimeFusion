@@ -30,6 +30,11 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
         public static async Task SeedSampleDataAsync(FusionTimeDbContext context)
         {
             // Seed, if necessary
+
+            // Currency Reference
+            context.CurrencyReferences.Add(new CurrencyReference { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" });
+            context.CurrencyReferences.Add(new CurrencyReference { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" });
+
             if (!context.TodoLists.Any())
             {
                 context.TodoLists.Add(new TodoList

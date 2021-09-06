@@ -11,6 +11,8 @@ namespace FusionIT.TimeFusion.Application.Common.Interfaces
 
         DbSet<TodoItem> TodoItems { get; set; }
 
+        DbSet<CurrencyReference> CurrencyReferences { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
