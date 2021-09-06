@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Domain.Entities
 {
-    public class CurrencyReference : AuditableEntity
+    public class Currency : AuditableEntity
     {
         public int Id { get; set; }
 

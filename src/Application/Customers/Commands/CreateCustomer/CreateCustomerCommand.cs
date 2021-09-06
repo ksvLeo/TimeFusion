@@ -29,7 +29,7 @@ namespace FusionIT.TimeFusion.Application.Customers.Commands.CreateCustomer
         {
             if (string.IsNullOrEmpty(request.Customer.Name))
             {
-                throw new ArgumentException("Name field cant be null.");
+                throw new ArgumentException("Name field can't be null.");
             }
 
             Customer customer = _context.Customers.FirstOrDefault(c => c.Name == request.Customer.Name);
@@ -39,14 +39,16 @@ namespace FusionIT.TimeFusion.Application.Customers.Commands.CreateCustomer
                 throw new ArgumentException("Customer Name already exist.");
             }
 
-            CurrencyReference currency = _context.CurrencyReferences.FirstOrDefault(c => c.Id == request.Customer.Currency.Id);
+            Currency currency = _context.Currencies.FirstOrDefault(c => c.Id == request.Customer.Currency.Id);
+
             if (currency == null)
             {
-                throw new ArgumentException("Currency not exist");
+                throw new ArgumentException("Currency not exist.");
             }
 
             Referrer referrer;
             referrer = _context.Referrers.FirstOrDefault(r => r.Email == request.Customer.Referrer.Email);
+
             if (referrer == null)
             {
                 referrer = new Referrer

@@ -20,7 +20,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CurrencyReferenceDto"
+                    "$ref": "#/components/schemas/CurrencyDto"
                   }
                 }
               }
@@ -528,7 +528,7 @@
   },
   "components": {
     "schemas": {
-      "CurrencyReferenceDto": {
+      "CurrencyDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -570,7 +570,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/CurrencyReference"
+                "$ref": "#/components/schemas/Currency"
               }
             ]
           },
@@ -587,7 +587,7 @@
           }
         }
       },
-      "CurrencyReference": {
+      "Currency": {
         "allOf": [
           {
             "$ref": "#/components/schemas/AuditableEntity"

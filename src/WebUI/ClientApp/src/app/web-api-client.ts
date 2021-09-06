@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface ICurrencyReferenceClient {
-    getCurrencyReferences(): Observable<CurrencyReferenceDto[]>;
+    getCurrencyReferences(): Observable<CurrencyDto[]>;
 }
 
 @Injectable({
@@ -31,7 +31,7 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getCurrencyReferences(): Observable<CurrencyReferenceDto[]> {
+    getCurrencyReferences(): Observable<CurrencyDto[]> {
         let url_ = this.baseUrl + "/api/CurrencyReference";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -50,14 +50,14 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
                 try {
                     return this.processGetCurrencyReferences(<any>response_);
                 } catch (e) {
-                    return <Observable<CurrencyReferenceDto[]>><any>_observableThrow(e);
+                    return <Observable<CurrencyDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<CurrencyReferenceDto[]>><any>_observableThrow(response_);
+                return <Observable<CurrencyDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetCurrencyReferences(response: HttpResponseBase): Observable<CurrencyReferenceDto[]> {
+    protected processGetCurrencyReferences(response: HttpResponseBase): Observable<CurrencyDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -71,7 +71,7 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(CurrencyReferenceDto.fromJS(item));
+                    result200!.push(CurrencyDto.fromJS(item));
             }
             return _observableOf(result200);
             }));
@@ -80,7 +80,7 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<CurrencyReferenceDto[]>(<any>null);
+        return _observableOf<CurrencyDto[]>(<any>null);
     }
 }
 
@@ -842,13 +842,13 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
-export class CurrencyReferenceDto implements ICurrencyReferenceDto {
+export class CurrencyDto implements ICurrencyDto {
     id?: number;
     name?: string | undefined;
     alpha3Code?: string | undefined;
     symbol?: string | undefined;
 
-    constructor(data?: ICurrencyReferenceDto) {
+    constructor(data?: ICurrencyDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -866,9 +866,9 @@ export class CurrencyReferenceDto implements ICurrencyReferenceDto {
         }
     }
 
-    static fromJS(data: any): CurrencyReferenceDto {
+    static fromJS(data: any): CurrencyDto {
         data = typeof data === 'object' ? data : {};
-        let result = new CurrencyReferenceDto();
+        let result = new CurrencyDto();
         result.init(data);
         return result;
     }
@@ -883,7 +883,7 @@ export class CurrencyReferenceDto implements ICurrencyReferenceDto {
     }
 }
 
-export interface ICurrencyReferenceDto {
+export interface ICurrencyDto {
     id?: number;
     name?: string | undefined;
     alpha3Code?: string | undefined;
@@ -894,7 +894,7 @@ export class CustomerDto implements ICustomerDto {
     id?: number;
     name?: string | undefined;
     address?: string | undefined;
-    currency?: CurrencyReference | undefined;
+    currency?: Currency | undefined;
     referrer?: Referrer | undefined;
     active?: boolean;
 
@@ -912,7 +912,7 @@ export class CustomerDto implements ICustomerDto {
             this.id = _data["id"];
             this.name = _data["name"];
             this.address = _data["address"];
-            this.currency = _data["currency"] ? CurrencyReference.fromJS(_data["currency"]) : <any>undefined;
+            this.currency = _data["currency"] ? Currency.fromJS(_data["currency"]) : <any>undefined;
             this.referrer = _data["referrer"] ? Referrer.fromJS(_data["referrer"]) : <any>undefined;
             this.active = _data["active"];
         }
@@ -941,7 +941,7 @@ export interface ICustomerDto {
     id?: number;
     name?: string | undefined;
     address?: string | undefined;
-    currency?: CurrencyReference | undefined;
+    currency?: Currency | undefined;
     referrer?: Referrer | undefined;
     active?: boolean;
 }
@@ -992,13 +992,13 @@ export interface IAuditableEntity {
     lastModifiedBy?: string | undefined;
 }
 
-export class CurrencyReference extends AuditableEntity implements ICurrencyReference {
+export class Currency extends AuditableEntity implements ICurrency {
     id?: number;
     name?: string | undefined;
     alpha3Code?: string | undefined;
     symbol?: string | undefined;
 
-    constructor(data?: ICurrencyReference) {
+    constructor(data?: ICurrency) {
         super(data);
     }
 
@@ -1012,9 +1012,9 @@ export class CurrencyReference extends AuditableEntity implements ICurrencyRefer
         }
     }
 
-    static fromJS(data: any): CurrencyReference {
+    static fromJS(data: any): Currency {
         data = typeof data === 'object' ? data : {};
-        let result = new CurrencyReference();
+        let result = new Currency();
         result.init(data);
         return result;
     }
@@ -1030,7 +1030,7 @@ export class CurrencyReference extends AuditableEntity implements ICurrencyRefer
     }
 }
 
-export interface ICurrencyReference extends IAuditableEntity {
+export interface ICurrency extends IAuditableEntity {
     id?: number;
     name?: string | undefined;
     alpha3Code?: string | undefined;

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
 {
-    public class CurrencyReferenceConfiguration : IEntityTypeConfiguration<CurrencyReference>
+    public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
     {
-        public void Configure(EntityTypeBuilder<CurrencyReference> builder)
+        public void Configure(EntityTypeBuilder<Currency> builder)
         {
         }
     }

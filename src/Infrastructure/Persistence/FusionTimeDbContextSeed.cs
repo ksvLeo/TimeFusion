@@ -32,8 +32,8 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
             // Seed, if necessary
 
             // Currency Reference
-            context.CurrencyReferences.Add(new CurrencyReference { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" });
-            context.CurrencyReferences.Add(new CurrencyReference { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" });
+            context.Currencies.Add(new Currency { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" });
+            context.Currencies.Add(new Currency { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" });
 
             if (!context.TodoLists.Any())
             {

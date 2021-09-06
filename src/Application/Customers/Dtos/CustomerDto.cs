@@ -16,7 +16,7 @@ namespace FusionIT.TimeFusion.Application.Customers.Dtos
 
         public string Address { get; set; }
 
-        public CurrencyReference Currency { get; set; }
+        public Currency Currency { get; set; }
 
         public Referrer Referrer { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using FusionIT.TimeFusion.Application.CurrencyReferences.Dtos;
+﻿using FusionIT.TimeFusion.Application.Currencies.Dtos;
 using FusionIT.TimeFusion.Application.CurrencyReferences.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +11,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
     public class CurrencyReferenceController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<CurrencyReferenceDto>>> GetCurrencyReferences()
+        public async Task<ActionResult<List<CurrencyDto>>> GetCurrencyReferences()
         {
             return await Mediator.Send(new GetCurrencyReferencesQuery());
         }

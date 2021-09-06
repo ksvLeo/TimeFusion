@@ -36,7 +36,10 @@ namespace FusionIT.TimeFusion.Application.Customers.Queries
                 throw new ArgumentException("Name field cant be null.");
             }
 
-            List<CustomerDto> customers = await _context.Customers.Where(c => c.Name.Contains(request.Name)).ProjectTo<CustomerDto>(_mapper.ConfigurationProvider).ToListAsync();
+            List<CustomerDto> customers = await _context.Customers
+                .Where(c => c.Name.Contains(request.Name))
+                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
             return customers;
         }

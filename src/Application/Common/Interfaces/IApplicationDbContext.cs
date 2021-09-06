@@ -11,7 +11,7 @@ namespace FusionIT.TimeFusion.Application.Common.Interfaces
 
         DbSet<TodoItem> TodoItems { get; set; }
 
-        DbSet<CurrencyReference> CurrencyReferences { get; set; }
+        DbSet<Currency> Currencies { get; set; }
 
         DbSet<Referrer> Referrers { get; set; }
 

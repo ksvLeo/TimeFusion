@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.CurrencyReferences.Dtos
+namespace FusionIT.TimeFusion.Application.Currencies.Dtos
 {
-    public class CurrencyReferenceDto : IMapFrom<CurrencyReference>
+    public class CurrencyDto : IMapFrom<Currency>
     {
         public int Id { get; set; }
 

@@ -35,7 +35,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
 
         public DbSet<TodoList> TodoLists { get; set; }
 
-        public DbSet<CurrencyReference> CurrencyReferences { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
 
