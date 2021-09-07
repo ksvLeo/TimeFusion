@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Application.Customers.Dtos;
+using FusionIT.TimeFusion.Clients.Dtos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,14 +11,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Customers.Queries
+namespace FusionIT.TimeFusion.Application.Clients.Queries
 {
-    public class GetCustomersByNameQuery : IRequest<List<CustomerDto>>
+    public class GetClientsByNameQuery : IRequest<List<ClientDto>>
     {
         public string Name { get; set; }
     }
 
-    public class GetCustomersByNameQueryHandle : IRequestHandler<GetCustomersByNameQuery, List<CustomerDto>>
+    public class GetCustomersByNameQueryHandle : IRequestHandler<GetClientsByNameQuery, List<ClientDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -29,16 +29,16 @@ namespace FusionIT.TimeFusion.Application.Customers.Queries
             _mapper = mapper;
         }
 
-        public async Task<List<CustomerDto>> Handle(GetCustomersByNameQuery request, CancellationToken cancellationToken)
+        public async Task<List<ClientDto>> Handle(GetClientsByNameQuery request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Name))
             {
                 throw new ArgumentException("Name field cant be null.");
             }
 
-            List<CustomerDto> customers = await _context.Customers
+            List<ClientDto> customers = await _context.Clients
                 .Where(c => c.Name.Contains(request.Name))
-                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return customers;

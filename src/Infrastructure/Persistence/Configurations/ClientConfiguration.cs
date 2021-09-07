@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
 {
-    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    public class ClientConfiguration : IEntityTypeConfiguration<Client>
     {
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        public void Configure(EntityTypeBuilder<Client> builder)
         {
             builder.Property(c => c.Name)
                 .IsRequired();
 
-            builder.HasOne(c => c.Referrer);
+            builder.HasMany(c => c.Referrer).WithOne().HasForeignKey(c => c.ClientId);
 
-            builder.HasOne(c => c.Currency);
+            builder.HasOne(c => c.Currency).WithMany();
         }
     }
 }

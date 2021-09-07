@@ -6,35 +6,12 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/CurrencyReference": {
+    "/api/Client": {
       "get": {
         "tags": [
-          "CurrencyReference"
+          "Client"
         ],
-        "operationId": "CurrencyReference_GetCurrencyReferences",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CurrencyDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Customer": {
-      "get": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_GetCustomersByName",
+        "operationId": "Client_GetClientsByName",
         "parameters": [
           {
             "name": "Name",
@@ -54,7 +31,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CustomerDto"
+                    "$ref": "#/components/schemas/ClientDto"
                   }
                 }
               }
@@ -64,15 +41,15 @@
       },
       "post": {
         "tags": [
-          "Customer"
+          "Client"
         ],
-        "operationId": "Customer_CreateCustomer",
+        "operationId": "Client_CreateCustomer",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCustomerCommand"
+                "$ref": "#/components/schemas/CreateClientCommand"
               }
             }
           },
@@ -95,15 +72,15 @@
       },
       "put": {
         "tags": [
-          "Customer"
+          "Client"
         ],
-        "operationId": "Customer_UpdateCustomer",
+        "operationId": "Client_UpdateCustomer",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCustomerCommand"
+                "$ref": "#/components/schemas/UpdateClientCommand"
               }
             }
           },
@@ -124,12 +101,12 @@
         }
       }
     },
-    "/api/Customer/customer": {
+    "/api/Client/client": {
       "get": {
         "tags": [
-          "Customer"
+          "Client"
         ],
-        "operationId": "Customer_GetCustomer",
+        "operationId": "Client_GetClient",
         "parameters": [
           {
             "name": "CustomerId",
@@ -147,7 +124,30 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
+                  "$ref": "#/components/schemas/ClientDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CurrencyReference": {
+      "get": {
+        "tags": [
+          "CurrencyReference"
+        ],
+        "operationId": "CurrencyReference_GetCurrencyReferences",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrencyDto"
+                  }
                 }
               }
             }
@@ -589,29 +589,7 @@
   },
   "components": {
     "schemas": {
-      "CurrencyDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "alpha3Code": {
-            "type": "string",
-            "nullable": true
-          },
-          "symbol": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "CustomerDto": {
+      "ClientDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -636,94 +614,91 @@
             ]
           },
           "referrer": {
+            "type": "array",
             "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Referrer"
-              }
-            ]
+            "items": {
+              "$ref": "#/components/schemas/ReferrerDto"
+            }
           },
           "active": {
             "type": "boolean"
           }
         }
       },
-      "Referrer": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/AuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "email": {
-                "type": "string",
-                "nullable": true
-              },
-              "phoneNumber": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "AuditableEntity": {
+      "CurrencyDto": {
         "type": "object",
-        "x-abstract": true,
         "additionalProperties": false,
         "properties": {
-          "created": {
-            "type": "string",
-            "format": "date-time"
+          "id": {
+            "type": "integer",
+            "format": "int32"
           },
-          "createdBy": {
+          "name": {
             "type": "string",
             "nullable": true
           },
-          "lastModified": {
+          "alpha3Code": {
             "type": "string",
-            "format": "date-time",
             "nullable": true
           },
-          "lastModifiedBy": {
+          "symbol": {
             "type": "string",
             "nullable": true
           }
         }
       },
-      "CreateCustomerCommand": {
+      "ReferrerDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "customer": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateClientCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "client": {
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/CustomerDto"
+                "$ref": "#/components/schemas/ClientDto"
               }
             ]
           }
         }
       },
-      "UpdateCustomerCommand": {
+      "UpdateClientCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "customer": {
+          "client": {
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/CustomerDto"
+                "$ref": "#/components/schemas/ClientDto"
               }
             ]
           }
