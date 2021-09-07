@@ -1,4 +1,5 @@
 ﻿using FusionIT.TimeFusion.Application.Clients.Commands.CreateClient;
+using FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer;
 using FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient;
 using FusionIT.TimeFusion.Application.Clients.Queries;
 using FusionIT.TimeFusion.Clients.Dtos;
@@ -25,13 +26,13 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateCustomer(CreateClientCommand command)
+        public async Task<ActionResult<int>> CreateClient(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteCustomer(DeleteCustomerCommand command)
+        public async Task<ActionResult<int>> DeleteClient (DeleteClientCommand command)
         {
             return await Mediator.Send(command);
         }
