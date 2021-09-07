@@ -1,6 +1,7 @@
 ﻿using FusionIT.TimeFusion.Application.Clients.Commands.CreateClient;
 using FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer;
 using FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient;
+using FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer;
 using FusionIT.TimeFusion.Application.Clients.Queries;
 using FusionIT.TimeFusion.Clients.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,13 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<bool>> UpdateCustomer(UpdateClientCommand command)
+        public async Task<ActionResult<bool>> UpdateClient(UpdateClientCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("reactiveClient")]
+        public async Task<ActionResult<bool>> ReactiveClient([FromQuery]ReactivateClientCommand command)
         {
             return await Mediator.Send(command);
         }
@@ -42,7 +49,6 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         {
             return await Mediator.Send(command);
         }
-
 
     }
 }

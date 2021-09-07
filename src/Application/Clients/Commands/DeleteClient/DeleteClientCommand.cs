@@ -35,17 +35,21 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
                 throw new ArgumentException($"Unable to find client with ID #{ request.ClientId }.");
             }
 
-            var userProjects = await _context.Projects
-                                .Where(p => p.ClientId == request.CustomerId)
-                                .Where(p => p.ProjectStatus.Description == "Inactive")
-                                .SingleOrDefaultAsync(cancellationToken);
+            bool activeProject = await _context.Projects.AnyAsync(c => c.ClientId == request.ClientId);
 
-            if (userProjects != null)
+            //var userProjects = await _context.Projects
+            //                    .Where(p => p.ClientId == request.ClientId)
+            //                    .SingleOrDefaultAsync(cancellationToken);
+
+            if (activeProject)
             {
                 throw new ArgumentException("User has active projects with to this client.");
             }
 
-            _context.Clients.First(c => c.Id == request.ClientId).Active = false;
+            // Serch in table again?
+            //_context.Clients.First(c => c.Id == request.ClientId).Active = false;
+
+            client.Active = false;
 
             await _context.SaveChangesAsync(cancellationToken);
 

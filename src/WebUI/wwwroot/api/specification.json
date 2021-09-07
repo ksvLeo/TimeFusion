@@ -70,18 +70,16 @@
           }
         }
       },
-      "delete": {
+      "put": {
         "tags": [
           "Client"
         ],
-        "operationId": "Customer_DeleteCustomer",
-        "operationId": "Client_UpdateCustomer",
+        "operationId": "Client_UpdateClient",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DeleteCustomerCommand"
                 "$ref": "#/components/schemas/UpdateClientCommand"
               }
             }
@@ -95,8 +93,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "type": "boolean"
                 }
               }
             }
@@ -110,7 +107,7 @@
         "operationId": "Client_DeleteClient",
         "parameters": [
           {
-            "name": "CustomerId",
+            "name": "ClientId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -158,6 +155,37 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ClientDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Client/reactiveClient": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_ReactiveClient",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
                 }
               }
             }
@@ -649,11 +677,6 @@
           "referrer": {
             "type": "array",
             "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ReferrerDto"
-              }
-            ]
             "items": {
               "$ref": "#/components/schemas/ReferrerDto"
             }
@@ -663,27 +686,6 @@
           }
         }
       },
-      "ReferrerDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          }
-        }
       "CurrencyDto": {
         "type": "object",
         "additionalProperties": false,
@@ -749,17 +751,6 @@
           }
         }
       },
-      "DeleteCustomerCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "customerId": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "UpdateCustomerCommand": {
       "UpdateClientCommand": {
         "type": "object",
         "additionalProperties": false,
