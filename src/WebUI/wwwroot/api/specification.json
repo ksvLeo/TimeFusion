@@ -92,6 +92,37 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "Customer_DeleteCustomer",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteCustomerCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/TodoItems": {
@@ -680,6 +711,16 @@
                 "$ref": "#/components/schemas/CustomerDto"
               }
             ]
+          }
+        }
+      },
+      "DeleteCustomerCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "customerId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

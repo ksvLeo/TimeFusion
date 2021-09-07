@@ -19,6 +19,8 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
             builder.HasOne(c => c.Referrer);
 
             builder.HasOne(c => c.Currency);
+
+            builder.HasMany(c => c.Projects).WithOne().HasForeignKey(p => p.ClientId);
         }
     }
 }

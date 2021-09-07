@@ -1,4 +1,5 @@
 ﻿using FusionIT.TimeFusion.Application.Customers.Commands.CreateCustomer;
+using FusionIT.TimeFusion.Application.Customers.Commands.DeleteCustomer;
 using FusionIT.TimeFusion.Application.Customers.Dtos;
 using FusionIT.TimeFusion.Application.Customers.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -22,5 +23,12 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         {
             return await Mediator.Send(command);
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteCustomer(DeleteCustomerCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
     }
 }

@@ -87,6 +87,7 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
 export interface ICustomerClient {
     getCustomersByName(name: string | null | undefined): Observable<CustomerDto[]>;
     createCustomer(command: CreateCustomerCommand): Observable<number>;
+    deleteCustomer(command: DeleteCustomerCommand): Observable<number>;
 }
 
 @Injectable({
@@ -187,6 +188,58 @@ export class CustomerClient implements ICustomerClient {
     }
 
     protected processCreateCustomer(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+
+    deleteCustomer(command: DeleteCustomerCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Customer";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteCustomer(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteCustomer(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteCustomer(response: HttpResponseBase): Observable<number> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1116,6 +1169,42 @@ export class CreateCustomerCommand implements ICreateCustomerCommand {
 
 export interface ICreateCustomerCommand {
     customer?: CustomerDto | undefined;
+}
+
+export class DeleteCustomerCommand implements IDeleteCustomerCommand {
+    customerId?: number;
+
+    constructor(data?: IDeleteCustomerCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.customerId = _data["customerId"];
+        }
+    }
+
+    static fromJS(data: any): DeleteCustomerCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteCustomerCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["customerId"] = this.customerId;
+        return data; 
+    }
+}
+
+export interface IDeleteCustomerCommand {
+    customerId?: number;
 }
 
 export class PaginatedListOfTodoItemDto implements IPaginatedListOfTodoItemDto {

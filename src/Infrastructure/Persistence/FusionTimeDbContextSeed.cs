@@ -32,8 +32,38 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
             // Seed, if necessary
 
             // Currency Reference
-            context.Currencies.Add(new Currency { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" });
-            context.Currencies.Add(new Currency { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" });
+            if (!context.Currencies.Any())
+            {
+                context.Currencies.Add(new Currency { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" });
+                context.Currencies.Add(new Currency { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" }); 
+            }
+
+            if (!context.BudgetTypes.Any())
+            {
+                context.BudgetTypes.Add(new BudgetType { Description = "On Demand" });
+                context.BudgetTypes.Add(new BudgetType { Description = "By The Hour" });
+                context.BudgetTypes.Add(new BudgetType { Description = "By The Fee" });
+            }
+
+            if (!context.ProjectTypes.Any())
+            {
+                context.ProjectTypes.Add(new ProjectType { Description = "NonBillable" });
+                context.ProjectTypes.Add(new ProjectType { Description = "FixedPrice" });
+                context.ProjectTypes.Add(new ProjectType { Description = "TimeAndMaterials" });
+            }
+
+            if (!context.RateTypes.Any())
+            {
+                context.RateTypes.Add(new RateType { Description = "TotalCostRate" });
+                context.RateTypes.Add(new RateType { Description = "PerTaskRate" });
+            }
+
+            if (!context.TimeDistributions.Any())
+            {
+                context.TimeDistributions.Add(new TimeDistribution { Description = "PerPerson" });
+                context.TimeDistributions.Add(new TimeDistribution { Description = "PerTask" });
+                context.TimeDistributions.Add(new TimeDistribution { Description = "TotalWorkTime" });
+            }
 
             if (!context.TodoLists.Any())
             {
