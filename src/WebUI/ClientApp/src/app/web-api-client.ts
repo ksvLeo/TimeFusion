@@ -16,8 +16,9 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IClientClient {
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
-    createCustomer(command: CreateClientCommand): Observable<number>;
+    createClient(command: CreateClientCommand): Observable<number>;
     updateCustomer(command: UpdateClientCommand): Observable<boolean>;
+    deleteClient(customerId: number | undefined): Observable<number>;
     getClient(customerId: number | undefined): Observable<ClientDto>;
 }
 
@@ -87,17 +88,8 @@ export class ClientClient implements IClientClient {
         }
         return _observableOf<ClientDto[]>(<any>null);
     }
-}
 
-export interface ICustomerClient {
-    getCustomersByName(name: string | null | undefined): Observable<CustomerDto[]>;
-    createCustomer(command: CreateCustomerCommand): Observable<number>;
-    deleteCustomer(command: DeleteCustomerCommand): Observable<number>;
-    updateCustomer(command: UpdateCustomerCommand): Observable<boolean>;
-    getCustomer(customerId: number | undefined): Observable<CustomerDto>;
-}
-
-    createCustomer(command: CreateClientCommand): Observable<number> {
+    createClient(command: CreateClientCommand): Observable<number> {
         let url_ = this.baseUrl + "/api/Client";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -114,11 +106,11 @@ export interface ICustomerClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateCustomer(response_);
+            return this.processCreateClient(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCreateCustomer(<any>response_);
+                    return this.processCreateClient(<any>response_);
                 } catch (e) {
                     return <Observable<number>><any>_observableThrow(e);
                 }
@@ -127,7 +119,7 @@ export interface ICustomerClient {
         }));
     }
 
-    protected processCreateCustomer(response: HttpResponseBase): Observable<number> {
+    protected processCreateClient(response: HttpResponseBase): Observable<number> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -201,34 +193,28 @@ export interface ICustomerClient {
         return _observableOf<boolean>(<any>null);
     }
 
-    getClient(customerId: number | undefined): Observable<ClientDto> {
-        let url_ = this.baseUrl + "/api/Client/client?";
+    deleteClient(customerId: number | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/Client?";
         if (customerId === null)
             throw new Error("The parameter 'customerId' cannot be null.");
         else if (customerId !== undefined)
             url_ += "CustomerId=" + encodeURIComponent("" + customerId) + "&";
-    deleteCustomer(command: DeleteCustomerCommand): Observable<number> {
-        let url_ = this.baseUrl + "/api/Customer";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
 
         return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processDeleteCustomer(response_);
+            return this.processDeleteClient(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processDeleteCustomer(<any>response_);
+                    return this.processDeleteClient(<any>response_);
                 } catch (e) {
                     return <Observable<number>><any>_observableThrow(e);
                 }
@@ -237,14 +223,34 @@ export interface ICustomerClient {
         }));
     }
 
-    protected processDeleteCustomer(response: HttpResponseBase): Observable<number> {
+    protected processDeleteClient(response: HttpResponseBase): Observable<number> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-    updateCustomer(command: UpdateCustomerCommand): Observable<boolean> {
-        let url_ = this.baseUrl + "/api/Customer";
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+
+    getClient(customerId: number | undefined): Observable<ClientDto> {
+        let url_ = this.baseUrl + "/api/Client/client?";
+        if (customerId === null)
+            throw new Error("The parameter 'customerId' cannot be null.");
+        else if (customerId !== undefined)
+            url_ += "CustomerId=" + encodeURIComponent("" + customerId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -311,29 +317,6 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
 
     getCurrencyReferences(): Observable<CurrencyDto[]> {
         let url_ = this.baseUrl + "/api/CurrencyReference";
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<number>(<any>null);
-    }
-}
-
-    getCustomer(customerId: number | undefined): Observable<CustomerDto> {
-        let url_ = this.baseUrl + "/api/Customer/customer?";
-        if (customerId === null)
-            throw new Error("The parameter 'customerId' cannot be null.");
-        else if (customerId !== undefined)
-            url_ += "CustomerId=" + encodeURIComponent("" + customerId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1256,42 +1239,6 @@ export class UpdateClientCommand implements IUpdateClientCommand {
 
 export interface IUpdateClientCommand {
     client?: ClientDto | undefined;
-}
-
-export class DeleteCustomerCommand implements IDeleteCustomerCommand {
-    customerId?: number;
-
-    constructor(data?: IDeleteCustomerCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.customerId = _data["customerId"];
-        }
-    }
-
-    static fromJS(data: any): DeleteCustomerCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new DeleteCustomerCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["customerId"] = this.customerId;
-        return data; 
-    }
-}
-
-export interface IDeleteCustomerCommand {
-    customerId?: number;
 }
 
 export class PaginatedListOfTodoItemDto implements IPaginatedListOfTodoItemDto {

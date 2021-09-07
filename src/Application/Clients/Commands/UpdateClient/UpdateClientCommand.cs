@@ -32,7 +32,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
             if (client == null)
             {
-                /// Task to Esteban, send throw new Argument Exception or NotFound()?
                 throw new ArgumentException($"Unable to find client with ID #{request.Client.Id}");
             }
 

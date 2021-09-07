@@ -14,43 +14,41 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
 {
     public class DeleteClientCommand : IRequest<int>
     {
-        public int CustomerId { get; set; }
+        public int ClientId { get; set; }
     }
 
-    public class DeleteCustomerCommandHandler : IRequestHandler<DeleteClientCommand, int>
+    public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand, int>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
-        public DeleteCustomerCommandHandler(IApplicationDbContext context, IMapper mapper)
+        public DeleteClientCommandHandler(IApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<int> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {
-            Client customer = _context.Clients.FirstOrDefault(c => c.Id == request.CustomerId);
+            Client client = _context.Clients.FirstOrDefault(c => c.Id == request.ClientId);
 
-            if (customer == null)
+            if (client == null)
             {
-                throw new ArgumentException($"Unable to find customer with ID #{ request.CustomerId }");
+                throw new ArgumentException($"Unable to find client with ID #{ request.ClientId }.");
             }
 
             var userProjects = await _context.Projects
-                                .Where(p => p.ClientId == request.CustomerId)
+                                .Where(p => p.ClientId == request.ClientId)
                                 .SingleOrDefaultAsync(cancellationToken);
 
             if (userProjects != null)
             {
-                throw new ArgumentException("User has active projects with to this client");
+                throw new ArgumentException("User has active projects with to this client.");
             }
 
-            _context.Clients.First(c => c.Id == request.CustomerId).Active = false;
+            _context.Clients.First(c => c.Id == request.ClientId).Active = false;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return request.CustomerId;
+            return request.ClientId;
         }
     }
 }

@@ -43,7 +43,7 @@
         "tags": [
           "Client"
         ],
-        "operationId": "Client_CreateCustomer",
+        "operationId": "Client_CreateClient",
         "requestBody": {
           "x-name": "command",
           "content": {
@@ -99,6 +99,36 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_DeleteClient",
+        "parameters": [
+          {
+            "name": "CustomerId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Client/client": {
@@ -148,39 +178,6 @@
                   "items": {
                     "$ref": "#/components/schemas/CurrencyDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-      },
-      "delete": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_DeleteCustomer",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteCustomerCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
                 }
               }
             }
@@ -734,16 +731,6 @@
                 "$ref": "#/components/schemas/ClientDto"
               }
             ]
-          }
-        }
-      },
-      "DeleteCustomerCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "customerId": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },

@@ -31,17 +31,18 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<int>> DeleteClient (DeleteClientCommand command)
-        {
-            return await Mediator.Send(command);
-        }
-
-
         [HttpPut]
         public async Task<ActionResult<bool>> UpdateCustomer(UpdateClientCommand command)
         {
             return await Mediator.Send(command);
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteClient ([FromQuery]DeleteClientCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+
     }
 }

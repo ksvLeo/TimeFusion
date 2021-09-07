@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(FusionTimeDbContext))]
-    [Migration("20210907161045_ChangeNameCustomerToClient")]
+    [Migration("20210907175335_ChangeNameCustomerToClient")]
     partial class ChangeNameCustomerToClient
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,21 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.BudgetType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BudgetTypes");
+                });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Client", b =>
                 {
@@ -93,6 +108,113 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.ToTable("Currencies");
                 });
 
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("BudgetTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FinishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkTimeTicks")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BudgetTypeId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ProjectTypeId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.ProjectStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProjectStatuses");
+                });
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.ProjectType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProjectTypes");
+                });
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.RateType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RateTypes");
+                });
+
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Referrer", b =>
                 {
                     b.Property<int>("Id")
@@ -136,6 +258,21 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Referrers");
+                });
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.TimeDistribution", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeDistributions");
                 });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.TodoItem", b =>
@@ -525,6 +662,27 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.Navigation("Currency");
                 });
 
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Project", b =>
+                {
+                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.BudgetType", "BudgetType")
+                        .WithMany()
+                        .HasForeignKey("BudgetTypeId");
+
+                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Client", null)
+                        .WithMany("Projects")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.ProjectType", "ProjectType")
+                        .WithMany()
+                        .HasForeignKey("ProjectTypeId");
+
+                    b.Navigation("BudgetType");
+
+                    b.Navigation("ProjectType");
+                });
+
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Referrer", b =>
                 {
                     b.HasOne("FusionIT.TimeFusion.Domain.Entities.Client", null)
@@ -621,6 +779,8 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Client", b =>
                 {
+                    b.Navigation("Projects");
+
                     b.Navigation("Referrer");
                 });
 
