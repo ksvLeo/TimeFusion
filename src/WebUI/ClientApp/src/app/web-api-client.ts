@@ -1068,6 +1068,10 @@ export interface IClientDto {
 export class CurrencyDto implements ICurrencyDto {
     id?: number;
     name?: string | undefined;
+    address?: string | undefined;
+    currency?: CurrencyDto | undefined;
+    referrer?: ReferrerDto | undefined;
+    active?: boolean;
     alpha3Code?: string | undefined;
     symbol?: string | undefined;
 
@@ -1084,6 +1088,10 @@ export class CurrencyDto implements ICurrencyDto {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.address = _data["address"];
+            this.currency = _data["currency"] ? CurrencyDto.fromJS(_data["currency"]) : <any>undefined;
+            this.referrer = _data["referrer"] ? ReferrerDto.fromJS(_data["referrer"]) : <any>undefined;
+            this.active = _data["active"];
             this.alpha3Code = _data["alpha3Code"];
             this.symbol = _data["symbol"];
         }
@@ -1109,10 +1117,19 @@ export class CurrencyDto implements ICurrencyDto {
 export interface ICurrencyDto {
     id?: number;
     name?: string | undefined;
+    address?: string | undefined;
+    currency?: CurrencyDto | undefined;
+    referrer?: ReferrerDto | undefined;
+    active?: boolean;
     alpha3Code?: string | undefined;
     symbol?: string | undefined;
 }
 
+export class ReferrerDto implements IReferrerDto {
+    id?: number;
+    name?: string | undefined;
+    email?: string | undefined;
+    phoneNumber?: string | undefined;
 export class ReferrerDto implements IReferrerDto {
     id?: number;
     title?: string | undefined;
@@ -1127,6 +1144,9 @@ export class ReferrerDto implements IReferrerDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+    }
+
         }
     }
 
@@ -1205,9 +1225,12 @@ export interface ICreateClientCommand {
     client?: ClientDto | undefined;
 }
 
+export class DeleteCustomerCommand implements IDeleteCustomerCommand {
+    customerId?: number;
 export class UpdateClientCommand implements IUpdateClientCommand {
     client?: ClientDto | undefined;
 
+    constructor(data?: IDeleteCustomerCommand) {
     constructor(data?: IUpdateClientCommand) {
         if (data) {
             for (var property in data) {
@@ -1219,12 +1242,15 @@ export class UpdateClientCommand implements IUpdateClientCommand {
 
     init(_data?: any) {
         if (_data) {
+            this.customerId = _data["customerId"];
             this.client = _data["client"] ? ClientDto.fromJS(_data["client"]) : <any>undefined;
         }
     }
 
+    static fromJS(data: any): DeleteCustomerCommand {
     static fromJS(data: any): UpdateClientCommand {
         data = typeof data === 'object' ? data : {};
+        let result = new DeleteCustomerCommand();
         let result = new UpdateClientCommand();
         result.init(data);
         return result;
@@ -1232,11 +1258,14 @@ export class UpdateClientCommand implements IUpdateClientCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["customerId"] = this.customerId;
         data["client"] = this.client ? this.client.toJSON() : <any>undefined;
         return data; 
     }
 }
 
+export interface IDeleteCustomerCommand {
+    customerId?: number;
 export interface IUpdateClientCommand {
     client?: ClientDto | undefined;
 }

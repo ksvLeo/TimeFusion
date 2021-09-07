@@ -70,16 +70,18 @@
           }
         }
       },
-      "put": {
+      "delete": {
         "tags": [
           "Client"
         ],
+        "operationId": "Customer_DeleteCustomer",
         "operationId": "Client_UpdateCustomer",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
+                "$ref": "#/components/schemas/DeleteCustomerCommand"
                 "$ref": "#/components/schemas/UpdateClientCommand"
               }
             }
@@ -93,7 +95,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -646,6 +649,11 @@
           "referrer": {
             "type": "array",
             "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReferrerDto"
+              }
+            ]
             "items": {
               "$ref": "#/components/schemas/ReferrerDto"
             }
@@ -655,6 +663,27 @@
           }
         }
       },
+      "ReferrerDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       "CurrencyDto": {
         "type": "object",
         "additionalProperties": false,
@@ -720,6 +749,17 @@
           }
         }
       },
+      "DeleteCustomerCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "customerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UpdateCustomerCommand": {
       "UpdateClientCommand": {
         "type": "object",
         "additionalProperties": false,

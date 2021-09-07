@@ -36,7 +36,8 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
             }
 
             var userProjects = await _context.Projects
-                                .Where(p => p.ClientId == request.ClientId)
+                                .Where(p => p.ClientId == request.CustomerId)
+                                .Where(p => p.ProjectStatus.Description == "Inactive")
                                 .SingleOrDefaultAsync(cancellationToken);
 
             if (userProjects != null)
