@@ -37,9 +37,14 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
             return await Mediator.Send(command);
         }
 
-
         [HttpPut]
         public async Task<ActionResult<bool>> UpdateCustomer(UpdateCustomerCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<bool>> ReactivateClient(ReactivateClientCommand command)
         {
             return await Mediator.Send(command);
         }

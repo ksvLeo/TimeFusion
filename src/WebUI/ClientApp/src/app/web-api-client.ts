@@ -247,6 +247,22 @@ export class CustomerClient implements ICustomerClient {
             response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+
     updateCustomer(command: UpdateCustomerCommand): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Customer";
         url_ = url_.replace(/[?&]$/, "");
@@ -298,23 +314,6 @@ export class CustomerClient implements ICustomerClient {
         }
         return _observableOf<boolean>(<any>null);
     }
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<number>(<any>null);
-    }
-}
 
     getCustomer(customerId: number | undefined): Observable<CustomerDto> {
         let url_ = this.baseUrl + "/api/Customer/customer?";
@@ -1055,7 +1054,7 @@ export class CustomerDto implements ICustomerDto {
     name?: string | undefined;
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
-    referrer?: Referrer | undefined;
+    referrer?: ReferrerDto | undefined;
     active?: boolean;
 
     constructor(data?: ICustomerDto) {
@@ -1073,7 +1072,7 @@ export class CustomerDto implements ICustomerDto {
             this.name = _data["name"];
             this.address = _data["address"];
             this.currency = _data["currency"] ? CurrencyDto.fromJS(_data["currency"]) : <any>undefined;
-            this.referrer = _data["referrer"] ? Referrer.fromJS(_data["referrer"]) : <any>undefined;
+            this.referrer = _data["referrer"] ? ReferrerDto.fromJS(_data["referrer"]) : <any>undefined;
             this.active = _data["active"];
         }
     }
@@ -1102,17 +1101,17 @@ export interface ICustomerDto {
     name?: string | undefined;
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
-    referrer?: Referrer | undefined;
+    referrer?: ReferrerDto | undefined;
     active?: boolean;
 }
 
-export abstract class AuditableEntity implements IAuditableEntity {
-    created?: Date;
-    createdBy?: string | undefined;
-    lastModified?: Date | undefined;
-    lastModifiedBy?: string | undefined;
+export class ReferrerDto implements IReferrerDto {
+    id?: number;
+    name?: string | undefined;
+    email?: string | undefined;
+    phoneNumber?: string | undefined;
 
-    constructor(data?: IAuditableEntity) {
+    constructor(data?: IReferrerDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1123,48 +1122,6 @@ export abstract class AuditableEntity implements IAuditableEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
-            this.createdBy = _data["createdBy"];
-            this.lastModified = _data["lastModified"] ? new Date(_data["lastModified"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-        }
-    }
-
-    static fromJS(data: any): AuditableEntity {
-        data = typeof data === 'object' ? data : {};
-        throw new Error("The abstract class 'AuditableEntity' cannot be instantiated.");
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy;
-        data["lastModified"] = this.lastModified ? this.lastModified.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        return data; 
-    }
-}
-
-export interface IAuditableEntity {
-    created?: Date;
-    createdBy?: string | undefined;
-    lastModified?: Date | undefined;
-    lastModifiedBy?: string | undefined;
-}
-
-export class Referrer extends AuditableEntity implements IReferrer {
-    id?: number;
-    name?: string | undefined;
-    email?: string | undefined;
-    phoneNumber?: string | undefined;
-
-    constructor(data?: IReferrer) {
-        super(data);
-    }
-
-    init(_data?: any) {
-        super.init(_data);
-        if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
             this.email = _data["email"];
@@ -1172,9 +1129,9 @@ export class Referrer extends AuditableEntity implements IReferrer {
         }
     }
 
-    static fromJS(data: any): Referrer {
+    static fromJS(data: any): ReferrerDto {
         data = typeof data === 'object' ? data : {};
-        let result = new Referrer();
+        let result = new ReferrerDto();
         result.init(data);
         return result;
     }
@@ -1185,12 +1142,11 @@ export class Referrer extends AuditableEntity implements IReferrer {
         data["name"] = this.name;
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
-        super.toJSON(data);
         return data; 
     }
 }
 
-export interface IReferrer extends IAuditableEntity {
+export interface IReferrerDto {
     id?: number;
     name?: string | undefined;
     email?: string | undefined;
@@ -1233,42 +1189,6 @@ export interface ICreateCustomerCommand {
     customer?: CustomerDto | undefined;
 }
 
-export class UpdateCustomerCommand implements IUpdateCustomerCommand {
-    customer?: CustomerDto | undefined;
-
-    constructor(data?: IUpdateCustomerCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.customer = _data["customer"] ? CustomerDto.fromJS(_data["customer"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): UpdateCustomerCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateCustomerCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["customer"] = this.customer ? this.customer.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IUpdateCustomerCommand {
-    customer?: CustomerDto | undefined;
-}
-
 export class DeleteCustomerCommand implements IDeleteCustomerCommand {
     customerId?: number;
 
@@ -1303,6 +1223,42 @@ export class DeleteCustomerCommand implements IDeleteCustomerCommand {
 
 export interface IDeleteCustomerCommand {
     customerId?: number;
+}
+
+export class UpdateCustomerCommand implements IUpdateCustomerCommand {
+    customer?: CustomerDto | undefined;
+
+    constructor(data?: IUpdateCustomerCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.customer = _data["customer"] ? CustomerDto.fromJS(_data["customer"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdateCustomerCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCustomerCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["customer"] = this.customer ? this.customer.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IUpdateCustomerCommand {
+    customer?: CustomerDto | undefined;
 }
 
 export class PaginatedListOfTodoItemDto implements IPaginatedListOfTodoItemDto {
