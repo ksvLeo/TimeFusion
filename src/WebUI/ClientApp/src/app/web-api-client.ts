@@ -87,6 +87,8 @@ export class CurrencyReferenceClient implements ICurrencyReferenceClient {
 export interface ICustomerClient {
     getCustomersByName(name: string | null | undefined): Observable<CustomerDto[]>;
     createCustomer(command: CreateCustomerCommand): Observable<number>;
+    updateCustomer(command: UpdateCustomerCommand): Observable<boolean>;
+    getCustomer(customerId: number | undefined): Observable<CustomerDto>;
 }
 
 @Injectable({
@@ -206,6 +208,110 @@ export class CustomerClient implements ICustomerClient {
             }));
         }
         return _observableOf<number>(<any>null);
+    }
+
+    updateCustomer(command: UpdateCustomerCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Customer";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateCustomer(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateCustomer(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateCustomer(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
+    }
+
+    getCustomer(customerId: number | undefined): Observable<CustomerDto> {
+        let url_ = this.baseUrl + "/api/Customer/customer?";
+        if (customerId === null)
+            throw new Error("The parameter 'customerId' cannot be null.");
+        else if (customerId !== undefined)
+            url_ += "CustomerId=" + encodeURIComponent("" + customerId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCustomer(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCustomer(<any>response_);
+                } catch (e) {
+                    return <Observable<CustomerDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CustomerDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetCustomer(response: HttpResponseBase): Observable<CustomerDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CustomerDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CustomerDto>(<any>null);
     }
 }
 
@@ -894,7 +1000,7 @@ export class CustomerDto implements ICustomerDto {
     id?: number;
     name?: string | undefined;
     address?: string | undefined;
-    currency?: Currency | undefined;
+    currency?: CurrencyDto | undefined;
     referrer?: Referrer | undefined;
     active?: boolean;
 
@@ -912,7 +1018,7 @@ export class CustomerDto implements ICustomerDto {
             this.id = _data["id"];
             this.name = _data["name"];
             this.address = _data["address"];
-            this.currency = _data["currency"] ? Currency.fromJS(_data["currency"]) : <any>undefined;
+            this.currency = _data["currency"] ? CurrencyDto.fromJS(_data["currency"]) : <any>undefined;
             this.referrer = _data["referrer"] ? Referrer.fromJS(_data["referrer"]) : <any>undefined;
             this.active = _data["active"];
         }
@@ -941,7 +1047,7 @@ export interface ICustomerDto {
     id?: number;
     name?: string | undefined;
     address?: string | undefined;
-    currency?: Currency | undefined;
+    currency?: CurrencyDto | undefined;
     referrer?: Referrer | undefined;
     active?: boolean;
 }
@@ -990,51 +1096,6 @@ export interface IAuditableEntity {
     createdBy?: string | undefined;
     lastModified?: Date | undefined;
     lastModifiedBy?: string | undefined;
-}
-
-export class Currency extends AuditableEntity implements ICurrency {
-    id?: number;
-    name?: string | undefined;
-    alpha3Code?: string | undefined;
-    symbol?: string | undefined;
-
-    constructor(data?: ICurrency) {
-        super(data);
-    }
-
-    init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.alpha3Code = _data["alpha3Code"];
-            this.symbol = _data["symbol"];
-        }
-    }
-
-    static fromJS(data: any): Currency {
-        data = typeof data === 'object' ? data : {};
-        let result = new Currency();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["alpha3Code"] = this.alpha3Code;
-        data["symbol"] = this.symbol;
-        super.toJSON(data);
-        return data; 
-    }
-}
-
-export interface ICurrency extends IAuditableEntity {
-    id?: number;
-    name?: string | undefined;
-    alpha3Code?: string | undefined;
-    symbol?: string | undefined;
 }
 
 export class Referrer extends AuditableEntity implements IReferrer {
@@ -1115,6 +1176,42 @@ export class CreateCustomerCommand implements ICreateCustomerCommand {
 }
 
 export interface ICreateCustomerCommand {
+    customer?: CustomerDto | undefined;
+}
+
+export class UpdateCustomerCommand implements IUpdateCustomerCommand {
+    customer?: CustomerDto | undefined;
+
+    constructor(data?: IUpdateCustomerCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.customer = _data["customer"] ? CustomerDto.fromJS(_data["customer"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdateCustomerCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCustomerCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["customer"] = this.customer ? this.customer.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IUpdateCustomerCommand {
     customer?: CustomerDto | undefined;
 }
 

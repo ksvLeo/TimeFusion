@@ -1,4 +1,5 @@
 ﻿using FusionIT.TimeFusion.Application.Customers.Commands.CreateCustomer;
+using FusionIT.TimeFusion.Application.Customers.Commands.UpdateCustomer;
 using FusionIT.TimeFusion.Application.Customers.Dtos;
 using FusionIT.TimeFusion.Application.Customers.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,20 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
             return await Mediator.Send(query);
         }
 
+        [HttpGet("customer")]
+        public async Task<ActionResult<CustomerDto>> GetCustomer([FromQuery] GetCustomerQuery query)
+        {
+            return await Mediator.Send(query);
+        }
+
         [HttpPost]
         public async Task<ActionResult<int>> CreateCustomer(CreateCustomerCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<bool>> UpdateCustomer(UpdateCustomerCommand command)
         {
             return await Mediator.Send(command);
         }

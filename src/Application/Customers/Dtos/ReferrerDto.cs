@@ -1,5 +1,4 @@
 ﻿using FusionIT.TimeFusion.Application.Common.Mappings;
-using FusionIT.TimeFusion.Application.Currencies.Dtos;
 using FusionIT.TimeFusion.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,18 +8,14 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Customers.Dtos
 {
-    public class CustomerDto : IMapFrom<Customer>
+    public class ReferrerDto : IMapFrom<Referrer>
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public string Address { get; set; }
+        public string Email { get; set; }
 
-        public CurrencyDto Currency { get; set; }
-
-        public ReferrerDto Referrer { get; set; }
-
-        public bool Active { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
