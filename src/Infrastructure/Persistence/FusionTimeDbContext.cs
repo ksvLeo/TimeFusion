@@ -37,9 +37,21 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
 
         public DbSet<Currency> Currencies { get; set; }
 
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         public DbSet<Referrer> Referrers { get; set; }
+
+        public DbSet<Project> Projects { get; set; }
+
+        public DbSet<BudgetType> BudgetTypes { get; set; }
+
+        public DbSet<ProjectStatus> ProjectStatuses { get; set; }
+
+        public DbSet<ProjectType> ProjectTypes { get; set; }
+
+        public DbSet<RateType> RateTypes { get; set; }
+
+        public DbSet<TimeDistribution> TimeDistributions { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

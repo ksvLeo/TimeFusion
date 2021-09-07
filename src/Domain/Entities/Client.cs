@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Domain.Entities
 {
-    public class Customer : AuditableEntity
+    public class Client : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -17,8 +17,10 @@ namespace FusionIT.TimeFusion.Domain.Entities
 
         public Currency Currency { get; set; }
 
-        public Referrer Referrer { get; set; }
+        public List<Referrer> Referrer { get; set; }
 
         public bool Active { get; set; }
+
+        public IList<Project> Projects { get; set; }
     }
 }

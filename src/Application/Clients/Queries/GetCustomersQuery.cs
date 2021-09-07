@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Application.Customers.Dtos;
+using FusionIT.TimeFusion.Clients.Dtos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Customers.Queries
 {
-    public class GetCustomersQuery : IRequest<List<CustomerDto>>
+    public class GetCustomersQuery : IRequest<List<ClientDto>>
     {
-        public class GetCustomersQueryHandle : IRequestHandler<GetCustomersQuery, List<CustomerDto>>
+        public class GetCustomersQueryHandle : IRequestHandler<GetCustomersQuery, List<ClientDto>>
         {
             private readonly IApplicationDbContext _context;
             private readonly IMapper _mapper;
@@ -26,10 +26,10 @@ namespace FusionIT.TimeFusion.Application.Customers.Queries
                 _mapper = mapper;
             }
 
-            public async Task<List<CustomerDto>> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
+            public async Task<List<ClientDto>> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
             {
-                List<CustomerDto> customers = await _context.Customers
-                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
+                List<ClientDto> customers = await _context.Clients
+                .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
                 return customers;
