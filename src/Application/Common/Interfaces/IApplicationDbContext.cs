@@ -17,6 +17,18 @@ namespace FusionIT.TimeFusion.Application.Common.Interfaces
 
         DbSet<Client> Clients { get; set; }
 
+        DbSet<Project> Projects { get; set; }
+
+        DbSet<BudgetType> BudgetTypes { get; set; }
+
+        DbSet<ProjectStatus> ProjectStatuses { get; set; }
+
+        DbSet<ProjectType> ProjectTypes { get; set; }
+
+        DbSet<RateType> RateTypes { get; set; }
+
+        DbSet<TimeDistribution> TimeDistributions { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

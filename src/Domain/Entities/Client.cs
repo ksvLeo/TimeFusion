@@ -20,5 +20,7 @@ namespace FusionIT.TimeFusion.Domain.Entities
         public List<Referrer> Referrer { get; set; }
 
         public bool Active { get; set; }
+
+        public IList<Project> Projects { get; set; }
     }
 }

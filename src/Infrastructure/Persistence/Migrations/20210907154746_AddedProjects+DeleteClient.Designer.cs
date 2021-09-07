@@ -4,14 +4,16 @@ using FusionIT.TimeFusion.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(FusionTimeDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210907154746_AddedProjects+DeleteClient")]
+    partial class AddedProjectsDeleteClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,45 +34,6 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BudgetTypes");
-                });
-
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Currency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Currency", b =>
@@ -104,6 +67,50 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ReferrerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("ReferrerId");
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Project", b =>
@@ -220,12 +227,6 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -248,12 +249,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("Referrers");
                 });
@@ -651,22 +647,19 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Client", b =>
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("FusionIT.TimeFusion.Domain.Entities.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId");
 
-                    b.Navigation("Currency");
-                });
+                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Referrer", "Referrer")
+                        .WithMany()
+                        .HasForeignKey("ReferrerId");
 
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Referrer", b =>
-                {
-                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Client", null)
-                        .WithMany("Referrer")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Currency");
+
+                    b.Navigation("Referrer");
                 });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Project", b =>
@@ -775,11 +768,6 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Client", b =>
-                {
-                    b.Navigation("Referrer");
-                });
-                    
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Projects");
