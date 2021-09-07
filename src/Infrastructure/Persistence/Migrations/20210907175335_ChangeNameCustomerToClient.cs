@@ -7,6 +7,10 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_Customers_ClientId",
+                table: "Projects");
+
             migrationBuilder.DropTable(
                 name: "Customers");
 
@@ -67,6 +71,14 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                 column: "CurrencyId");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Projects_Clients_ClientId",
+                table: "Projects",
+                column: "ClientId",
+                principalTable: "Clients",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Referrers_Clients_ClientId",
                 table: "Referrers",
                 column: "ClientId",
@@ -77,6 +89,10 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_Clients_ClientId",
+                table: "Projects");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Referrers_Clients_ClientId",
                 table: "Referrers");
@@ -142,6 +158,14 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                 name: "IX_Customers_ReferrerId",
                 table: "Customers",
                 column: "ReferrerId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Projects_Customers_ClientId",
+                table: "Projects",
+                column: "ClientId",
+                principalTable: "Customers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

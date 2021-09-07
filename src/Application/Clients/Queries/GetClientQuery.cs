@@ -38,7 +38,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
 
             if (customer == null)
             {
-                throw new ArgumentException($"Unable to find client with #ID {request.CustomerId}");
+                throw new ArgumentException($"Unable to find client with #ID {request.CustomerId}.");
             }
 
             return customer;

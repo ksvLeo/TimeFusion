@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CurrencyReferenceClient } from '../web-api-client';
 
 @Component({
   selector: 'app-home',

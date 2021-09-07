@@ -34,7 +34,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.ToTable("BudgetTypes");
                 });
 
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Currency", b =>
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -660,22 +660,13 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.Navigation("Currency");
                 });
 
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Referrer", b =>
-                {
-                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Client", null)
-                        .WithMany("Referrer")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Project", b =>
                 {
                     b.HasOne("FusionIT.TimeFusion.Domain.Entities.BudgetType", "BudgetType")
                         .WithMany()
                         .HasForeignKey("BudgetTypeId");
 
-                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Customer", null)
+                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Client", null)
                         .WithMany("Projects")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -688,6 +679,15 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
                     b.Navigation("BudgetType");
 
                     b.Navigation("ProjectType");
+                });
+
+            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Referrer", b =>
+                {
+                    b.HasOne("FusionIT.TimeFusion.Domain.Entities.Client", null)
+                        .WithMany("Referrer")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.TodoItem", b =>
@@ -777,12 +777,9 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Client", b =>
                 {
-                    b.Navigation("Referrer");
-                });
-                    
-            modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.Customer", b =>
-                {
                     b.Navigation("Projects");
+
+                    b.Navigation("Referrer");
                 });
 
             modelBuilder.Entity("FusionIT.TimeFusion.Domain.Entities.TodoList", b =>
