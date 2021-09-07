@@ -7,9 +7,5 @@ import { CurrencyReferenceClient } from '../web-api-client';
 })
 export class HomeComponent {
 
-  constructor(private currencyReferenceClient: CurrencyReferenceClient){
-    this.currencyReferenceClient.getCurrencyReferences().subscribe(res => {
-      console.log(res);
-    });
-  }
+  constructor(){}
 }
