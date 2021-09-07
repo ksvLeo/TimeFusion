@@ -11,18 +11,7 @@
         "tags": [
           "Client"
         ],
-        "operationId": "Client_GetClientsByName",
-        "parameters": [
-          {
-            "name": "Name",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
+        "operationId": "Client_Get",
         "responses": {
           "200": {
             "description": "",
@@ -131,6 +120,40 @@
         }
       }
     },
+    "/api/Client/GetClientsByName": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_GetClientsByName",
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Client/client": {
       "get": {
         "tags": [
@@ -155,6 +178,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ClientDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Client/GetReferrersByClient": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_GetReferrersByClient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReferrerDto"
+                  }
                 }
               }
             }
@@ -208,40 +265,6 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/CurrencyDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Customer/GetCustomersByName": {
-      "get": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_GetCustomersByName",
-        "parameters": [
-          {
-            "name": "Name",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomerDto"
                   }
                 }
               }
