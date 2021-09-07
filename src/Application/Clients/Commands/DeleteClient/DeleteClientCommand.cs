@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Application.Projects.Dtos;
 using FusionIT.TimeFusion.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +10,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Customers.Commands.DeleteCustomer
+namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
 {
-    public class DeleteCustomerCommand : IRequest<int>
+    public class DeleteClientCommand : IRequest<int>
     {
         public int CustomerId { get; set; }
     }
 
-    public class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand, int>
+    public class DeleteCustomerCommandHandler : IRequestHandler<DeleteClientCommand, int>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -30,18 +28,18 @@ namespace FusionIT.TimeFusion.Application.Customers.Commands.DeleteCustomer
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {
-            Customer customer = _context.Customers.FirstOrDefault(c => c.Id == request.CustomerId);
+            Client customer = _context.Clients.FirstOrDefault(c => c.Id == request.CustomerId);
 
             if (customer == null)
             {
                 throw new ArgumentException($"Unable to find customer with ID #{ request.CustomerId }");
             }
 
-            //IList<Project> ClientProjects = _context.Projects.SelectMany(p => p.ClientId == request.CustomerId);
             var userProjects = await _context.Projects
                                 .Where(p => p.ClientId == request.CustomerId)
+                                .Where(p => p.ProjectStatus.Description == "Inactive")
                                 .SingleOrDefaultAsync(cancellationToken);
 
             if (userProjects != null)
@@ -49,7 +47,7 @@ namespace FusionIT.TimeFusion.Application.Customers.Commands.DeleteCustomer
                 throw new ArgumentException("User has active projects with to this client");
             }
 
-            _context.Customers.First(c => c.Id == request.CustomerId).Active = false;
+            _context.Clients.First(c => c.Id == request.CustomerId).Active = false;
 
             await _context.SaveChangesAsync(cancellationToken);
 

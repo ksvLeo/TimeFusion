@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Application.Customers.Dtos;
+using FusionIT.TimeFusion.Clients.Dtos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,33 +11,34 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Customers.Queries
+namespace FusionIT.TimeFusion.Application.Clients.Queries
 {
-    public class GetCustomerQuery : IRequest<CustomerDto>
+    public class GetClientQuery : IRequest<ClientDto>
     {
         public int CustomerId { get; set; }
     }
 
-    public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, CustomerDto>
+    public class GetClientQueryHandler : IRequestHandler<GetClientQuery, ClientDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetCustomerQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetClientQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<CustomerDto> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
+        public async Task<ClientDto> Handle(GetClientQuery request, CancellationToken cancellationToken)
         {
-            CustomerDto customer = await _context.Customers
-                .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
+                ClientDto customer = await _context.Clients
+                .AsNoTracking()
+                .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == request.CustomerId);
 
             if (customer == null)
             {
-                throw new ArgumentException($"Unable to find customer with #ID {request.CustomerId}");
+                throw new ArgumentException($"Unable to find client with #ID {request.CustomerId}");
             }
 
             return customer;

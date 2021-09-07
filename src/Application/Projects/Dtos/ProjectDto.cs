@@ -30,6 +30,8 @@ namespace FusionIT.TimeFusion.Application.Projects.Dtos
 
         public DateTime FinishDate { get; set; }
 
+        public ProjectStatus ProjectStatus { get; set; }
+
         public ProjectType ProjectType { get; set; }
 
         public BudgetType BudgetType { get; set; }

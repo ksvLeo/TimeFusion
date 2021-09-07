@@ -15,7 +15,7 @@ namespace FusionIT.TimeFusion.Application.Common.Interfaces
 
         DbSet<Referrer> Referrers { get; set; }
 
-        DbSet<Customer> Customers { get; set; }
+        DbSet<Client> Clients { get; set; }
 
         DbSet<Project> Projects { get; set; }
 

@@ -1,5 +1,4 @@
 ﻿using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Application.Customers.Commands.CreateCustomer;
 using FusionIT.TimeFusion.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Customers.Commands.UpdateCustomer
+namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
 {
     public class ReactivateClientCommand : IRequest<bool>
     {
@@ -28,7 +27,7 @@ namespace FusionIT.TimeFusion.Application.Customers.Commands.UpdateCustomer
 
         public async Task<bool> Handle(ReactivateClientCommand request, CancellationToken cancellationToken)
         {
-            Customer client = await _context.Customers.FirstOrDefaultAsync(c => c.Id == request.ClientId);
+            Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId);
 
             if (client == null)
             {

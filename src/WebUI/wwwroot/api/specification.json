@@ -6,6 +6,153 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Client": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_GetClientsByName",
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_CreateCustomer",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Customer_DeleteCustomer",
+        "operationId": "Client_UpdateCustomer",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteCustomerCommand"
+                "$ref": "#/components/schemas/UpdateClientCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+      }
+    },
+    "/api/Client/client": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Customer_UpdateCustomer",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCustomerCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "operationId": "Client_GetClient",
+        "parameters": [
+          {
+            "name": "CustomerId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                  "$ref": "#/components/schemas/ClientDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Customer/customer": {
+      "get": {
     "/api/CurrencyReference": {
       "get": {
         "tags": [
@@ -29,134 +176,8 @@
         }
       }
     },
-    "/api/Customer": {
-      "get": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_GetCustomersByName",
-        "parameters": [
-          {
-            "name": "Name",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomerDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_CreateCustomer",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCustomerCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        }
       },
       "delete": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_DeleteCustomer",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteCustomerCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_UpdateCustomer",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateCustomerCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Customer/customer": {
-      "get": {
         "tags": [
           "Customer"
         ],
@@ -620,29 +641,7 @@
   },
   "components": {
     "schemas": {
-      "CurrencyDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "alpha3Code": {
-            "type": "string",
-            "nullable": true
-          },
-          "symbol": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "CustomerDto": {
+      "ClientDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -667,12 +666,16 @@
             ]
           },
           "referrer": {
+            "type": "array",
             "nullable": true,
             "oneOf": [
               {
                 "$ref": "#/components/schemas/ReferrerDto"
               }
             ]
+            "items": {
+              "$ref": "#/components/schemas/ReferrerDto"
+            }
           },
           "active": {
             "type": "boolean"
@@ -700,16 +703,66 @@
             "nullable": true
           }
         }
-      },
-      "CreateCustomerCommand": {
+      "CurrencyDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "customer": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "alpha3Code": {
+            "type": "string",
+            "nullable": true
+          },
+          "symbol": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ReferrerDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateClientCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "client": {
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/CustomerDto"
+                "$ref": "#/components/schemas/ClientDto"
               }
             ]
           }
@@ -726,14 +779,15 @@
         }
       },
       "UpdateCustomerCommand": {
+      "UpdateClientCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "customer": {
+          "client": {
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/CustomerDto"
+                "$ref": "#/components/schemas/ClientDto"
               }
             ]
           }
