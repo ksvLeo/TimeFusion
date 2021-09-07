@@ -17,7 +17,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
                 .IsRequired(false);
 
             builder.Property(p => p.StartDate)
-                .IsRequired(false);
+                .HasDefaultValueSql("GETDATE()");
 
             builder.Property(p => p.Title)
                 .IsRequired(false);

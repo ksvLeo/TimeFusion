@@ -24,7 +24,7 @@ namespace FusionIT.TimeFusion.Application.Projects.Dtos
 
         public string Notes { get; set; }
 
-        public IList Tags { get; set; }
+        //public IList Tags { get; set; }
 
         public DateTime StartDate { get; set; }
 

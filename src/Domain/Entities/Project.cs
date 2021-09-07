@@ -23,7 +23,7 @@ namespace FusionIT.TimeFusion.Domain.Entities
 
         public string  Notes { get; set; }
 
-        public IList Tags { get; set; }
+        //public IList<string> Tags { get; set; }
 
         public DateTime StartDate { get; set; }
 
