@@ -12,6 +12,12 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
     public class CustomerController : ApiControllerBase
     {
         [HttpGet]
+        public async Task<List<CustomerDto>> Get()
+        {
+            return await Mediator.Send(new GetCustomersQuery());
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult<List<CustomerDto>>> GetCustomersByName([FromQuery] GetCustomersByNameQuery query)
         {
             return await Mediator.Send(query);
