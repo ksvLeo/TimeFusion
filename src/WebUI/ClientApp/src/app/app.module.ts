@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { TokenComponent } from './token/token.component';
+import { ManageComponent } from './Manage/manage.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { TokenComponent } from './token/token.component';
     CounterComponent,
     FetchDataComponent,
     TodoComponent,
-    TokenComponent
+    TokenComponent,
+    ManageComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
