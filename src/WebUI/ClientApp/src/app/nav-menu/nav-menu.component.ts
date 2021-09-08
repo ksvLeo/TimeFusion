@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
 
+
   navItems: NavMenuItemInterface[] = [
     { 
       description: "",
@@ -42,10 +43,6 @@ export class NavMenuComponent {
       url: "/manage"
     },
     {
-      description: "API",
-      url: "/api"
-    },
-    {
       description: "",
       url: "/",
       icon: 'far fa-user fa-2x'
@@ -64,8 +61,7 @@ export class NavMenuComponent {
 }
 
 export interface NavMenuItemInterface{
-    url: string;
-    description: string;
-    icon?: string;
-    
+  url: string;
+  description: string;
+  icon?: string;   
 }
