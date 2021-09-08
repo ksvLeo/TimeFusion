@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateEditClientCompontent } from './components/create-edit-client/create-edit-client.component';
+import { CreateEditClientCompontent } from './components/clients/create-edit-client/create-edit-client.component';
 import { ManageComponent } from './manage.component';
-import { ClientsComponent } from './Pages/clients/clients.component';
+import { ClientsComponent } from './components/clients/clients.component';
 
 const routes: Routes = [
   { path: 'manage', component: ManageComponent, children: [

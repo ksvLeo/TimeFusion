@@ -1,0 +1,114 @@
+<div class="container">
+    <div class="col-12 mt-2 p-0">
+        <h3>New Client</h3>
+        <p>Once you’ve added a client, you can add projects and contacts.</p>
+        <hr>
+    </div>
+
+    <div class="col-12 mx-2 mt-1">
+        <form [formGroup]="clientForm">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-12 col-sm-3">
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="col-12 col-sm-8 col-xl-6">
+                        <input type="text" id="name" class="form-control" formControlName="name" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-12 col-sm-3">
+                        <label for="address">Address</label>
+                    </div>
+                    <div class="col-12 col-sm-8 col-xl-6">
+                        <input type="text" id="name" class="form-control" formControlName="address"s />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-sm-3">
+                    <label for="currency">Preferred Currency</label>
+                </div>
+                <div class="col-12 col-sm-8 col-xl-6">
+                    <select name="currency" id="currency" class="form-control" formControlName="currency">
+                        <option *ngFor="let currency of currencies" value="{{ currency.id }}" [selected]="currency.id == 2"> {{ currency.name }} - {{ currency.symbol }} </option>
+                    </select>
+                </div>
+            </div>
+        </form>
+        
+        <div class="col-12 mt-3" >
+            <button type="button" class="btn btn-primary"  *ngIf="!createReferrer" (click)="onCreateReferrer() "> 
+                <i class="fas fa-plus-circle"></i>
+                Add Referrer
+            </button>
+            <button type="button" class="btn btn-danger" *ngIf="createReferrer" (click)="onCreateReferrer()"> 
+                <i class="fas fa-minus-circle"></i>
+                Cancel
+            </button>
+        </div>
+
+        <div class="col-12 mt-5 p-1" *ngIf="createReferrer">
+            <h5>New Refferrer</h5>
+            <p>No email is sent when adding a contact.</p>
+            <hr>
+        </div>
+        
+        <div class="col-12 mt-2 p-1">
+            <form [formGroup]="referrerForm" *ngIf="createReferrer">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <label for="title">Title</label>
+                        </div>
+                        <div class="col-12 col-sm-8 col-xl-6">
+                            <input type="text" id="title" class="form-control" formControlName="title" />
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <label for="address">Name</label>
+                        </div>
+                        <div class="col-12 col-sm-8 col-xl-6">
+                            <input type="text" id="name" class="form-control" formControlName="name" />
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <label for="address">Email</label>
+                        </div>
+                        <div class="col-12 col-sm-8 col-xl-6">
+                            <input type="text" id="email" class="form-control" formControlName="email" />
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <label for="address">Phone</label>
+                        </div>
+                        <div class="col-12 col-sm-8 col-xl-6">
+                            <input type="text" id="phone" class="form-control" formControlName="phone" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="col-12 mb-2 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary"  [disabled]=" (!isClientFormValid && !createReferrer)" (click)="create()" >Save Client</button>
+        </div>
+    </div>
+</div>
