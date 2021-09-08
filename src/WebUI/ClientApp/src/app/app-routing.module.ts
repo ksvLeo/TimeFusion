@@ -14,11 +14,8 @@ export const routes: Routes = [
   { path: 'counter', component: CounterComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   { path: '', component: HomeComponent, pathMatch: 'full' },
-  { path: 'manage', component: ManageComponent, children:[
-    {path: 'clients', component: ClientsComponent}
-  ]},
   { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
-  { path: 'token', component: TokenComponent, canActivate: [AuthorizeGuard] }
+  { path: 'token', component: TokenComponent, canActivate: [AuthorizeGuard] },
 ];
 
 @NgModule({

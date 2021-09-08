@@ -13,7 +13,7 @@ export class ManageComponent {
     manageMenu: NavMenuItemInterface[] = [
         {
             description: "Clients",
-            url: "clients"
+            url: "./clients"
         },
         {
             description: "Tasks",

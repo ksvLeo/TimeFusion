@@ -18,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { TokenComponent } from './token/token.component';
 import { ManageComponent } from './Manage/manage.component';
 import { ClientsComponent } from './Manage/Pages/clients/clients.component';
+import { ManageModule } from './manage/manage.module';
 
 @NgModule({
   declarations: [
@@ -28,8 +29,6 @@ import { ClientsComponent } from './Manage/Pages/clients/clients.component';
     FetchDataComponent,
     TodoComponent,
     TokenComponent,
-    ManageComponent,
-    ClientsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -39,7 +38,8 @@ import { ClientsComponent } from './Manage/Pages/clients/clients.component';
     ApiAuthorizationModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    ManageModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="col-12 mt-2 p-0">
+        <h3>New Clients</h3>
+        <p>Once you’ve added a client, you can add projects and contacts.</p>
+    </div>
+
+    <hr>
+
+    <div class="col-12 mt-1">
+        <form [formGroup]="clientForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" formControlName="name" required />
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="name" class="form-control" formControlName="address"s />
+            </div>
+
+            <div class="row">
+                <label for="currency">Preferred Currency</label>
+                <select name="currency" id="currency" class="form-control" formControlName="currency">
+                    <option value="" hide >Select currency...</option>
+                    <option *ngFor="let currency of currencies" value="{{ currency.id }}"> {{ currency.name }} - {{ currency.symbol }} </option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
