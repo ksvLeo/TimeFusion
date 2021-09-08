@@ -33,7 +33,11 @@ namespace FusionIT.TimeFusion.Domain.Entities
 
         public ProjectType ProjectType { get; set; }
 
-        public BudgetType BudgetType { get; set; }
+        public BudgetType BudgetType { get; set; } 
+
+        public RateType RateType { get; set; }
+
+        public TimeDistribution TimeDistribution { get; set; }
 
         public int WorkTimeTicks { get; set; }
     }

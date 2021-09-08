@@ -45,17 +45,25 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
                 context.BudgetTypes.Add(new BudgetType { Description = "By The Fee" });
             }
 
+            if (!context.ProjectStatuses.Any())
+            {
+                context.ProjectStatuses.Add(new ProjectStatus { Description = "Inactive" });
+                context.ProjectStatuses.Add(new ProjectStatus { Description = "Active" });
+                //context.ProjectStatuses.Add(new ProjectStatus { Description = "On hold" });
+                context.ProjectStatuses.Add(new ProjectStatus { Description = "Finished" });
+            }
+
             if (!context.ProjectTypes.Any())
             {
-                context.ProjectTypes.Add(new ProjectType { Description = "NonBillable" });
-                context.ProjectTypes.Add(new ProjectType { Description = "FixedPrice" });
-                context.ProjectTypes.Add(new ProjectType { Description = "TimeAndMaterials" });
+                context.ProjectTypes.Add(new ProjectType { Description = "Non Billable" });
+                context.ProjectTypes.Add(new ProjectType { Description = "Fixed Price" });
+                context.ProjectTypes.Add(new ProjectType { Description = "Time And Materials" }); //No encontré cómo se llamaría este tipo de proyectos, por ahora va con ese nombre
             }
 
             if (!context.RateTypes.Any())
             {
-                context.RateTypes.Add(new RateType { Description = "TotalCostRate" });
-                context.RateTypes.Add(new RateType { Description = "PerTaskRate" });
+                context.RateTypes.Add(new RateType { Description = "Total Cost Rate" });
+                context.RateTypes.Add(new RateType { Description = "Per Task Rate" });
             }
 
             if (!context.TimeDistributions.Any())

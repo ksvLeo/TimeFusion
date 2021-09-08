@@ -224,7 +224,7 @@
         "tags": [
           "Client"
         ],
-        "operationId": "Client_ReactiveClient",
+        "operationId": "Client_ReactivateClient",
         "parameters": [
           {
             "name": "ClientId",

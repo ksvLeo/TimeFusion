@@ -22,7 +22,7 @@ export interface IClientClient {
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     getClient(customerId: number | undefined): Observable<ClientDto>;
     getReferrersByClient(id: number | undefined): Observable<ReferrerDto[]>;
-    reactiveClient(clientId: number | undefined): Observable<boolean>;
+    reactivateClient(clientId: number | undefined): Observable<boolean>;
 }
 
 @Injectable({
@@ -408,7 +408,7 @@ export class ClientClient implements IClientClient {
         return _observableOf<ReferrerDto[]>(<any>null);
     }
 
-    reactiveClient(clientId: number | undefined): Observable<boolean> {
+    reactivateClient(clientId: number | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Client/reactiveClient?";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
@@ -425,11 +425,11 @@ export class ClientClient implements IClientClient {
         };
 
         return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processReactiveClient(response_);
+            return this.processReactivateClient(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processReactiveClient(<any>response_);
+                    return this.processReactivateClient(<any>response_);
                 } catch (e) {
                     return <Observable<boolean>><any>_observableThrow(e);
                 }
@@ -438,7 +438,7 @@ export class ClientClient implements IClientClient {
         }));
     }
 
-    protected processReactiveClient(response: HttpResponseBase): Observable<boolean> {
+    protected processReactivateClient(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
