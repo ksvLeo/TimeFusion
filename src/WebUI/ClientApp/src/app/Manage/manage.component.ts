@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { NavMenuItemInterface } from "../interfaces/navMenuItem";
 
 @Component({
     selector: 'app-manage-component',
@@ -7,22 +8,30 @@ import { Component } from "@angular/core";
 })
 export class ManageComponent {
 
-    layout = [
+    flag: boolean = false;
+
+    manageMenu: NavMenuItemInterface[] = [
         {
-            name: "Clients",
-            url: "/"
+            description: "Clients",
+            url: "clients"
         },
         {
-            name: "Tasks",
-            url: "/"
+            description: "Tasks",
+            url: ""
         },
         {
-            name: "Expense Categories",
-            url: "/"
+            description: "Expense Categories",
+            url: ""
         },
         {
-            name: "Roles",
-            url: "/"
+            description: "Roles",
+            url: ""
         }
     ];
+
+    active(){
+        this.flag = this.flag;
+    }
 }
+
+

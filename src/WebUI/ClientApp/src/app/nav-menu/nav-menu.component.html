@@ -1,26 +1,17 @@
 <div class="container-fluid p-0 ">
   <div class="row d-flex justify-content-between mt-1">
-    <button class="btn btn-none text-dark nav-link"  routerLinkActive="nav-link" routerLink="{{ item.url }}" *ngFor="let item of navItems">
+    <button class="btn btn-none text-dark" routerLink="/">
+      <i class="fas fa-laptop-house fa-2x"></i>
+    </button>
+    <button class="btn btn-none text-dark nav-link" routerLinkActive="nav-link-active" routerLink="{{ item.url }}" *ngFor="let item of navItems">
       <i *ngIf="item.icon" class="{{ item.icon }}"></i>
       <span *ngIf="!item.icon">{{ item.description }}</span>
     </button>
+    <button class="btn btn-none text-dark">
+      <i class="far fa-user fa-2x"></i>
+    </button>
+    <!-- Testing Api -->
     <a class="nav-link text-dark mt-1" href="/api" target="_blank">API</a>
-
-    <!-- Test Api -->
-    <!-- <div class="col-1">
-      <a class="nav-link text-dark" href="/api" target="_blank">API</a>
-    </div>-->  
-    <!-- Test Api -->
-    <!-- <div class="-col-2">
-    <app-login-menu></app-login-menu> -->
-    
-      <!-- <nav
-      class="
-        navbar navbar-expand-sm navbar-toggleable-sm navbar-light
-        bg-white
-        border-bottom
-        box-shadow
-        mb-3
-      "
-    > -->
+    <!-- Testing Api -->
+  </div>
 </div>
