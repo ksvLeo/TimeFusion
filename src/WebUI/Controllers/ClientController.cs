@@ -17,7 +17,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ClientDto>>> Get()
         {
-            return await Mediator.Send(new GetClientsQuery());
+            return await Mediator.Send(new GetClientsWithPaginationQuery());
         }
 
         [HttpGet("[action]")]
