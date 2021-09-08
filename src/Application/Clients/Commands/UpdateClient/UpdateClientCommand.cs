@@ -1,5 +1,5 @@
-﻿using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Clients.Dtos;
+﻿using FusionIT.TimeFusion.Application.Clients.Dtos;
+using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

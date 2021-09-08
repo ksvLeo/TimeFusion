@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Clients.Dtos
+namespace FusionIT.TimeFusion.Application.Clients.Dtos
 {
     public class ClientDto : IMapFrom<Client>
     {

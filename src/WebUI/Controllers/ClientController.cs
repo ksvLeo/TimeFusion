@@ -2,8 +2,8 @@
 using FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer;
 using FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient;
 using FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer;
+using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Clients.Queries;
-using FusionIT.TimeFusion.Clients.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,12 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
     public class ClientController : ApiControllerBase
     {
         [HttpGet]
+        public async Task<ActionResult<List<ClientDto>>> Get()
+        {
+            return await Mediator.Send(new GetClientsQuery());
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult<List<ClientDto>>> GetClientsByName([FromQuery] GetClientsByNameQuery query)
         {
             return await Mediator.Send(query);
@@ -24,6 +30,12 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         public async Task<ActionResult<ClientDto>> GetClient([FromQuery] GetClientQuery query)
         {
             return await Mediator.Send(query);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<List<ReferrerDto>>> GetReferrersByClient(int id)
+        {
+            return await Mediator.Send(new GetReferrersByClientQuery { ClientId = id });
         }
 
         [HttpPost]

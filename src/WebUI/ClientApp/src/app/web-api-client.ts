@@ -15,11 +15,13 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IClientClient {
-    getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
+    get(): Observable<ClientDto[]>;
     createClient(command: CreateClientCommand): Observable<number>;
     updateClient(command: UpdateClientCommand): Observable<boolean>;
     deleteClient(clientId: number | undefined): Observable<number>;
+    getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     getClient(customerId: number | undefined): Observable<ClientDto>;
+    getReferrersByClient(id: number | undefined): Observable<ReferrerDto[]>;
     reactiveClient(clientId: number | undefined): Observable<boolean>;
 }
 
@@ -36,10 +38,8 @@ export class ClientClient implements IClientClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getClientsByName(name: string | null | undefined): Observable<ClientDto[]> {
-        let url_ = this.baseUrl + "/api/Client?";
-        if (name !== undefined && name !== null)
-            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+    get(): Observable<ClientDto[]> {
+        let url_ = this.baseUrl + "/api/Client";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -51,11 +51,11 @@ export class ClientClient implements IClientClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetClientsByName(response_);
+            return this.processGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetClientsByName(<any>response_);
+                    return this.processGet(<any>response_);
                 } catch (e) {
                     return <Observable<ClientDto[]>><any>_observableThrow(e);
                 }
@@ -64,7 +64,7 @@ export class ClientClient implements IClientClient {
         }));
     }
 
-    protected processGetClientsByName(response: HttpResponseBase): Observable<ClientDto[]> {
+    protected processGet(response: HttpResponseBase): Observable<ClientDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -246,6 +246,60 @@ export class ClientClient implements IClientClient {
         return _observableOf<number>(<any>null);
     }
 
+    getClientsByName(name: string | null | undefined): Observable<ClientDto[]> {
+        let url_ = this.baseUrl + "/api/Client/GetClientsByName?";
+        if (name !== undefined && name !== null)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClientsByName(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClientsByName(<any>response_);
+                } catch (e) {
+                    return <Observable<ClientDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ClientDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClientsByName(response: HttpResponseBase): Observable<ClientDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ClientDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ClientDto[]>(<any>null);
+    }
+
     getClient(customerId: number | undefined): Observable<ClientDto> {
         let url_ = this.baseUrl + "/api/Client/client?";
         if (customerId === null)
@@ -296,6 +350,62 @@ export class ClientClient implements IClientClient {
             }));
         }
         return _observableOf<ClientDto>(<any>null);
+    }
+
+    getReferrersByClient(id: number | undefined): Observable<ReferrerDto[]> {
+        let url_ = this.baseUrl + "/api/Client/GetReferrersByClient?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetReferrersByClient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetReferrersByClient(<any>response_);
+                } catch (e) {
+                    return <Observable<ReferrerDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ReferrerDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetReferrersByClient(response: HttpResponseBase): Observable<ReferrerDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ReferrerDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ReferrerDto[]>(<any>null);
     }
 
     reactiveClient(clientId: number | undefined): Observable<boolean> {

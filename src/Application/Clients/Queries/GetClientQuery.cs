@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
-using FusionIT.TimeFusion.Clients.Dtos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
