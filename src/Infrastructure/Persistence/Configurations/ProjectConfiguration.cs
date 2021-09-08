@@ -21,7 +21,6 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
 
             builder.Property(p => p.Title)
                 .IsRequired(false);
-
         }
     }
 }

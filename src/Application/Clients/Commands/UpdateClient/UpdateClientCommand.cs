@@ -40,6 +40,15 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
                 throw new ArgumentException("Name field can't be null.");
             }
 
+            Client nameClientExist = await _context.Clients
+                .Where(c => c.Id != client.Id && c.Name == request.Client.Name)
+                .FirstOrDefaultAsync();
+
+            if(nameClientExist != null)
+            {
+                throw new ArgumentException("Already exist a client with entred name.");
+            }
+
             Currency currency = await _context.Currencies
                 .FirstOrDefaultAsync(c => c.Id == request.Client.Currency.Id);
 

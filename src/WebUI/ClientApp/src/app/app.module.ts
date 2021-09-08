@@ -17,6 +17,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { TokenComponent } from './token/token.component';
 import { ManageComponent } from './Manage/manage.component';
+import { ClientsComponent } from './Manage/Pages/clients/clients.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ManageComponent } from './Manage/manage.component';
     FetchDataComponent,
     TodoComponent,
     TokenComponent,
-    ManageComponent
+    ManageComponent,
+    ClientsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

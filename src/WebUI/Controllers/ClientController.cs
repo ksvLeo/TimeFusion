@@ -51,7 +51,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPut("reactiveClient")]
-        public async Task<ActionResult<bool>> ReactiveClient([FromQuery]ReactivateClientCommand command)
+        public async Task<ActionResult<bool>> ReactivateClient([FromQuery]ReactivateClientCommand command)
         {
             return await Mediator.Send(command);
         }

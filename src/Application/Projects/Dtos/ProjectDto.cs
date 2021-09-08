@@ -36,6 +36,10 @@ namespace FusionIT.TimeFusion.Application.Projects.Dtos
 
         public BudgetType BudgetType { get; set; }
 
+        public RateType RateType { get; set; }
+
+        public TimeDistribution TimeDistribution { get; set; }
+
         public int WorkTimeTicks { get; set; }
 
     }

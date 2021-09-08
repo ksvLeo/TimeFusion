@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavMenuItemInterface } from '../interfaces/navMenuItem';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,12 +8,8 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
 
+
   navItems: NavMenuItemInterface[] = [
-    { 
-      description: "",
-      url: "/",
-      icon:"fas fa-laptop-house fa-2x"
-    },
     {
       description: "Time",
       url: "/"
@@ -41,15 +38,6 @@ export class NavMenuComponent {
       description: "Manage",
       url: "/manage"
     },
-    {
-      description: "API",
-      url: "/api"
-    },
-    {
-      description: "",
-      url: "/",
-      icon: 'far fa-user fa-2x'
-    }
   ]
 
   isExpanded = false;
@@ -61,11 +49,4 @@ export class NavMenuComponent {
   toggle() {
     this.isExpanded = !this.isExpanded;
   }
-}
-
-export interface NavMenuItemInterface{
-    url: string;
-    description: string;
-    icon?: string;
-    
 }
