@@ -37,10 +37,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
 
         public async Task<PaginatedList<ClientDto>> Handle(GetClientsWithPaginationQuery request, CancellationToken cancellationToken)
         {
-            var propertyInfo = typeof(Client).GetProperty(request.OrderField);
-
             PaginatedList<ClientDto> clients = await _context.Clients
-                .OrderBy(c => propertyInfo.GetValue(c, null))
                 .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 
