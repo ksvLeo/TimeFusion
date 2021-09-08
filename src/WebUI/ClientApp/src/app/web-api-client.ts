@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IClientClient {
-    get(): Observable<ClientDto[]>;
+    get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined): Observable<PaginatedListOfClientDto>;
     createClient(command: CreateClientCommand): Observable<number>;
     updateClient(command: UpdateClientCommand): Observable<boolean>;
     deleteClient(clientId: number | undefined): Observable<number>;
@@ -38,8 +38,22 @@ export class ClientClient implements IClientClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    get(): Observable<ClientDto[]> {
-        let url_ = this.baseUrl + "/api/Client";
+    get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined): Observable<PaginatedListOfClientDto> {
+        let url_ = this.baseUrl + "/api/Client?";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (order === null)
+            throw new Error("The parameter 'order' cannot be null.");
+        else if (order !== undefined)
+            url_ += "Order=" + encodeURIComponent("" + order) + "&";
+        if (orderField !== undefined && orderField !== null)
+            url_ += "OrderField=" + encodeURIComponent("" + orderField) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -57,14 +71,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processGet(<any>response_);
                 } catch (e) {
-                    return <Observable<ClientDto[]>><any>_observableThrow(e);
+                    return <Observable<PaginatedListOfClientDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ClientDto[]>><any>_observableThrow(response_);
+                return <Observable<PaginatedListOfClientDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<ClientDto[]> {
+    protected processGet(response: HttpResponseBase): Observable<PaginatedListOfClientDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -75,11 +89,7 @@ export class ClientClient implements IClientClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ClientDto.fromJS(item));
-            }
+            result200 = PaginatedListOfClientDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -87,7 +97,7 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ClientDto[]>(<any>null);
+        return _observableOf<PaginatedListOfClientDto>(<any>null);
     }
 
     createClient(command: CreateClientCommand): Observable<number> {
@@ -1164,6 +1174,70 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export class PaginatedListOfClientDto implements IPaginatedListOfClientDto {
+    items?: ClientDto[] | undefined;
+    pageIndex?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfClientDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ClientDto.fromJS(item));
+            }
+            this.pageIndex = _data["pageIndex"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfClientDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfClientDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageIndex"] = this.pageIndex;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data; 
+    }
+}
+
+export interface IPaginatedListOfClientDto {
+    items?: ClientDto[] | undefined;
+    pageIndex?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+}
+
 export class ClientDto implements IClientDto {
     id?: number;
     name?: string | undefined;
@@ -1330,6 +1404,11 @@ export interface IReferrerDto {
     email?: string | undefined;
     phoneNumber?: string | undefined;
     active?: boolean;
+}
+
+export enum PaginationOrder {
+    ASC = 1,
+    DESC = 2,
 }
 
 export class CreateClientCommand implements ICreateClientCommand {
