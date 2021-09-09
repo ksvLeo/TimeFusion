@@ -1,6 +1,7 @@
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ClientClient, ClientDto, CurrencyDto, CurrencyReferenceClient, ReferrerDto } from "src/app/web-api-client";
+import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ReferrerDto } from "src/app/web-api-client";
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -15,9 +16,12 @@ export class CreateEditClientCompontent implements OnInit{
     createReferrer: boolean = false;
     isClientFormValid: boolean = false;
     isReferrerFormValid: boolean = false;
+    isFormsValid: boolean = true;
 
     // Data
     currencies: CurrencyDto[] = [];
+    userExist: boolean;
+    defaultCurrency: CurrencyDto;
 
     constructor(
         private fb: FormBuilder,
@@ -27,56 +31,105 @@ export class CreateEditClientCompontent implements OnInit{
 
     ngOnInit(){
         this.getCurrencies();
-
+        
         this.clientForm = this.fb.group({
-            name: [ "",[Validators.minLength(3),Validators.required]],
+            name: ["",[Validators.minLength(3),Validators.required]],
             address: [ "",[Validators.minLength(4)]],
-            currency: [ "", [Validators.required]]
+            currency: ["", [Validators.required]]
         });
+
 
         this.clientForm.valueChanges.subscribe(changes => {
             this.clientFormChanges(changes);
         });
 
         this.referrerForm = this.fb.group({
-            title : [ , [Validators.minLength(4), Validators.required]],
-            name: [ , [Validators.minLength(3)]],
+            title : [ , [Validators.minLength(4)]],
+            name: [ , [Validators.minLength(3), Validators.required]],
             email: [ , [Validators.email]],
             phone: [ , []]
         });
+
+        this.referrerForm.valueChanges.subscribe(changes =>{
+            this.referrerFromChanges(changes);
+        })
     }
 
-    getCurrencies(){
+    getCurrencies(): CurrencyDto[]{
         this.currencyClient.getCurrencyReferences().subscribe(res =>{
             this.currencies = res;
+            this.defaultCurrency = this.currencies.find(c => c.id == 2);
+            this.clientForm.patchValue({
+                currency: [this.defaultCurrency.id]
+            });
         }, err => {});
+
+        return this.currencies;
     }
 
     clientFormChanges($values){
-        this.isClientFormValid = this.clientForm.valid;
+        if(this.userExist){
+            this.userExist = false;
+        }
+    
+        if((this.clientForm.get('name').value.trim()).length > 0){
+            this.clientClient.getClientByName(this.clientForm.get('name').value.trim()).subscribe(res =>{
+                if(res){
+                    this.userExist = true;
+                    return;
+                }
+
+                if(!this.userExist){
+                    this.isClientFormValid = this.clientForm.valid;
+                }
+            });
+        }else{
+            this.userExist = false;
+        }
+
+        this.validForm();
     }
 
     referrerFromChanges($values){
         this.isReferrerFormValid = this.referrerForm.valid;
+        this.validForm();
     }
 
     onCreateReferrer(){
         if(this.createReferrer){
             this.createReferrer = false;
+            this.referrerForm.reset();
+            this.validForm();
             return;
         }
-        debugger;
-        if(this.isClientFormValid){
-            this.isClientFormValid = true;
-        }
+
         this.createReferrer = true;
+        this.validForm();
+    }
+
+    validForm(){
+        this.isFormsValid = true;
+        if(this.isClientFormValid && !this.createReferrer && !this.userExist){
+            this.isFormsValid = false;
+            return;
+        }
+        if(this.isClientFormValid && this.isReferrerFormValid && this.createReferrer){
+            this.isFormsValid = false;
+            return;
+        }
+
+        this.isFormsValid = true;    
     }
 
     create(){
         let referrer = this.mapReferrer(this.referrerForm);
         let client  = this.mapClient(this.clientForm, referrer);
-
-        console.log(client);
+        this.clientClient.createClient(new CreateClientCommand({client : client})).subscribe(res =>{
+            this.clientForm.reset();
+            if(this.createReferrer){
+                this.referrerForm.reset();
+            }
+        }, err => {});
     }
 
     mapReferrer(referrerForm: FormGroup): ReferrerDto {
@@ -95,10 +148,9 @@ export class CreateEditClientCompontent implements OnInit{
         let currency = this.currencies.find(c => c.id == clientForm.get('currency').value);
         return  new ClientDto({
             name : clientForm.get('name').value,
-            address : clientForm.get('address').value,
+            address : clientForm.get('address').value.trim(),
             currency: currency,
             referrer: referrers,
         });
     }
-
 }

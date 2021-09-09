@@ -188,6 +188,37 @@
         }
       }
     },
+    "/api/Client/GetClientByName": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Client_GetClientByName",
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Client/client": {
       "get": {
         "tags": [

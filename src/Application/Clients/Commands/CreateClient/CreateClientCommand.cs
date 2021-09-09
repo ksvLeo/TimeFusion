@@ -27,7 +27,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
         public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(request.Client.Name))
+                if (string.IsNullOrEmpty(request.Client.Name))
             {
                 throw new ArgumentException("Name field can't be null.");
             }
