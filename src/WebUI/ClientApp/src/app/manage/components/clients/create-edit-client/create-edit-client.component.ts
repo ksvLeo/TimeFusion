@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ClientClient, CurrencyDto, CurrencyReferenceClient } from "src/app/web-api-client";
+import { ClientClient, ClientDto, CurrencyDto, CurrencyReferenceClient, ReferrerDto } from "src/app/web-api-client";
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -60,14 +60,45 @@ export class CreateEditClientCompontent implements OnInit{
         this.isReferrerFormValid = this.referrerForm.valid;
     }
 
-    onCreateReferrerFrom(){
-        if(this.referrerForm){
+    onCreateReferrer(){
+        if(this.createReferrer){
             this.createReferrer = false;
             return;
         }
+        debugger;
+        if(this.isClientFormValid){
+            this.isClientFormValid = true;
+        }
+        this.createReferrer = true;
     }
 
     create(){
-        
+        let referrer = this.mapReferrer(this.referrerForm);
+        let client  = this.mapClient(this.clientForm, referrer);
+
+        console.log(client);
     }
+
+    mapReferrer(referrerForm: FormGroup): ReferrerDto {
+        return new ReferrerDto({
+            name : referrerForm.get('name').value,
+            title: referrerForm.get('title').value,
+            email: referrerForm.get('email').value,
+            phoneNumber: referrerForm.get('phone').value
+        });
+    }
+
+
+    mapClient(clientForm: FormGroup, referrer: ReferrerDto) : ClientDto{
+        let referrers : ReferrerDto[] = [];
+        referrers.push(referrer);
+        let currency = this.currencies.find(c => c.id == clientForm.get('currency').value);
+        return  new ClientDto({
+            name : clientForm.get('name').value,
+            address : clientForm.get('address').value,
+            currency: currency,
+            referrer: referrers,
+        });
+    }
+
 }

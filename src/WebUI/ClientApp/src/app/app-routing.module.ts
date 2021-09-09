@@ -3,9 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { HomeComponent } from './home/home.component';
-import { ManageComponent } from './Manage/manage.component';
-import { ClientsComponent } from './Manage/Pages/clients/clients.component';
+import { HomeComponent } from './component/home/home.component';
 import { TodoComponent } from './todo/todo.component';
 import { TokenComponent } from './token/token.component';
 
