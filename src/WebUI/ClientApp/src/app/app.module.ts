@@ -15,6 +15,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { TokenComponent } from './token/token.component';
 import { ManageModule } from './manage/manage.module';
+import { CommonsModule } from './commons/commons.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ManageModule } from './manage/manage.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     ModalModule.forRoot(),
-    ManageModule
+    ManageModule,
+    CommonsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

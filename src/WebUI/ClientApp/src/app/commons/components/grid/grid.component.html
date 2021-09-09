@@ -3,7 +3,9 @@
 <table>
     <thead>
         <tr>
-            <th></th>
+            <th *ngFor="let info of configurationInfo">
+                {{info.label}}
+            </th>
         </tr>
     </thead>
     <tbody>

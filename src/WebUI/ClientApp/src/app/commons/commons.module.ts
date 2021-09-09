@@ -12,6 +12,9 @@ import { GridComponent } from './components/grid/grid.component';
   imports: [
     CommonModule,
     CommonsRoutingModule
+  ],
+  exports:[
+    
   ]
 })
 export class CommonsModule { }
