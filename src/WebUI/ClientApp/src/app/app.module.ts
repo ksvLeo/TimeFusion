@@ -7,8 +7,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './component/nav-menu/nav-menu.component';
 import { HomeComponent } from './component/home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { TodoComponent } from './todo/todo.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
@@ -17,16 +15,15 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { TokenComponent } from './token/token.component';
 import { ManageModule } from './manage/manage.module';
+import { CommonsModule } from './commons/commons.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     TodoComponent,
-    TokenComponent,
+    TokenComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,7 +34,8 @@ import { ManageModule } from './manage/manage.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     ModalModule.forRoot(),
-    ManageModule
+    ManageModule,
+    CommonsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
