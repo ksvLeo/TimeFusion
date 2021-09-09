@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Queries
 {
-    public class GetReferrersByClientQuery : IRequest<List<ReferrerDto>>
+    public class GetReferrersByClientQuery : IRequest<List<ContactDto>>
     {
         public int ClientId { get; set; }
     }
 
-    public class GetReferrersByClientQueryHandler : IRequestHandler<GetReferrersByClientQuery, List<ReferrerDto>>
+    public class GetReferrersByClientQueryHandler : IRequestHandler<GetReferrersByClientQuery, List<ContactDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -29,11 +29,11 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
             _mapper = mapper;
         }
 
-        public async Task<List<ReferrerDto>> Handle(GetReferrersByClientQuery request, CancellationToken cancellationToken)
+        public async Task<List<ContactDto>> Handle(GetReferrersByClientQuery request, CancellationToken cancellationToken)
         {
-            List<ReferrerDto> referrers = await _context.Referrers
+            List<ContactDto> referrers = await _context.Contacts
                 .Where(r => r.ClientId == request.ClientId)
-                .ProjectTo<ReferrerDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             return referrers;

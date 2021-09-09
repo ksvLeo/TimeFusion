@@ -39,7 +39,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
 
         public DbSet<Client> Clients { get; set; }
 
-        public DbSet<Referrer> Referrers { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<Project> Projects { get; set; }
 

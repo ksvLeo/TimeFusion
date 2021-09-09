@@ -1,18 +1,19 @@
-﻿using FusionIT.TimeFusion.Application.Common.Mappings;
-using FusionIT.TimeFusion.Domain.Entities;
+﻿using FusionIT.TimeFusion.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Clients.Dtos
+namespace FusionIT.TimeFusion.Domain.Entities
 {
-    public class ReferrerDto : IMapFrom<Referrer>
+    public class Contact : AuditableEntity
     {
         public int Id { get; set; }
 
         public string Title { get; set; }
+
+        public int ClientId { get; set; }
 
         public string Name { get; set; }
 

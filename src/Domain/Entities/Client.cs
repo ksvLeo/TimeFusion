@@ -17,7 +17,7 @@ namespace FusionIT.TimeFusion.Domain.Entities
 
         public Currency Currency { get; set; }
 
-        public List<Referrer> Referrer { get; set; }
+        public List<Contact> Referrer { get; set; }
 
         public bool Active { get; set; }
 

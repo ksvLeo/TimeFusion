@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
 {
-    public class ReferrerConfiguration : IEntityTypeConfiguration<Referrer>
+    public class ContactConfiguration : IEntityTypeConfiguration<Contact>
     {
-        public void Configure(EntityTypeBuilder<Referrer> builder)
+        public void Configure(EntityTypeBuilder<Contact> builder)
         {
             builder.Property(r => r.Name)
                 .IsRequired(true);

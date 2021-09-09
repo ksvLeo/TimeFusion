@@ -20,7 +20,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Dtos
 
         public CurrencyDto Currency { get; set; }
 
-        public List<ReferrerDto> Referrer { get; set; }
+        public List<ContactDto> Referrer { get; set; }
 
         public bool Active { get; set; }
     }

@@ -250,12 +250,12 @@
         }
       }
     },
-    "/api/Client/GetReferrersByClient": {
+    "/api/Client/GetContactsByClient": {
       "get": {
         "tags": [
           "Client"
         ],
-        "operationId": "Client_GetReferrersByClient",
+        "operationId": "Client_GetContactsByClient",
         "parameters": [
           {
             "name": "id",
@@ -275,7 +275,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReferrerDto"
+                    "$ref": "#/components/schemas/ContactDto"
                   }
                 }
               }
@@ -831,7 +831,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/ReferrerDto"
+              "$ref": "#/components/schemas/ContactDto"
             }
           },
           "active": {
@@ -861,7 +861,7 @@
           }
         }
       },
-      "ReferrerDto": {
+      "ContactDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

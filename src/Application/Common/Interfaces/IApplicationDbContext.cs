@@ -13,7 +13,7 @@ namespace FusionIT.TimeFusion.Application.Common.Interfaces
 
         DbSet<Currency> Currencies { get; set; }
 
-        DbSet<Referrer> Referrers { get; set; }
+        DbSet<Contact> Contacts { get; set; }
 
         DbSet<Client> Clients { get; set; }
 

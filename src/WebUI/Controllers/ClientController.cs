@@ -40,7 +40,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<ReferrerDto>>> GetReferrersByClient(int id)
+        public async Task<ActionResult<List<ContactDto>>> GetContactsByClient(int id)
         {
             return await Mediator.Send(new GetReferrersByClientQuery { ClientId = id });
         }

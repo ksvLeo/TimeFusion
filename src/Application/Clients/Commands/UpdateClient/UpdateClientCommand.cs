@@ -57,16 +57,16 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
                 throw new ArgumentException($"Unable to find currency with ID #{request.Client.Currency.Id}.");
             }
 
-            List<Referrer> referrers = new List<Referrer>();
+            List<Contact> referrers = new List<Contact>();
 
             request.Client.Referrer.ForEach(c =>
             {
-                Referrer referrer =  _context.Referrers
+                Contact referrer =  _context.Contacts
                     .FirstOrDefault(r => r.Id == c.Id);
 
                 if(referrer == null)
                 {
-                    referrer = new Referrer();
+                    referrer = new Contact();
                 }
 
                 // Map referrer update
