@@ -166,6 +166,9 @@ export class CreateEditClientCompontent implements OnInit{
         }
         let client  = this.mapClient(this.clientForm, referrer);
 
+
+
+        
         if(this.clientEdit){
             client.id = this.client.id;
             client.contactList = this.client.contactList;

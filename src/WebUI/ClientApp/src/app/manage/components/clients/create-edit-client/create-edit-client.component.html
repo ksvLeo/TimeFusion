@@ -48,11 +48,11 @@
         </form>
         
         <div *ngIf="!clientEdit" class="mt-2">
-            <button type="button" class="btn btn-primary mt-2"  *ngIf="!createContact" (click)="onCreateReferrer() "> 
+            <button type="button" class="btn btn-primary mt-2"  *ngIf="!createContact" (click)="onCreateContact() "> 
                 <i class="fas fa-plus-circle"></i>
                 Add Contact
             </button>
-            <button type="button" class="btn btn-danger mt-2" *ngIf="createContact" (click)="onCreateReferrer()"> 
+            <button type="button" class="btn btn-danger mt-2" *ngIf="createContact" (click)="onCreateContact()"> 
                 <i class="fas fa-minus-circle"></i>
                 Cancel
             </button>
