@@ -1,7 +1,11 @@
 <div class="container">
-    <div class="col-12 mt-2 p-0">
+    <div class="col-12 mt-2 p-0" *ngIf="!clientEdit">
         <h3>New Client</h3>
         <p>Once you’ve added a client, you can add projects and contacts.</p>
+        <hr>
+    </div>
+    <div class="col-12 mt-2 p-0" *ngIf="clientEdit">
+        <h3>Edit Client</h3>
         <hr>
     </div>
 
@@ -25,7 +29,7 @@
                         <label for="address">Address (Optional)</label>
                     </div>
                     <div class="col-12 col-sm-8 col-xl-6">
-                        <input type="text" id="name" class="form-control" formControlName="address" />
+                        <input type="text" id="address" class="form-control" formControlName="address" />
                         <span class="text-danger" *ngIf="clientForm.controls.address.touched && clientForm.controls.address.invalid">This field must have a minimum of 4 characters.</span>
                     </div>
                 </div>
@@ -43,14 +47,16 @@
             </div>
         </form>
         
-        <button type="button" class="btn btn-primary mt-2"  *ngIf="!createReferrer" (click)="onCreateReferrer() "> 
-            <i class="fas fa-plus-circle"></i>
-            Add Referrer
-        </button>
-        <button type="button" class="btn btn-danger mt-2" *ngIf="createReferrer" (click)="onCreateReferrer()"> 
-            <i class="fas fa-minus-circle"></i>
-            Cancel
-        </button>
+        <div *ngIf="!clientEdit" class="mt-2">
+            <button type="button" class="btn btn-primary mt-2"  *ngIf="!createReferrer" (click)="onCreateReferrer() "> 
+                <i class="fas fa-plus-circle"></i>
+                Add Referrer
+            </button>
+            <button type="button" class="btn btn-danger mt-2" *ngIf="createReferrer" (click)="onCreateReferrer()"> 
+                <i class="fas fa-minus-circle"></i>
+                Cancel
+            </button>
+        </div>
 
         <div class="col-12 mt-5 p-1" *ngIf="createReferrer">
             <h5>New Refferrer</h5>
@@ -111,7 +117,7 @@
         </div>
 
         <div class="col-12 mb-2 d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary"  [disabled]="isFormsValid" (click)="create()" >Save Client</button>
+            <button type="submit" class="btn btn-primary"  [disabled]="isFormsValid" (click)="saveClient()" >Save Client</button>
         </div>
     </div>
 </div>

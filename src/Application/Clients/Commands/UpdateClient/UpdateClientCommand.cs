@@ -45,7 +45,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
                 .FirstOrDefaultAsync();
 
             if(nameClientExist != null)
-            {
+            {  
                 throw new ArgumentException("Already exist a client with entred name.");
             }
 
@@ -59,7 +59,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
             List<Referrer> referrers = new List<Referrer>();
 
-            request.Client.Referrer.ForEach(c =>
+             request.Client.Referrer.ForEach(c =>
             {
                 Referrer referrer =  _context.Referrers
                     .FirstOrDefault(r => r.Id == c.Id);
