@@ -27,7 +27,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
         public async Task<bool> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            Client client = await _context.Clients.Include(c => c.Referrer).FirstOrDefaultAsync(c => c.Id == request.Client.Id);
+            Client client = await _context.Clients.Include(c => c.ContactList).FirstOrDefaultAsync(c => c.Id == request.Client.Id);
 
 
             if (client == null)
@@ -59,7 +59,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
             List<Contact> referrers = new List<Contact>();
 
-            request.Client.Referrer.ForEach(c =>
+            request.Client.ContactList.ForEach(c =>
             {
                 Contact referrer =  _context.Contacts
                     .FirstOrDefault(r => r.Id == c.Id);
@@ -84,7 +84,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
             client.Name = request.Client.Name;
             client.Address = request.Client.Address;
             client.Currency = currency;
-            client.Referrer = referrers;
+            client.ContactList = referrers;
 
             await _context.SaveChangesAsync(cancellationToken);
 

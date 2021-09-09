@@ -16,7 +16,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence.Configurations
             builder.Property(c => c.Name)
                 .IsRequired();
 
-            builder.HasMany(c => c.Referrer).WithOne().HasForeignKey(c => c.ClientId);
+            builder.HasMany(c => c.ContactList).WithOne().HasForeignKey(c => c.ClientId);
 
             builder.HasOne(c => c.Currency).WithMany();
 

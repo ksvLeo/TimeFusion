@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 {
-    class UpdateContactCommand
+    public class UpdateContactCommand
     {
     }
 }

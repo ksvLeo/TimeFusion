@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
 {
-    class CreateContactValidator
+    public class CreateContactValidator
     {
     }
 }
