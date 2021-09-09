@@ -27,7 +27,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
         public async Task<bool> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            Client client = await _context.Clients.Include(c => c.Referrer).FirstOrDefaultAsync(c => c.Id == request.Client.Id);
+            Client client = await _context.Clients.Include(c => c.ContactList).FirstOrDefaultAsync(c => c.Id == request.Client.Id);
 
 
             if (client == null)
@@ -57,16 +57,16 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
                 throw new ArgumentException($"Unable to find currency with ID #{request.Client.Currency.Id}.");
             }
 
-            List<Referrer> referrers = new List<Referrer>();
+            List<Contact> contacts = new List<Contact>();
 
-             request.Client.Referrer.ForEach(c =>
+            request.Client.ContactList.ForEach(c =>
             {
-                Referrer referrer =  _context.Referrers
+                Contact referrer =  _context.Contacts
                     .FirstOrDefault(r => r.Id == c.Id);
 
                 if(referrer == null)
                 {
-                    referrer = new Referrer();
+                    referrer = new Contact();
                 }
 
                 // Map referrer update
@@ -84,7 +84,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
             client.Name = request.Client.Name;
             client.Address = request.Client.Address;
             client.Currency = currency;
-            client.Referrer = referrers;
+            client.ContactList = referrers;
 
             await _context.SaveChangesAsync(cancellationToken);
 

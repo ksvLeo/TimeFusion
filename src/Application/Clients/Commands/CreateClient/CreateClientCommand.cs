@@ -46,14 +46,14 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 throw new ArgumentException("Currency not exist.");
             }
 
-            List<Referrer> referrers = new List<Referrer>();
+            List<Contact> referrers = new List<Contact>();
 
-            Referrer referrer = new Referrer
+            Contact referrer = new Contact
             {
-                Title = request.Client.Referrer[0].Email,
-                Name = request.Client.Referrer[0].Name,
-                Email = request.Client.Referrer[0].Email,
-                PhoneNumber = request.Client.Referrer[0].PhoneNumber,
+                Title = request.Client.ContactList[0].Email,
+                Name = request.Client.ContactList[0].Name,
+                Email = request.Client.ContactList[0].Email,
+                PhoneNumber = request.Client.ContactList[0].PhoneNumber,
                 Active = true
             };
 
@@ -64,7 +64,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 Name = request.Client.Name,
                 Address = request.Client.Address,
                 Currency = currency,
-                Referrer = referrers,
+                ContactList = referrers,
                 Active = true
             };
 

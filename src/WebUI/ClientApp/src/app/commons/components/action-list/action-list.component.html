@@ -1,0 +1,8 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-danger rounded-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="y">
+      <i class="fas fa-cog"></i>
+    </button>
+    <div class="dropdown-menu">
+      <button *ngFor="let action of actions" class="dropdown-item btn" href="#" (click)="onClick(action)">{{ action.label }}</button>
+    </div>
+</div>

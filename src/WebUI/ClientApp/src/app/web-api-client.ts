@@ -21,7 +21,7 @@ export interface IClientClient {
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     getClientByName(name: string | null | undefined): Observable<ClientDto>;
     getClient(customerId: number | undefined): Observable<ClientDto>;
-    getReferrersByClient(id: number | undefined): Observable<ReferrerDto[]>;
+    getContactsByClient(id: number | undefined): Observable<ContactDto[]>;
     reactivateClient(clientId: number | undefined): Observable<boolean>;
     updateClient(command: UpdateClientCommand): Observable<boolean>;
 }
@@ -361,8 +361,8 @@ export class ClientClient implements IClientClient {
         return _observableOf<ClientDto>(<any>null);
     }
 
-    getReferrersByClient(id: number | undefined): Observable<ReferrerDto[]> {
-        let url_ = this.baseUrl + "/api/Client/GetReferrersByClient?";
+    getContactsByClient(id: number | undefined): Observable<ContactDto[]> {
+        let url_ = this.baseUrl + "/api/Client/GetContactsByClient?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -378,20 +378,20 @@ export class ClientClient implements IClientClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetReferrersByClient(response_);
+            return this.processGetContactsByClient(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetReferrersByClient(<any>response_);
+                    return this.processGetContactsByClient(<any>response_);
                 } catch (e) {
-                    return <Observable<ReferrerDto[]>><any>_observableThrow(e);
+                    return <Observable<ContactDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ReferrerDto[]>><any>_observableThrow(response_);
+                return <Observable<ContactDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetReferrersByClient(response: HttpResponseBase): Observable<ReferrerDto[]> {
+    protected processGetContactsByClient(response: HttpResponseBase): Observable<ContactDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -405,7 +405,7 @@ export class ClientClient implements IClientClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ReferrerDto.fromJS(item));
+                    result200!.push(ContactDto.fromJS(item));
             }
             return _observableOf(result200);
             }));
@@ -414,7 +414,7 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ReferrerDto[]>(<any>null);
+        return _observableOf<ContactDto[]>(<any>null);
     }
 
     reactivateClient(clientId: number | undefined): Observable<boolean> {
@@ -1294,7 +1294,7 @@ export class ClientDto implements IClientDto {
     name?: string | undefined;
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
-    referrer?: ReferrerDto[] | undefined;
+    referrer?: ContactDto[] | undefined;
     active?: boolean;
 
     constructor(data?: IClientDto) {
@@ -1315,7 +1315,7 @@ export class ClientDto implements IClientDto {
             if (Array.isArray(_data["referrer"])) {
                 this.referrer = [] as any;
                 for (let item of _data["referrer"])
-                    this.referrer!.push(ReferrerDto.fromJS(item));
+                    this.referrer!.push(ContactDto.fromJS(item));
             }
             this.active = _data["active"];
         }
@@ -1349,7 +1349,7 @@ export interface IClientDto {
     name?: string | undefined;
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
-    referrer?: ReferrerDto[] | undefined;
+    referrer?: ContactDto[] | undefined;
     active?: boolean;
 }
 
@@ -1401,7 +1401,7 @@ export interface ICurrencyDto {
     symbol?: string | undefined;
 }
 
-export class ReferrerDto implements IReferrerDto {
+export class ContactDto implements IContactDto {
     id?: number;
     title?: string | undefined;
     name?: string | undefined;
@@ -1409,7 +1409,7 @@ export class ReferrerDto implements IReferrerDto {
     phoneNumber?: string | undefined;
     active?: boolean;
 
-    constructor(data?: IReferrerDto) {
+    constructor(data?: IContactDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1429,9 +1429,9 @@ export class ReferrerDto implements IReferrerDto {
         }
     }
 
-    static fromJS(data: any): ReferrerDto {
+    static fromJS(data: any): ContactDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ReferrerDto();
+        let result = new ContactDto();
         result.init(data);
         return result;
     }
@@ -1448,7 +1448,7 @@ export class ReferrerDto implements IReferrerDto {
     }
 }
 
-export interface IReferrerDto {
+export interface IContactDto {
     id?: number;
     title?: string | undefined;
     name?: string | undefined;
