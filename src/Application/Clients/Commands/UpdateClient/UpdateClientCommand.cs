@@ -77,14 +77,14 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
                 referrer.Active = c.Active;
 
                 // Add to list referrers
-                referrers.Add(referrer);
+                contacts.Add(referrer);
             });
 
             // Map customer update
             client.Name = request.Client.Name;
             client.Address = request.Client.Address;
             client.Currency = currency;
-            client.ContactList = referrers;
+            client.ContactList = contacts;
 
             await _context.SaveChangesAsync(cancellationToken);
 

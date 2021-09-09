@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ReferrerDto, UpdateClientCommand } from "src/app/web-api-client";
+import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ContactDto, UpdateClientCommand } from "src/app/web-api-client";
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -12,10 +12,10 @@ export class CreateEditClientCompontent implements OnInit{
 
     // Form
     clientForm: FormGroup;
-    referrerForm: FormGroup;
-    createReferrer: boolean = false;
+    contactForm: FormGroup;
+    createContact: boolean = false;
     isClientFormValid: boolean = false;
-    isReferrerFormValid: boolean = false;
+    isContactFormValid: boolean = false;
     isFormsValid: boolean = true;
 
     // Data
@@ -51,15 +51,15 @@ export class CreateEditClientCompontent implements OnInit{
             this.clientFormChanges(changes);
         });
 
-        this.referrerForm = this.fb.group({
+        this.contactForm = this.fb.group({
             title : [ "" , [Validators.minLength(4)]],
             name: [ "", [Validators.minLength(3), Validators.required]],
             email: [ "", [Validators.email]],
             phone: [ "", []]
         });
 
-        this.referrerForm.valueChanges.subscribe(changes =>{
-            this.referrerFromChanges(changes);
+        this.contactForm.valueChanges.subscribe(changes =>{
+            this.contactFromChanges(changes);
         })
     }
 
@@ -123,20 +123,20 @@ export class CreateEditClientCompontent implements OnInit{
         this.validForm();
     }
 
-    referrerFromChanges($values){
-        this.isReferrerFormValid = this.referrerForm.valid;
+    contactFromChanges($values){
+        this.isContactFormValid = this.contactForm.valid;
         this.validForm();
     }
 
-    onCreateReferrer(){
-        if(this.createReferrer){
-            this.createReferrer = false;
-            this.referrerForm.reset();
+    onCreateContact(){
+        if(this.createContact){
+            this.createContact = false;
+            this.contactForm.reset();
             this.validForm();
             return;
         }
 
-        this.createReferrer = true;
+        this.createContact = true;
         this.validForm();
     }
 
@@ -144,11 +144,11 @@ export class CreateEditClientCompontent implements OnInit{
         if(this.client){
             this.isClientFormValid = true;
         }
-        if(this.isClientFormValid && !this.createReferrer && !this.userExist){
+        if(this.isClientFormValid && !this.createContact && !this.userExist){
             this.isFormsValid = false;
             return;
         }
-        if(this.isClientFormValid && this.isReferrerFormValid && this.createReferrer){
+        if(this.isClientFormValid && this.isContactFormValid && this.createContact){
             this.isFormsValid = false;
             return;
         }
@@ -162,13 +162,13 @@ export class CreateEditClientCompontent implements OnInit{
         }
 
         if(!this.clientEdit){
-            var referrer = this.mapReferrer(this.referrerForm);
+            var referrer = this.mapReferrer(this.contactForm);
         }
         let client  = this.mapClient(this.clientForm, referrer);
 
         if(this.clientEdit){
             client.id = this.client.id;
-            client.referrer = this.client.referrer;
+            client.contactList = this.client.contactList;
             client.name = client.name.toString();
             client.address = client.address.toString();
             let common = new UpdateClientCommand({client: client})
@@ -181,33 +181,33 @@ export class CreateEditClientCompontent implements OnInit{
 
         this.clientClient.createClient(new CreateClientCommand({ client : client })).subscribe(res =>{
             this.clientForm.reset();
-            if(this.createReferrer){
-                this.referrerForm.reset();
+            if(this.createContact){
+                this.contactForm.reset();
             }
             this.router.navigate(['manage/clients']);
         }, err => {});
 
     }
     
-    mapReferrer(referrerForm: FormGroup): ReferrerDto {
-        return new ReferrerDto({
-            name : referrerForm.get('name').value,
-            title: referrerForm.get('title').value,
-            email: referrerForm.get('email').value,
-            phoneNumber: referrerForm.get('phone').value
+    mapReferrer(contactForm: FormGroup): ContactDto {
+        return new ContactDto({
+            name : contactForm.get('name').value,
+            title: contactForm.get('title').value,
+            email: contactForm.get('email').value,
+            phoneNumber: contactForm.get('phone').value
         });
     }
 
 
-    mapClient(clientForm: FormGroup, referrer: ReferrerDto) : ClientDto{
-        let referrers : ReferrerDto[] = [];
-        referrers.push(referrer);
+    mapClient(clientForm: FormGroup, contact: ContactDto) : ClientDto{
+        let contacts : ContactDto[] = [];
+        contacts.push(contact);
         let currency = this.currencies.find(c => c.id == clientForm.get('currency').value);
         let client =  new ClientDto({
             name : clientForm.get('name').value,
             address : clientForm.get('address').value,
             currency: currency,
-            referrer: referrers,
+            contactList: contacts,
         });
 
         return client;

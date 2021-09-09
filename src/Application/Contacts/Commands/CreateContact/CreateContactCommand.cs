@@ -35,7 +35,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
                 throw new ArgumentException("Name field can't be null.");
             }
 
-            Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId);
+            Client client = await _context.Clients.Include(c => c.ContactList).FirstOrDefaultAsync(c => c.Id == request.ClientId);
 
             if (client.ContactList.Any(c => c.Name == request.Contact.Name))
             {
