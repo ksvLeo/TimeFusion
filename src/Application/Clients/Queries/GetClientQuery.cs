@@ -5,9 +5,6 @@ using FusionIT.TimeFusion.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +12,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
 {
     public class GetClientQuery : IRequest<ClientDto>
     {
-        public int CustomerId { get; set; }
+        public int ClientId { get; set; }
     }
 
     public class GetClientQueryHandler : IRequestHandler<GetClientQuery, ClientDto>
@@ -31,17 +28,17 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
 
         public async Task<ClientDto> Handle(GetClientQuery request, CancellationToken cancellationToken)
         {
-                ClientDto customer = await _context.Clients
+                ClientDto client = await _context.Clients
                 .AsNoTracking()
                 .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == request.CustomerId);
+                .FirstOrDefaultAsync(c => c.Id == request.ClientId);
 
-            if (customer == null)
+            if (client == null)
             {
-                throw new ArgumentException($"Unable to find client with #ID {request.CustomerId}.");
+                throw new ArgumentException($"Unable to find client with ID: #{request.ClientId}.");
             }
 
-            return customer;
+            return client;
         }
     }
 }

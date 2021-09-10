@@ -6,9 +6,7 @@ using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Clients.Queries;
 using FusionIT.TimeFusion.Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.WebUI.Controllers
@@ -37,12 +35,6 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         public async Task<ActionResult<ClientDto>> GetClient([FromQuery] GetClientQuery query)
         {
             return await Mediator.Send(query);
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult<List<ContactDto>>> GetContactsByClient(int id)
-        {
-            return await Mediator.Send(new GetReferrersByClientQuery { ClientId = id });
         }
 
         [HttpPost]

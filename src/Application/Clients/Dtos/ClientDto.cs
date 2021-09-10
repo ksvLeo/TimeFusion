@@ -1,4 +1,4 @@
-﻿using FusionIT.TimeFusion.Application.Clients.Dtos;
+﻿using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Common.Mappings;
 using FusionIT.TimeFusion.Application.Currencies.Dtos;
 using FusionIT.TimeFusion.Domain.Entities;

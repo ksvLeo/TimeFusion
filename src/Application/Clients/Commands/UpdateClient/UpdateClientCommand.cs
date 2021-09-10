@@ -32,7 +32,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
             if (client == null)
             {
-                throw new ArgumentException($"Unable to find client with ID #{request.Client.Id}");
+                throw new ArgumentException($"Unable to find client with ID #{ request.Client.Id }");
             }
 
             if (string.IsNullOrEmpty(request.Client.Name))
@@ -46,7 +46,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
 
             if(nameClientExist != null)
             {
-                throw new ArgumentException("Already exist a client with entred name.");
+                throw new ArgumentException("Client with name: " + request.Client.Name + "already exists.");
             }
 
             Currency currency = await _context.Currencies

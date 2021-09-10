@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Clients.Dtos
+namespace FusionIT.TimeFusion.Application.Contacts.Dtos
 {
     public class ContactDto : IMapFrom<Contact>
     {

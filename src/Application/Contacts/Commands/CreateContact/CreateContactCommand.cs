@@ -1,4 +1,4 @@
-﻿using FusionIT.TimeFusion.Application.Clients.Dtos;
+﻿using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Domain.Entities;
 using MediatR;
@@ -32,7 +32,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
         {
             if (string.IsNullOrEmpty(request.Contact.Name))
             {
-                throw new ArgumentException("Name field can't be null.");
+                throw new ArgumentException("Contact name can't be null.");
             }
 
             Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId);
