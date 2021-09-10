@@ -47,27 +47,29 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 throw new ArgumentException($"Unable to find currency with ID: #{ request.newClient.Currency.Id }.");
             }
             
-            Client entity = new Client
-            {
-                Name = request.newClient.Name,
-                Address = request.newClient.Address,
-                Currency = currency,
-                Active = true
-            };
-
-            _context.Clients.Add(entity);
+            List<Contact> contacts = new List<Contact>();
 
             Contact contact = new Contact
             {
-                Title = request.newClient.ContactList[0].Title,
+                Title = request.newClient.ContactList[0].Email,
                 Name = request.newClient.ContactList[0].Name,
                 Email = request.newClient.ContactList[0].Email,
                 PhoneNumber = request.newClient.ContactList[0].PhoneNumber,
                 Active = true
             };
 
-            _context.Contacts.Add(contact);
+            contacts.Add(contact);
 
+            Client entity = new Client
+            {
+                Name = request.newClient.Name,
+                Address = request.newClient.Address,
+                Currency = currency,
+                ContactList = contacts,
+                Active = true
+            };
+
+            _context.Clients.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
 
             return entity.Id;
