@@ -28,7 +28,16 @@ namespace FusionIT.TimeFusion.Application.Common.Models
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
             var count = await source.CountAsync();
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            List<T> items = new List<T>();
+            if (pageSize == 0)
+            {
+                items = await source.ToListAsync();
+            }
+            else
+            {
+                items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
 
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
