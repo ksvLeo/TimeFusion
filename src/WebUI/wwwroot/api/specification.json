@@ -1059,14 +1059,6 @@
                 "$ref": "#/components/schemas/ClientDto"
               }
             ]
-          },
-          "newContact": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ContactDto"
-              }
-            ]
           }
         }
       },

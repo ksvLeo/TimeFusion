@@ -2,6 +2,7 @@
 using FusionIT.TimeFusion.Domain.ValueObjects;
 using FusionIT.TimeFusion.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,12 +31,18 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
         public static async Task SeedSampleDataAsync(FusionTimeDbContext context)
         {
             // Seed, if necessary
-
-            // Currency Reference
+           
+            // Currency 
             if (!context.Currencies.Any())
             {
                 context.Currencies.Add(new Currency { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" });
                 context.Currencies.Add(new Currency { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" }); 
+            }
+
+            if (!context.Clients.Any())
+            {
+                //context.Clients.Add(new Client { Id = 1,  Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = new Currency { Alpha3Code = "USD" }, Active = true, ContactList = new List<Contact>{ new Contact { Name = "Romualdo Rodriguez", Title = "El que paga" } } });
+                //context.Clients.Add(new Client { Id = 2, Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = new Currency { Alpha3Code = "" } });
             }
 
             if (!context.BudgetTypes.Any())

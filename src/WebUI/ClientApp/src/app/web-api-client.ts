@@ -1699,7 +1699,6 @@ export enum PaginationOrder {
 
 export class CreateClientCommand implements ICreateClientCommand {
     newClient?: ClientDto | undefined;
-    newContact?: ContactDto | undefined;
 
     constructor(data?: ICreateClientCommand) {
         if (data) {
@@ -1713,7 +1712,6 @@ export class CreateClientCommand implements ICreateClientCommand {
     init(_data?: any) {
         if (_data) {
             this.newClient = _data["newClient"] ? ClientDto.fromJS(_data["newClient"]) : <any>undefined;
-            this.newContact = _data["newContact"] ? ContactDto.fromJS(_data["newContact"]) : <any>undefined;
         }
     }
 
@@ -1727,14 +1725,12 @@ export class CreateClientCommand implements ICreateClientCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["newClient"] = this.newClient ? this.newClient.toJSON() : <any>undefined;
-        data["newContact"] = this.newContact ? this.newContact.toJSON() : <any>undefined;
         return data; 
     }
 }
 
 export interface ICreateClientCommand {
     newClient?: ClientDto | undefined;
-    newContact?: ContactDto | undefined;
 }
 
 export class UpdateClientCommand implements IUpdateClientCommand {

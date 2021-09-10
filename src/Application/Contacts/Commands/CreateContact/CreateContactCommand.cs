@@ -36,7 +36,6 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
             }
 
             bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
-                                                                    c.Id != request.Contact.Id &&
                                                                     c.Name == request.Contact.Name);
 
             if (nameExists)

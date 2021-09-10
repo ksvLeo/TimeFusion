@@ -1,1 +1,30 @@
-<p>client-detail works!</p>
+<div class="container">
+    <div class="row">
+        <h1 class="mx-auto">Client Details</h1>
+    </div>
+    <div class="row">
+        <div class="col w-25 mx-auto">
+            <div class="row mx-auto btn-primary">
+                <div class="mt-2 mx-auto"> <!-- -->
+                    <!-- <hr data-content="{{data}}" class="hr-text"> -->
+                    <h3 class="mx-auto">{{ clientInfo.name }}</h3>
+                    <div class="card-body">
+                        <div class="row">
+                            <p class="detailsLabel">Address</p>
+                            <p class="detailsText">{{ clientInfo.address }}</p>
+                        </div>
+                        <div class="row">
+                            <p class="detailsLabel">Currency</p>
+                            <p class="detailsText">{{ clientInfo.currency.alpha3Code }} - {{ clientInfo.currency.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+        </div>
+        <div class="col w-75">
+        </div>
+    </div>
+</div>

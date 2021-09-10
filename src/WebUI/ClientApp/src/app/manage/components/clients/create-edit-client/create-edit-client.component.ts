@@ -179,7 +179,7 @@ export class CreateEditClientCompontent implements OnInit{
             return;
         }
 
-        this.clientClient.createClient(new CreateClientCommand({client: client})).subscribe(res =>{
+        this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res =>{
             this.clientForm.reset();
             if(this.createContact){
                 this.contactForm.reset();
