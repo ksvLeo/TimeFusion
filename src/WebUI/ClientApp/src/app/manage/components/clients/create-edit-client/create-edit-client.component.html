@@ -59,7 +59,7 @@
         </div>
 
         <div class="col-12 mt-5 p-1" *ngIf="createContact">
-            <h5>New Refferrer</h5>
+            <h5>New Contact</h5>
             <p>No email is sent when adding a contact.</p>
             <hr>
         </div>
@@ -117,7 +117,10 @@
         </div>
 
         <div class="col-12 mb-2 d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary"  [disabled]="isFormsValid" (click)="saveClient()" >Save Client</button>
+
+                <button type="submit" class="btn btn-secondary" routerLink="manage/clients" >Cancel</button>
+                
+                <button type="submit" class="btn btn-primary"  [disabled]="isFormsValid" (click)="saveClient()" >Save Client</button>
         </div>
     </div>
 </div>

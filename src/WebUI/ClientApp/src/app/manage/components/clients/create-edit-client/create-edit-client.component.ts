@@ -166,9 +166,6 @@ export class CreateEditClientCompontent implements OnInit{
         }
         let client  = this.mapClient(this.clientForm, referrer);
 
-
-
-        
         if(this.clientEdit){
             client.id = this.client.id;
             client.contactList = this.client.contactList;
@@ -182,7 +179,7 @@ export class CreateEditClientCompontent implements OnInit{
             return;
         }
 
-        this.clientClient.createClient(new CreateClientCommand({ client : client })).subscribe(res =>{
+        this.clientClient.createClient(new CreateClientCommand({client: client})).subscribe(res =>{
             this.clientForm.reset();
             if(this.createContact){
                 this.contactForm.reset();

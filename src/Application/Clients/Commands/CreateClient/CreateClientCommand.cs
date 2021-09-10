@@ -15,7 +15,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
     public class CreateClientCommand : IRequest<int>
     {
         public ClientDto newClient { get; set; }
-        public ContactDto newContact { get; set; }
     }
 
     public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
@@ -60,11 +59,10 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
             Contact contact = new Contact
             {
-                ClientId = entity.Id,
-                Title = request.newContact.Email,
-                Name = request.newContact.Name,
-                Email = request.newContact.Email,
-                PhoneNumber = request.newContact.PhoneNumber,
+                Title = request.newClient.ContactList[0].Title,
+                Name = request.newClient.ContactList[0].Name,
+                Email = request.newClient.ContactList[0].Email,
+                PhoneNumber = request.newClient.ContactList[0].PhoneNumber,
                 Active = true
             };
 

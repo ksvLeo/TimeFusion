@@ -35,6 +35,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
         public async Task<PaginatedList<ClientDto>> Handle(GetClientsWithPaginationQuery request, CancellationToken cancellationToken)
         {
             var property = typeof(ClientDto).GetProperty(request.OrderField, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
             if (property == null)
                 throw new ArgumentException("Order field not found");
 
@@ -51,5 +52,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
     {
         ASC = 1,
         DESC = 2
+
     }
 }

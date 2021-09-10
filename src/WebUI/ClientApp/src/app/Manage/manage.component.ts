@@ -10,6 +10,8 @@ export class ManageComponent {
 
     flag: boolean = false;
 
+    test: string = "hola"    ;
+
     manageMenu: NavMenuItemInterface[] = [
         {
             description: "Clients",
