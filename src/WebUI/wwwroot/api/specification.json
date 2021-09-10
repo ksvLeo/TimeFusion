@@ -197,7 +197,7 @@
         "operationId": "Client_GetClient",
         "parameters": [
           {
-            "name": "CustomerId",
+            "name": "ClientId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -220,41 +220,7 @@
         }
       }
     },
-    "/api/Client/GetContactsByClient": {
-      "get": {
-        "tags": [
-          "Client"
-        ],
-        "operationId": "Client_GetContactsByClient",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ContactDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Client/reactiveClient": {
+    "/api/Client/ReactivateClient": {
       "put": {
         "tags": [
           "Client"
@@ -318,6 +284,35 @@
       }
     },
     "/api/Contact": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "operationId": "Contact_GetContact",
+        "parameters": [
+          {
+            "name": "ContactId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Contact"
@@ -329,6 +324,122 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateContactCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Contact/GetContactsByClient": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "operationId": "Contact_GetContactsByClient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContactDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Contact/ValidateName": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "operationId": "Contact_ValidateName",
+        "parameters": [
+          {
+            "name": "ContactId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "ContactName",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "ClientId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Contact/UpdateContact": {
+      "post": {
+        "tags": [
+          "Contact"
+        ],
+        "operationId": "Contact_UpdateContact",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactCommand"
               }
             }
           },
@@ -962,6 +1073,24 @@
                 "$ref": "#/components/schemas/ClientDto"
               }
             ]
+          }
+        }
+      },
+      "UpdateContactCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "newContact": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ContactDto"
+              }
+            ]
+          },
+          "clientId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
