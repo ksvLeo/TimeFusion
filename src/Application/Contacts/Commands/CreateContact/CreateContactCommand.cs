@@ -35,11 +35,13 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
                 throw new ArgumentException("Contact name can't be null.");
             }
 
-            Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId);
+            bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
+                                                                    c.Id != request.Contact.Id &&
+                                                                    c.Name == request.Contact.Name);
 
-            if (client.ContactList.Any(c => c.Name == request.Contact.Name))
+            if (nameExists)
             {
-                throw new ArgumentException("Client already has a contact with that name added.");
+                throw new ArgumentException("Contact attached to Client: " + request.ClientId + " already exists with that name.");
             }
 
             Contact contact = new Contact

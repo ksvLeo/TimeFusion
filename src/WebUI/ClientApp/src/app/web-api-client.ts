@@ -17,13 +17,13 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export interface IClientClient {
     get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined): Observable<PaginatedListOfClientDto>;
     createClient(command: CreateClientCommand): Observable<number>;
-    updateClient(command: UpdateClientCommand): Observable<boolean>;
     deleteClient(clientId: number | undefined): Observable<number>;
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     getClientByName(name: string | null | undefined): Observable<ClientDto>;
     getClient(customerId: number | undefined): Observable<ClientDto>;
     getContactsByClient(id: number | undefined): Observable<ContactDto[]>;
     reactivateClient(clientId: number | undefined): Observable<boolean>;
+    updateClient(command: UpdateClientCommand): Observable<boolean>;
 }
 
 @Injectable({
@@ -151,58 +151,6 @@ export class ClientClient implements IClientClient {
             }));
         }
         return _observableOf<number>(<any>null);
-    }
-
-    updateClient(command: UpdateClientCommand): Observable<boolean> {
-        let url_ = this.baseUrl + "/api/Client";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(command);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdateClient(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpdateClient(<any>response_);
-                } catch (e) {
-                    return <Observable<boolean>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<boolean>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpdateClient(response: HttpResponseBase): Observable<boolean> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<boolean>(<any>null);
     }
 
     deleteClient(clientId: number | undefined): Observable<number> {
@@ -519,6 +467,128 @@ export class ClientClient implements IClientClient {
             }));
         }
         return _observableOf<boolean>(<any>null);
+    }
+
+    updateClient(command: UpdateClientCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Client/UpdateClient";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateClient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateClient(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateClient(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
+    }
+}
+
+export interface IContactClient {
+    createContact(command: CreateContactCommand): Observable<number>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ContactClient implements IContactClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    createContact(command: CreateContactCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Contact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateContact(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateContact(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateContact(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
     }
 }
 
@@ -1294,7 +1364,7 @@ export class ClientDto implements IClientDto {
     name?: string | undefined;
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
-    referrer?: ContactDto[] | undefined;
+    contactList?: ContactDto[] | undefined;
     active?: boolean;
 
     constructor(data?: IClientDto) {
@@ -1312,10 +1382,10 @@ export class ClientDto implements IClientDto {
             this.name = _data["name"];
             this.address = _data["address"];
             this.currency = _data["currency"] ? CurrencyDto.fromJS(_data["currency"]) : <any>undefined;
-            if (Array.isArray(_data["referrer"])) {
-                this.referrer = [] as any;
-                for (let item of _data["referrer"])
-                    this.referrer!.push(ContactDto.fromJS(item));
+            if (Array.isArray(_data["contactList"])) {
+                this.contactList = [] as any;
+                for (let item of _data["contactList"])
+                    this.contactList!.push(ContactDto.fromJS(item));
             }
             this.active = _data["active"];
         }
@@ -1334,10 +1404,10 @@ export class ClientDto implements IClientDto {
         data["name"] = this.name;
         data["address"] = this.address;
         data["currency"] = this.currency ? this.currency.toJSON() : <any>undefined;
-        if (Array.isArray(this.referrer)) {
-            data["referrer"] = [];
-            for (let item of this.referrer)
-                data["referrer"].push(item.toJSON());
+        if (Array.isArray(this.contactList)) {
+            data["contactList"] = [];
+            for (let item of this.contactList)
+                data["contactList"].push(item.toJSON());
         }
         data["active"] = this.active;
         return data; 
@@ -1349,7 +1419,7 @@ export interface IClientDto {
     name?: string | undefined;
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
-    referrer?: ContactDto[] | undefined;
+    contactList?: ContactDto[] | undefined;
     active?: boolean;
 }
 
@@ -1532,6 +1602,46 @@ export class UpdateClientCommand implements IUpdateClientCommand {
 
 export interface IUpdateClientCommand {
     client?: ClientDto | undefined;
+}
+
+export class CreateContactCommand implements ICreateContactCommand {
+    clientId?: number;
+    contact?: ContactDto | undefined;
+
+    constructor(data?: ICreateContactCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.clientId = _data["clientId"];
+            this.contact = _data["contact"] ? ContactDto.fromJS(_data["contact"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CreateContactCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateContactCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["clientId"] = this.clientId;
+        data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ICreateContactCommand {
+    clientId?: number;
+    contact?: ContactDto | undefined;
 }
 
 export class PaginatedListOfTodoItemDto implements IPaginatedListOfTodoItemDto {

@@ -33,7 +33,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
 
         [HttpGet("client")]
         public async Task<ActionResult<ClientDto>> GetClient([FromQuery] GetClientQuery query)
-        {
+            {
             return await Mediator.Send(query);
         }
 
@@ -43,20 +43,20 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<bool>> UpdateClient(UpdateClientCommand command)
-        {
-            return await Mediator.Send(command);
-        }
-
-        [HttpPut("reactiveClient")]
+        [HttpPut("[action]")]
         public async Task<ActionResult<bool>> ReactivateClient([FromQuery]ReactivateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
+        [HttpPut("[action]")]
+        public async Task<ActionResult<bool>> UpdateClient(UpdateClientCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteClient ([FromQuery]DeleteClientCommand command)
+        public async Task<ActionResult<int>> DeleteClient([FromQuery]DeleteClientCommand command)
         {
             return await Mediator.Send(command);
         }

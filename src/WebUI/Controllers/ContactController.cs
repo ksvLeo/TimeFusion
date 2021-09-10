@@ -1,4 +1,5 @@
-﻿using FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact;
+﻿using FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact;
+using FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact;
 using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetClients;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetContacts;
@@ -12,7 +13,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
     public class ContactController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<ContactDto>> Get([FromQuery] GetContactByIdQuery query)
+        public async Task<ActionResult<ContactDto>> GetContact([FromQuery] GetContactByIdQuery query)
         {
             return await Mediator.Send(query);
         }
@@ -23,14 +24,21 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
             return await Mediator.Send(new GetContactListByClientQuery { ClientId = id });
         }
 
-        [HttpGet]
-        public async Task<ActionResult<bool>> Get([FromQuery] ValidateContactNameQuery query)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<bool>> ValidateName([FromQuery] ValidateContactNameQuery query)
         {
             return await Mediator.Send(query);
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> UpdateContact([FromBody] UpdateContactCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+    
+
         [HttpPost]
-        public async Task<ActionResult<int>> Update([FromBody] UpdateContactCommand command)
+        public async Task<ActionResult<int>> CreateContact(CreateContactCommand command)
         {
             return await Mediator.Send(command);
         }
