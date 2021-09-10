@@ -31,7 +31,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 
             if (string.IsNullOrEmpty(request.newContact.Name))
             {
-                throw new ArgumentException("Contact name can't be null.");
+                throw new ArgumentException("Contact name must not be null.");
             }
 
             bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
@@ -40,18 +40,17 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 
             if (nameExists)
             {
-                throw new ArgumentException("Contact attached to Client: " + request.ClientId + " already exists with that name.");
+                throw new ArgumentException($"Contact name : {request.newContact.Name} already exists in client.");
             }
 
-            Contact contact = new Contact
-            {
-                Name = request.newContact.Name,
-                Title = request.newContact.Title,
-                ClientId = request.ClientId,
-                Email = request.newContact.Email,
-                PhoneNumber = request.newContact.PhoneNumber,
-                Active = true
-            };
+            // Obtaining contact
+            Contact contact = _context.Contacts.Where(c =>  c.Id == request.newContact.Id).FirstOrDefault();
+
+            // Updating contact
+            contact.Email = request.newContact.Email;
+            contact.Name = request.newContact.Name;
+            contact.PhoneNumber = request.newContact.PhoneNumber;
+            contact.Title = request.newContact.Title;
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -19,15 +19,15 @@ export class ManageComponent {
         },
         {
             description: "Tasks",
-            url: ""
+            url: "**"
         },
         {
             description: "Expense Categories",
-            url: ""
+            url: "**"
         },
         {
             description: "Roles",
-            url: ""
+            url: "**"
         }
     ];
 

@@ -31,7 +31,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> UpdateContact([FromBody] UpdateContactCommand command)
+        public async Task<ActionResult<int>> UpdateContact(UpdateContactCommand command)
         {
             return await Mediator.Send(command);
         }

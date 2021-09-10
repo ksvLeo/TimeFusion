@@ -391,18 +391,10 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "ContactName",
-            "in": "query",
-            "schema": {
-              "type": "string",
+              "format": "int32",
               "nullable": true
             },
-            "x-position": 2
+            "x-position": 1
           },
           {
             "name": "ClientId",
@@ -410,6 +402,15 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "ContactName",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
             },
             "x-position": 3
           }
@@ -1022,6 +1023,10 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "clientId": {
+            "type": "integer",
+            "format": "int32"
           },
           "email": {
             "type": "string",

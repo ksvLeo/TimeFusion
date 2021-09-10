@@ -469,7 +469,7 @@ export interface IContactClient {
     getContact(contactId: number | undefined): Observable<ContactDto>;
     createContact(command: CreateContactCommand): Observable<number>;
     getContactsByClient(id: number | undefined): Observable<ContactDto[]>;
-    validateName(contactId: number | undefined, contactName: string | null | undefined, clientId: number | undefined): Observable<boolean>;
+    validateName(contactId: number | null | undefined, clientId: number | undefined, contactName: string | null | undefined): Observable<boolean>;
     updateContact(command: UpdateContactCommand): Observable<number>;
 }
 
@@ -646,18 +646,16 @@ export class ContactClient implements IContactClient {
         return _observableOf<ContactDto[]>(<any>null);
     }
 
-    validateName(contactId: number | undefined, contactName: string | null | undefined, clientId: number | undefined): Observable<boolean> {
+    validateName(contactId: number | null | undefined, clientId: number | undefined, contactName: string | null | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Contact/ValidateName?";
-        if (contactId === null)
-            throw new Error("The parameter 'contactId' cannot be null.");
-        else if (contactId !== undefined)
+        if (contactId !== undefined && contactId !== null)
             url_ += "ContactId=" + encodeURIComponent("" + contactId) + "&";
-        if (contactName !== undefined && contactName !== null)
-            url_ += "ContactName=" + encodeURIComponent("" + contactName) + "&";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
         else if (clientId !== undefined)
             url_ += "ClientId=" + encodeURIComponent("" + clientId) + "&";
+        if (contactName !== undefined && contactName !== null)
+            url_ += "ContactName=" + encodeURIComponent("" + contactName) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1640,6 +1638,7 @@ export class ContactDto implements IContactDto {
     id?: number;
     title?: string | undefined;
     name?: string | undefined;
+    clientId?: number;
     email?: string | undefined;
     phoneNumber?: string | undefined;
     active?: boolean;
@@ -1658,6 +1657,7 @@ export class ContactDto implements IContactDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.name = _data["name"];
+            this.clientId = _data["clientId"];
             this.email = _data["email"];
             this.phoneNumber = _data["phoneNumber"];
             this.active = _data["active"];
@@ -1676,6 +1676,7 @@ export class ContactDto implements IContactDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["name"] = this.name;
+        data["clientId"] = this.clientId;
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
         data["active"] = this.active;
@@ -1687,6 +1688,7 @@ export interface IContactDto {
     id?: number;
     title?: string | undefined;
     name?: string | undefined;
+    clientId?: number;
     email?: string | undefined;
     phoneNumber?: string | undefined;
     active?: boolean;

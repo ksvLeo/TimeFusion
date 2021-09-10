@@ -43,16 +43,16 @@ export class CreateEditClientCompontent implements OnInit{
             currency: ["", [Validators.required]]
         });
         
-            this.onClientEdit();
+        this.getClientForEdit();
             
-            this.getCurrencies();
+        this.getCurrencies();
     
         this.clientForm.valueChanges.subscribe(changes => {
             this.clientFormChanges(changes);
         });
 
         this.contactForm = this.fb.group({
-            title : [ "" , [Validators.minLength(4)]],
+            title : [ "" , [Validators.minLength(3)]],
             name: [ "", [Validators.minLength(3), Validators.required]],
             email: [ "", [Validators.email]],
             phone: [ "", []]
@@ -60,10 +60,10 @@ export class CreateEditClientCompontent implements OnInit{
 
         this.contactForm.valueChanges.subscribe(changes =>{
             this.contactFromChanges(changes);
-        })
+        });
     }
 
-    onClientEdit(){
+    getClientForEdit(){
         this.activeRoute.params.subscribe(res => {
             if(res.id == null){
                 return;

@@ -12,11 +12,11 @@ namespace FusionIT.TimeFusion.Application.Contacts.Queries.ValidateContactName
 {
     public class ValidateContactNameQuery : IRequest<bool>
     {
-        public int ContactId { get; set; }
-
-        public string ContactName { get; set; }
+        public int? ContactId { get; set; }
 
         public int ClientId { get; set; }
+                                                                    
+        public string ContactName { get; set; }
     }
 
     public class ValidateContactNameQueryHandler : IRequestHandler<ValidateContactNameQuery, bool>
@@ -30,9 +30,17 @@ namespace FusionIT.TimeFusion.Application.Contacts.Queries.ValidateContactName
 
         public async Task<bool> Handle(ValidateContactNameQuery request, CancellationToken cancellationToken)
         {
-            bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId && 
-                                                                    c.Id != request.ContactId && 
-                                                                    c.Name == request.ContactName);
+            bool nameExists;
+
+            if (request.ClientId > 0)
+            {
+            
+                nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId && c.Id != request.ContactId && c.Name == request.ContactName);
+            }
+            else
+            {
+                nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId && c.Name == request.ContactName);
+            }
 
             return nameExists;
         }
