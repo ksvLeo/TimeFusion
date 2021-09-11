@@ -33,9 +33,9 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 throw new ArgumentException("Name field can't be null.");
              }
 
-            Client client = _context.Clients.FirstOrDefault(c => c.Name == request.newClient.Name);
+            Client clientNameExist = _context.Clients.FirstOrDefault(c => c.Name == request.newClient.Name);
 
-            if (client != null)
+            if (clientNameExist != null)
             {
                 throw new ArgumentException($"Client with name: '{ request.newClient.Name }' already exist.");
             }
@@ -66,7 +66,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
             }
 
-            Client entity = new Client
+            Client client = new Client
             {
                 Name = request.newClient.Name,
                 Address = request.newClient.Address,
@@ -75,10 +75,10 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 Active = true
             };
 
-            _context.Clients.Add(entity);
+            _context.Clients.Add(client);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return client.Id;
         }
     }
 }

@@ -181,7 +181,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientDto"
+                  "type": "boolean"
                 }
               }
             }

@@ -19,7 +19,7 @@ export interface IClientClient {
     createClient(command: CreateClientCommand): Observable<number>;
     deleteClient(clientId: number | undefined): Observable<number>;
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
-    getClientByName(name: string | null | undefined): Observable<ClientDto>;
+    getClientByName(name: string | null | undefined): Observable<boolean>;
     getClient(clientId: number | undefined): Observable<ClientDto>;
     reactivateClient(clientId: number | undefined): Observable<boolean>;
     updateClient(command: UpdateClientCommand): Observable<boolean>;
@@ -258,7 +258,7 @@ export class ClientClient implements IClientClient {
         return _observableOf<ClientDto[]>(<any>null);
     }
 
-    getClientByName(name: string | null | undefined): Observable<ClientDto> {
+    getClientByName(name: string | null | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Client/GetClientByName?";
         if (name !== undefined && name !== null)
             url_ += "Name=" + encodeURIComponent("" + name) + "&";
@@ -279,14 +279,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processGetClientByName(<any>response_);
                 } catch (e) {
-                    return <Observable<ClientDto>><any>_observableThrow(e);
+                    return <Observable<boolean>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ClientDto>><any>_observableThrow(response_);
+                return <Observable<boolean>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetClientByName(response: HttpResponseBase): Observable<ClientDto> {
+    protected processGetClientByName(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -297,7 +297,7 @@ export class ClientClient implements IClientClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientDto.fromJS(resultData200);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -305,7 +305,7 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ClientDto>(<any>null);
+        return _observableOf<boolean>(<any>null);
     }
 
     getClient(clientId: number | undefined): Observable<ClientDto> {

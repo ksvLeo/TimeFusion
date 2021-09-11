@@ -40,10 +40,10 @@ export class CreateEditContactComponent implements OnInit {
         
         this.contactForm = this.fb.group({
             client: [ "", [Validators.required]],
-            title: ["", []],
-            name: [ "", [ Validators.required]],
-            email: [ "",],
-            phone: [ "", []]
+            title: ["", [Validators.minLength(3)]],
+            name: [ "", [Validators.minLength(3), Validators.required]],
+            email: [ "", [Validators.email]],
+            phone: ["", []],
         });
         
         this.contactForm.valueChanges.subscribe(changes => {
@@ -65,7 +65,7 @@ export class CreateEditContactComponent implements OnInit {
             this.isFormValid = true;
             return;
         }
-
+        debugger;
         this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.contactId,+$values.client, $values.name);
     }
 
@@ -107,14 +107,15 @@ export class CreateEditContactComponent implements OnInit {
             this.contactClient.getContact(res.id).subscribe(res =>{
                 this.contactEdit = true;
                 this.contact = res;
-                this.contactForm.patchValue({
-                    client: [ this.contact.clientId ],
+                this.contactForm.setValue({
+                    client: [ this.contact.clientId],
                     title: [ this.contact.title],
                     name: [ this.contact.name],
                     email: [ this.contact.email],
                     phone: [ this.contact.phoneNumber]
                 });
-
+                this.contactForm.controls.title.setErrors(null);
+                this.contactForm.controls.email.setErrors(null);
             });
         });
     }
@@ -124,6 +125,7 @@ export class CreateEditContactComponent implements OnInit {
         let contact = this.mapContact(this.contactForm);
 
         if(this.contactEdit){
+            debugger;
             contact.phoneNumber = contact.phoneNumber.toString();
             contact.name = contact.name.toString()
             contact.title = contact.title.toString();

@@ -43,15 +43,18 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
                 throw new ArgumentException($"Contact name : {request.newContact.Name} already exists in client.");
             }
 
-            // Obtaining contact
-            Contact contact = _context.Contacts.Where(c =>  c.Id == request.newContact.Id).FirstOrDefault();
+            Contact contact = new Contact
+            {
+                Id = request.newContact.Id,
+                Name = request.newContact.Name,
+                Title = request.newContact.Title,
+                ClientId = request.ClientId,
+                Email = request.newContact.Email,
+                PhoneNumber = request.newContact.PhoneNumber,
+                Active = true
+            };
 
-            // Updating contact
-            contact.Email = request.newContact.Email;
-            contact.Name = request.newContact.Name;
-            contact.PhoneNumber = request.newContact.PhoneNumber;
-            contact.Title = request.newContact.Title;
-
+            _context.Contacts.Update(contact);
             await _context.SaveChangesAsync(cancellationToken);
 
             return contact.Id;

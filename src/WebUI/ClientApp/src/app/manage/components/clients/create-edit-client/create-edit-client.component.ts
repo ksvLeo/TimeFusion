@@ -16,11 +16,11 @@ export class CreateEditClientCompontent implements OnInit{
     createContact: boolean = false;
     isClientFormValid: boolean = false;
     isContactFormValid: boolean = false;
-    isFormsValid: boolean = true;
+    areFormsValid: boolean = true;
 
     // Data
     currencies: CurrencyDto[] = [];
-    userExist: boolean = false;
+    userExist: boolean;
     defaultCurrency: CurrencyDto;
 
     //Edit
@@ -88,9 +88,7 @@ export class CreateEditClientCompontent implements OnInit{
             this.currencies = res;
             if(!this.clientEdit){
                 this.defaultCurrency = this.currencies.find(c => c.id == 2);
-                this.clientForm.patchValue({    
-                    currency: [this.defaultCurrency.id]
-                });
+                this.clientForm.controls.currency.setValue(this.defaultCurrency.id);
             }
         }, err => {});
     }
@@ -99,33 +97,19 @@ export class CreateEditClientCompontent implements OnInit{
         if(this.userExist){
             this.userExist = false;
         }
-
-        if(this.clientEdit && this.client && this.clientForm.get('name').value == this.client.name){
-            this.isClientFormValid = this.clientForm.valid;
+        if(this.clientEdit && $values.name == this.client.name){
+            this.areFormsValid = this.clientForm.valid;
             return;
         }
         
-        if((this.clientForm.get('name').value.trim()).length > 0){
-            this.clientClient.getClientByName(this.clientForm.get('name').value).subscribe(res =>{
-                if(res){
-                    this.userExist = true;
-                    return;
-                }
-
-                if(!this.userExist){
-                    this.isClientFormValid = this.clientForm.valid;
-                }
-            });
-        }else{
-            this.userExist = false;
+        if($values.name.length > 0){
+            this.isClientFormValid = this.clientForm.valid && !this.clientExistByName();
         }
-
-        this.validForm();
     }
 
     contactFromChanges($values){
         this.isContactFormValid = this.contactForm.valid;
-        this.validForm();
+        this.areFormsValid = this.isContactFormValid && !this.validForm();
     }
 
     onCreateContact(){
@@ -140,33 +124,39 @@ export class CreateEditClientCompontent implements OnInit{
         this.validForm();
     }
 
-    validForm(){
-        if(this.client){
-            this.isClientFormValid = true;
-        }
-        if(this.isClientFormValid && !this.createContact && !this.userExist){
-            this.isFormsValid = false;
-            return;
-        }
-        if(this.isClientFormValid && this.isContactFormValid && this.createContact){
-            this.isFormsValid = false;
-            return;
-        }
+    clientExistByName(): boolean{
+        this.clientClient.getClientByName(this.clientForm.get('name').value).subscribe(res => {
+            this.userExist = res;
+            this.areFormsValid = this.validForm();
+            return this.userExist;
+        }, err => {});
+        return this.userExist;
+    }
 
-        this.isFormsValid = true;    
+    validForm(): boolean{
+        if(this.isClientFormValid &&!this.createContact && !this.userExist){
+            this.areFormsValid = false;
+            return false;
+        }
+        if(this.isClientFormValid && this.isContactFormValid && this.createContact && !this.userExist){
+            this.areFormsValid = false;
+            return false;
+        }
+        return true;    
     }
 
     saveClient(){
-        if(!this.isFormsValid){
-            this.isFormsValid = true;
+        if(!this.areFormsValid){
+            this.areFormsValid = true;
         }
 
         if(!this.clientEdit){
-            var referrer = this.mapReferrer(this.contactForm);
+            var referrer = this.mapContact(this.contactForm);
         }
         let client  = this.mapClient(this.clientForm, referrer);
 
         if(this.clientEdit){
+            debugger;
             client.id = this.client.id;
             client.contactList = this.client.contactList;
             client.name = client.name.toString();
@@ -189,7 +179,7 @@ export class CreateEditClientCompontent implements OnInit{
 
     }
     
-    mapReferrer(contactForm: FormGroup): ContactDto {
+    mapContact(contactForm: FormGroup): ContactDto {
         return new ContactDto({
             name : contactForm.get('name').value,
             title: contactForm.get('title').value,

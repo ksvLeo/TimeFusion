@@ -26,7 +26,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<ClientDto>> GetClientByName([FromQuery] GetClientByNameQuery query)
+        public async Task<ActionResult<bool>> GetClientByName([FromQuery] GetClientByNameQuery query)
         {
             return await Mediator.Send(query);
         }

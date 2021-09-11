@@ -13,13 +13,15 @@ export class ClientDetailComponent implements OnInit {
   constructor(private clientService: ClientClient) { }
 
   ngOnInit(): void {
-    this.onLoad()
-    console.log(this.clientInfo)
+    this.onLoad();
+    console.log(this.clientInfo);
   }
 
-  onLoad() { //Load Client Info + Projects
-      this.clientService.getClient(9).subscribe((response) => {
-          this.clientInfo = response
-      })
+  onLoad() {
+
+    // Load Client Info + Projects
+    this.clientService.getClient(9).subscribe((response) => {
+      this.clientInfo = response;
+    }, error => {});
   }
 }
