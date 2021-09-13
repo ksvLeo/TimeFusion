@@ -158,12 +158,12 @@
         }
       }
     },
-    "/api/Client/GetClientByName": {
+    "/api/Client/ValidateClientNameExistQuery": {
       "get": {
         "tags": [
           "Client"
         ],
-        "operationId": "Client_GetClientByName",
+        "operationId": "Client_ValidateClientNameExistQuery",
         "parameters": [
           {
             "name": "Name",

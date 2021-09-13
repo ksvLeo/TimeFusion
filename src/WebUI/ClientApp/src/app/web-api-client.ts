@@ -19,7 +19,7 @@ export interface IClientClient {
     createClient(command: CreateClientCommand): Observable<number>;
     deleteClient(clientId: number | undefined): Observable<number>;
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
-    getClientByName(name: string | null | undefined): Observable<boolean>;
+    validateClientNameExistQuery(name: string | null | undefined): Observable<boolean>;
     getClient(clientId: number | undefined): Observable<ClientDto>;
     reactivateClient(clientId: number | undefined): Observable<boolean>;
     updateClient(command: UpdateClientCommand): Observable<boolean>;
@@ -258,8 +258,8 @@ export class ClientClient implements IClientClient {
         return _observableOf<ClientDto[]>(<any>null);
     }
 
-    getClientByName(name: string | null | undefined): Observable<boolean> {
-        let url_ = this.baseUrl + "/api/Client/GetClientByName?";
+    validateClientNameExistQuery(name: string | null | undefined): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Client/ValidateClientNameExistQuery?";
         if (name !== undefined && name !== null)
             url_ += "Name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -273,11 +273,11 @@ export class ClientClient implements IClientClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetClientByName(response_);
+            return this.processValidateClientNameExistQuery(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetClientByName(<any>response_);
+                    return this.processValidateClientNameExistQuery(<any>response_);
                 } catch (e) {
                     return <Observable<boolean>><any>_observableThrow(e);
                 }
@@ -286,7 +286,7 @@ export class ClientClient implements IClientClient {
         }));
     }
 
-    protected processGetClientByName(response: HttpResponseBase): Observable<boolean> {
+    protected processValidateClientNameExistQuery(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

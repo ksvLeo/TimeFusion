@@ -49,10 +49,8 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
             List<Contact> contacts = new List<Contact>();
 
-            if (request.newClient.ContactList[0].Name != "")
+            if (request.newClient.ContactList != null)
             {
-
-
                 Contact contact = new Contact
                 {
                     Title = request.newClient.ContactList[0].Email,
@@ -63,7 +61,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 };
 
                 contacts.Add(contact);
-
             }
 
             Client client = new Client

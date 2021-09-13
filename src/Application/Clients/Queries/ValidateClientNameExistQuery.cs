@@ -13,23 +13,23 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Queries
 {
-    public class GetClientByNameQuery : IRequest<bool>
+    public class ValidateClientNameExistQuery : IRequest<bool>
     {
         public string Name { get; set; }
     }
 
-    public class GetClientByNameQueryHandler : IRequestHandler<GetClientByNameQuery, bool>
+    public class ValidateClientNameExistQueryHandler : IRequestHandler<ValidateClientNameExistQuery, bool>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetClientByNameQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public ValidateClientNameExistQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(GetClientByNameQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(ValidateClientNameExistQuery request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Name))
             {

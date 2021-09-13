@@ -12,8 +12,18 @@
 
     <div class="col-12 mx-2 mt-1">
         <form [formGroup]="contactForm">
-            
-
+            <!-- Testing -->
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="client">Client <span class="asterisk-required">*</span></label>
+                    </div>
+                    <div class="col-sm-9 col-xl-6">
+                        <app-select-component [items]="test.asObservable()" (clientName)="getClientsForName($event)"  (clientId)="processClientId($event)" (newClient)="createNewClient($event)"></app-select-component>
+                    </div>   
+                </div>
+            </div>
+            <!-- Testing -->
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3">

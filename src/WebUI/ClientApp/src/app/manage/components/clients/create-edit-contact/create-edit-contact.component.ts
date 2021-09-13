@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ClientClient, ClientDto, ContactClient, ContactDto, CreateContactCommand, UpdateContactCommand } from "src/app/web-api-client";
+import { Subject } from "rxjs";
+import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateContactCommand, UpdateContactCommand } from "src/app/web-api-client";
 
 
 
@@ -19,6 +20,12 @@ export class CreateEditContactComponent implements OnInit {
     // Data
     clients: ClientDto[] = [];
     nameExist: boolean = false;
+
+    // Testing
+    test = new Subject<ClientDto[]>();
+
+    // Testing
+
     
     //Edit
     contactEdit: boolean = false;
@@ -65,7 +72,6 @@ export class CreateEditContactComponent implements OnInit {
             this.isFormValid = true;
             return;
         }
-        debugger;
         this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.contactId,+$values.client, $values.name);
     }
 
@@ -125,7 +131,6 @@ export class CreateEditContactComponent implements OnInit {
         let contact = this.mapContact(this.contactForm);
 
         if(this.contactEdit){
-            debugger;
             contact.phoneNumber = contact.phoneNumber.toString();
             contact.name = contact.name.toString()
             contact.title = contact.title.toString();
@@ -155,4 +160,23 @@ export class CreateEditContactComponent implements OnInit {
             phoneNumber: contactForm.get('phone').value
         });
     }
+
+    // Testing
+    processClientId(id: number){
+        console.log(id);
+    }
+    
+    getClientsForName(name: string){
+        this.clientClient.getClientsByName(name).subscribe(res => {
+            this.clients = res;
+            this.test.next(this.clients);
+        }, err => {});    
+    }
+
+    createNewClient(newClient: ClientDto){
+        this.clientClient.createClient(new CreateClientCommand({newClient: newClient})).subscribe(res => {
+            this.getClientsForName(newClient.name);
+        });
+    }
+    // Testing
 }

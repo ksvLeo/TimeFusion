@@ -1,0 +1,21 @@
+<div class="row pl-3">
+    <ng-container *ngIf="addNewClient == false">
+        <input type="text" class="form-control w-50" id="name" [(ngModel)]="nameForFind" (keyup)="findNameClient()"  [disabled]="selectOption">
+        <div>
+            <div>
+                <span>{{ testing }}</span>
+            </div>
+            <div>
+                <span  class="text-danger clear" ><i class="fas fa-times"></i></span>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary mx-1"(click)="createClient()" *ngIf="_items && _items.length > 0 || notElement"  [disabled]="nameAlreadyExist">Create client</button>
+        <span  class="text-danger" *ngIf="notElement || nameAlreadyExist == false ">There is no client with the name entered. ¿Do you want to create it?</span>
+    </ng-container>
+    <select name="client" id="client" class="form-control mt-1 w-75" *ngIf="_items && _items.length > 0" (change)="test($event.target.value)">
+        <option value="{{item.id}}" *ngFor="let item of _items" [selected]="addNewClient && item.name == nameForFind" >
+            {{ item.name }}
+        </option>
+    </select> 
+    <span  class="text-success" *ngIf="addNewClient">The client was created successfully.</span>
+</div>

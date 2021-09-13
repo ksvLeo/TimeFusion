@@ -125,7 +125,7 @@ export class CreateEditClientCompontent implements OnInit{
     }
 
     clientExistByName(): boolean{
-        this.clientClient.getClientByName(this.clientForm.get('name').value).subscribe(res => {
+        this.clientClient.validateClientNameExistQuery(this.clientForm.get('name').value).subscribe(res => {
             this.userExist = res;
             this.areFormsValid = this.validForm();
             return this.userExist;
@@ -156,7 +156,6 @@ export class CreateEditClientCompontent implements OnInit{
         let client  = this.mapClient(this.clientForm, referrer);
 
         if(this.clientEdit){
-            debugger;
             client.id = this.client.id;
             client.contactList = this.client.contactList;
             client.name = client.name.toString();

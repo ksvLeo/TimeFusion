@@ -58,7 +58,6 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
             await _context.SaveChangesAsync(cancellationToken);
 
             return contact.Id;
-    
         }
     }
 }
