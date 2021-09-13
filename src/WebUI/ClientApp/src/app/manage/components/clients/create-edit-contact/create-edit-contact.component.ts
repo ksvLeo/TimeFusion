@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClientClient, ClientDto, ContactClient, ContactDto, CreateContactCommand, UpdateContactCommand } from "src/app/web-api-client";
@@ -35,9 +35,7 @@ export class CreateEditContactComponent implements OnInit {
     ){}
 
     ngOnInit(){
-        this.getContactForEdit();
-        this.getClients();
-        
+
         this.contactForm = this.fb.group({
             client: [ "", [Validators.required]],
             title: ["", [Validators.minLength(3)]],
@@ -45,10 +43,31 @@ export class CreateEditContactComponent implements OnInit {
             email: [ "", [Validators.email]],
             phone: ["", []],
         });
-        
+
         this.contactForm.valueChanges.subscribe(changes => {
             this.contactFormChanges(changes);
         });
+
+        var url = this.router.url.split("/");
+
+        switch (url[4]) {
+            case "create":
+                if (url.length == 4) {
+                    this.getClients();    
+                } else {
+                    this.getClientById(Number(url[5])).then((res: ClientDto) => {
+                        this.clients.push(res);
+                        this.contactForm.get('client').patchValue(res.id)
+                    })
+                }
+                break;
+            case "edit":
+                this.getContactForEdit();
+                break;
+            default:
+
+                break;
+        }
     }
 
     contactFormChanges($values){
@@ -97,6 +116,10 @@ export class CreateEditContactComponent implements OnInit {
         this.clientClient.get(0,0,1, null).subscribe(res => {
             this.clients = res.items;
         }, err => {});
+    }
+
+    getClientById(id: number): Promise<ClientDto> {
+        return this.clientClient.getClient(id).toPromise()
     }
 
     getContactForEdit(){

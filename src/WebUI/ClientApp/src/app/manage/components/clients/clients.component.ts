@@ -1,10 +1,13 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { TransitiveCompileNgModuleMetadata } from "@angular/compiler";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Router } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs";
 import { ActionInfo } from "src/app/commons/classes/action-info";
 import { FieldInfo } from "src/app/commons/classes/field-info";
 import { PaginatedList } from "src/app/commons/classes/paginated-list";
 import { PagingParameters } from "src/app/commons/classes/paging-parameters";
-import { ClientClient, ClientDto, PaginatedListOfClientDto } from "src/app/web-api-client";
+import { ClientClient, ClientDto } from "src/app/web-api-client";
 
 @Component({
     selector: 'app-clients-component',
@@ -13,11 +16,14 @@ import { ClientClient, ClientDto, PaginatedListOfClientDto } from "src/app/web-a
 })
 export class ClientsComponent implements OnInit {
 
+    closeModal: any;
     paginatedList: PaginatedList<ClientDto>;
     tableConfig: FieldInfo[];
-    actions: ActionInfo[] = []
+    actionList: ActionInfo[] = []
 
-    constructor(private clientClient: ClientClient){}
+    constructor(private clientClient: ClientClient,
+                private router: Router,
+                private modalService: NgbModal){}
 
     ngOnInit(): void {
         this.configurationGrid();
@@ -42,7 +48,7 @@ export class ClientsComponent implements OnInit {
     }
         
     onAddContact(item: any) {
-
+        this.router.navigate(['/manage/clients/contact/create', item.id])
     }
         
     onEditContacts(item: any) {
@@ -50,12 +56,13 @@ export class ClientsComponent implements OnInit {
     }
 
 
-    onEditClient(item: any) {
 
+    onEditClient(item: any) {
+        this.router.navigate(['/manage/clients/edit', item.id])
     }
 
     onDeleteClient(item: any) {
-
+        //this.openModal(item)
     }
         
     onViewProjects(item: any) {
@@ -69,30 +76,48 @@ export class ClientsComponent implements OnInit {
         action.label = "Add Contact";
         action.enable = true;
         action.event.subscribe(item => this.onAddContact(item));
-        this.actions.push(action)
+        this.actionList.push(action)
 
         action = new ActionInfo();
         action.label = "Edit Contacts";
         action.enable = true;
         action.event.subscribe(item => this.onEditContacts(item));
-        this.actions.push(action);
+        this.actionList.push(action);
 
         action = new ActionInfo();
         action.label = "Edit Client";
         action.enable = true;
         action.event.subscribe(item => this.onEditClient(item));
-        this.actions.push(action);
+        this.actionList.push(action);
 
         action = new ActionInfo();
         action.label = "Delete Client";
         action.enable = true;
         action.event.subscribe(item => this.onDeleteClient(item));
-        this.actions.push(action);
+        this.actionList.push(action);
 
         action = new ActionInfo();
         action.label = "View Projects";
         action.enable = true;
         action.event.subscribe(item => this.onViewProjects(item));
-        this.actions.push(action);
+        this.actionList.push(action);
     }
+
+    onClientDetailClick(item: any) {
+        console.log(item)
+    }
+
+    // openModal(item: any) {
+    //     const modalRef = this.modalService.open(GenericModalComponent,
+    //       {
+    //         scrollable: true
+    //       });
+          
+    //       modalRef.componentInstance.title = "Deactivate client?"
+    //       modalRef.componentInstance.message = "Are you sure you want to deactivate " + item.Name + "?"
+    //     modalRef.result.then((result:any) => {
+    //       console.log(result);
+    //     }, (reason:any) => {
+    //     });
+    //   }
 }

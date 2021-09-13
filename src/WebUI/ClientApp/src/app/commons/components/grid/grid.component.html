@@ -23,10 +23,13 @@
             </tr>
         </thead>
         <tbody *ngIf="_paginatedList && _paginatedList.items">
-            <tr *ngFor="let item of _paginatedList.items">
+            <tr *ngFor="let item of _paginatedList.items" (click)="onItemClick(item)" class="table-row">
                 <td *ngFor="let info of configurationInfo">
                     {{item[info.property]}}
                 </td>
+                <ng-container *ngIf="allowsActions">
+                    <app-action-list [actions]="actionList" [item]="item"></app-action-list>
+                </ng-container>
             </tr>
         </tbody>
     </table>
