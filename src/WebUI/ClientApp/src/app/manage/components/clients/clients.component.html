@@ -20,6 +20,6 @@
         (paginate)="onPaginate($event)"
         [actionList]="actionList"
         [allowsActions]="true"
-        (onItemClick)=onClientDetailClick($event)>
+        (itemClickEvent)="onClientDetailClick($event)">
     </app-grid>
 </div>

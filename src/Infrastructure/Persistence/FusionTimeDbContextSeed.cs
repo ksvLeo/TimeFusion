@@ -32,7 +32,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
         {
             // Seed, if necessary
 
-            Currency USD = new Currency { Name = "Dolar Estadounidense", Alpha3Code = "USD", Symbol = "U$S" };
+            Currency USD = new Currency { Name = "US Dollar", Alpha3Code = "USD", Symbol = "U$S" };
             Currency UYU = new Currency { Name = "Peso Uruguayo", Alpha3Code = "UYU", Symbol = "$" };
 
             if (!context.Currencies.Any())

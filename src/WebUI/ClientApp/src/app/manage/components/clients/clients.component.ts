@@ -106,7 +106,7 @@ export class ClientsComponent implements OnInit {
     }
 
     onClientDetailClick(item: any) {
-        console.log(item)
+        this.router.navigate(['/manage/clients', item.id])
     }
 
     openModal(item: any) {
