@@ -9,6 +9,7 @@ import { CreateEditClientCompontent } from './components/clients/create-edit-cli
 import { ManageComponent } from './manage.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateEditContactComponent } from './components/clients/create-edit-contact/create-edit-contact.component';
+import { CommonsModule } from '../commons/commons.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { CreateEditContactComponent } from './components/clients/create-edit-con
     CommonModule,
     ManageRoutingModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    CommonsModule
   ]
 })
 export class ManageModule { }
