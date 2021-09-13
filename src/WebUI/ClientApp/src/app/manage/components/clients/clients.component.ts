@@ -7,7 +7,6 @@ import { ActionInfo } from "src/app/commons/classes/action-info";
 import { FieldInfo } from "src/app/commons/classes/field-info";
 import { PaginatedList } from "src/app/commons/classes/paginated-list";
 import { PagingParameters } from "src/app/commons/classes/paging-parameters";
-import { GenericModalComponent } from "src/app/commons/components/generic-modal/generic-modal.component";
 import { ClientClient, ClientDto } from "src/app/web-api-client";
 
 @Component({
@@ -18,8 +17,7 @@ import { ClientClient, ClientDto } from "src/app/web-api-client";
 export class ClientsComponent implements OnInit {
 
     closeModal: any;
-
-    paginatedList$: Observable<PaginatedList<ClientDto>>;
+    paginatedList: PaginatedList<ClientDto>;
     tableConfig: FieldInfo[];
     actionList: ActionInfo[] = []
 
@@ -40,13 +38,13 @@ export class ClientsComponent implements OnInit {
         ];
     }
 
-    getClients(): void{
-        this.paginatedList$ = this.clientClient.get(1, 5, 1, "Address");
+    getClients(pageNumber: number = 1, pageSize: number = 1, order: number = 1, orderField: string = "name"): void{
+        this.clientClient.get(pageNumber, pageSize, order, orderField).subscribe(res => this.paginatedList = res);
     }
 
     onPaginate(pagingParameter: PagingParameters){
         console.log(pagingParameter);
-        this.getClients();
+        this.getClients(pagingParameter.PageNumber, pagingParameter.PageSize, pagingParameter.Order, pagingParameter.OrderField);
     }
         
     onAddContact(item: any) {
@@ -64,7 +62,7 @@ export class ClientsComponent implements OnInit {
     }
 
     onDeleteClient(item: any) {
-        this.openModal(item)
+        //this.openModal(item)
     }
         
     onViewProjects(item: any) {
@@ -109,17 +107,17 @@ export class ClientsComponent implements OnInit {
         this.router.navigate(['/manage/clients', item.id])
     }
 
-    openModal(item: any) {
-        const modalRef = this.modalService.open(GenericModalComponent,
-          {
-            scrollable: true
-          });
+    // openModal(item: any) {
+    //     const modalRef = this.modalService.open(GenericModalComponent,
+    //       {
+    //         scrollable: true
+    //       });
           
-          modalRef.componentInstance.title = "Deactivate client?"
-          modalRef.componentInstance.message = "Are you sure you want to deactivate " + item.Name + "?"
-        modalRef.result.then((result:any) => {
-          console.log(result);
-        }, (reason:any) => {
-        });
-      }
+    //       modalRef.componentInstance.title = "Deactivate client?"
+    //       modalRef.componentInstance.message = "Are you sure you want to deactivate " + item.Name + "?"
+    //     modalRef.result.then((result:any) => {
+    //       console.log(result);
+    //     }, (reason:any) => {
+    //     });
+    //   }
 }
