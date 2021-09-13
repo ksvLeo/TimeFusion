@@ -13,7 +13,7 @@ import { ClientClient, ClientDto, PaginatedListOfClientDto } from "src/app/web-a
 })
 export class ClientsComponent implements OnInit {
 
-    paginatedList$: Observable<PaginatedList<ClientDto>>;
+    paginatedList: PaginatedList<ClientDto>;
     tableConfig: FieldInfo[];
     actions: ActionInfo[] = []
 
@@ -32,13 +32,13 @@ export class ClientsComponent implements OnInit {
         ];
     }
 
-    getClients(): void{
-        this.paginatedList$ = this.clientClient.get(1, 5, 1, "Address");
+    getClients(pageNumber: number = 1, pageSize: number = 1, order: number = 1, orderField: string = "name"): void{
+        this.clientClient.get(pageNumber, pageSize, order, orderField).subscribe(res => this.paginatedList = res);
     }
 
     onPaginate(pagingParameter: PagingParameters){
         console.log(pagingParameter);
-        this.getClients();
+        this.getClients(pagingParameter.PageNumber, pagingParameter.PageSize, pagingParameter.Order, pagingParameter.OrderField);
     }
         
     onAddContact(item: any) {
