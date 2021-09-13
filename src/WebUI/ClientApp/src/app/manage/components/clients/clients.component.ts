@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 import { ActionInfo } from "src/app/commons/classes/action-info";
+import { FieldInfo } from "src/app/commons/classes/field-info";
+import { PaginatedList } from "src/app/commons/classes/paginated-list";
+import { PagingParameters } from "src/app/commons/classes/paging-parameters";
+import { ClientClient, ClientDto, PaginatedListOfClientDto } from "src/app/web-api-client";
 
 @Component({
     selector: 'app-clients-component',
@@ -8,10 +13,32 @@ import { ActionInfo } from "src/app/commons/classes/action-info";
 })
 export class ClientsComponent implements OnInit {
 
-    actions: ActionInfo[] = [] 
+    paginatedList$: Observable<PaginatedList<ClientDto>>;
+    tableConfig: FieldInfo[];
+    actions: ActionInfo[] = []
+
+    constructor(private clientClient: ClientClient){}
 
     ngOnInit(): void {
+        this.configurationGrid();
+        this.getClients();
         this.loadActions()
+    }
+
+    configurationGrid(){
+        this.tableConfig = [
+            new FieldInfo("Name", "name", "string", true),
+            new FieldInfo("Address", "address", "string", true)
+        ];
+    }
+
+    getClients(): void{
+        this.paginatedList$ = this.clientClient.get(1, 5, 1, "Address");
+    }
+
+    onPaginate(pagingParameter: PagingParameters){
+        console.log(pagingParameter);
+        this.getClients();
     }
         
     onAddContact(item: any) {

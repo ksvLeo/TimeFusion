@@ -13,4 +13,10 @@
             Add referrer
         </button>
     </div>
+
+    <app-grid 
+        [configurationInfo]="tableConfig"
+        [paginatedList]="paginatedList$"
+        (paginate)="onPaginate($event)">
+    </app-grid>
 </div>
