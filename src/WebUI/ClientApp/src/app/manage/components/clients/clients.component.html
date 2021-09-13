@@ -13,4 +13,13 @@
             Add Contact
         </button>
     </div>
+
+    <app-grid 
+        [configurationInfo]="tableConfig"
+        [paginatedList]="paginatedList"
+        (paginate)="onPaginate($event)"
+        [actionList]="actionList"
+        [allowsActions]="true"
+        (itemClickEvent)="onClientDetailClick($event)">
+    </app-grid>
 </div>

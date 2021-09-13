@@ -19,3 +19,14 @@ hr.hr-text {
       left: 50%;
       transform: translate(-50%, -50%);
   }
+
+.detailsLabel {
+    max-width: 25%;
+    font-weight: 600;
+    font-size: 1.2em;
+    text-align: right;
+}
+
+.detailsText {
+    max-width: 75%;
+}
