@@ -18,8 +18,9 @@ export class GridComponent implements OnInit {
   @Input() paginatedList: Observable<PaginatedList<any>>;
   @Input() configurationInfo: FieldInfo[] = [];
   @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
-  // @Input() actionsInfo: ActionInfo[] = [];
-  // @Input() allowsActions: boolean;
+  @Input() actionList: ActionInfo[] = [];
+  @Input() allowsActions: boolean;
+  @Output() itemClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
@@ -38,6 +39,11 @@ export class GridComponent implements OnInit {
     this.loading = true;
     console.log("Loading");
     this.paginate.emit(pagingParam);
+  }
+  
+  onItemClick(item: any){
+    console.log("before")
+    this.itemClickEvent.emit(item);
   }
 
 }

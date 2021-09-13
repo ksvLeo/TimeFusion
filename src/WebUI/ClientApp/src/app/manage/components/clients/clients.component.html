@@ -17,6 +17,9 @@
     <app-grid 
         [configurationInfo]="tableConfig"
         [paginatedList]="paginatedList$"
-        (paginate)="onPaginate($event)">
+        (paginate)="onPaginate($event)"
+        [actionList]="actionList"
+        [allowsActions]="true"
+        (onItemClick)=onClientDetailClick($event)>
     </app-grid>
 </div>
