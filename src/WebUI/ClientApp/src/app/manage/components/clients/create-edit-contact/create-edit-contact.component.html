@@ -1,0 +1,85 @@
+<div class="container">
+    <div class="col-12 mt-2 p-0" *ngIf="!contactEdit">
+        <h3>New Contact</h3>
+        <p>No email is sent when adding a contact.</p>
+        <hr>
+    </div>
+    <div class="col-12 mt-2 p-0" *ngIf="contactEdit">
+        <h3>Edit Contact</h3>
+        <hr>
+        <p>No email is sent when adding a contact.</p>
+    </div>
+
+    <div class="col-12 mx-2 mt-1">
+        <form [formGroup]="contactForm">
+            
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="client">Client <span class="asterisk-required">*</span></label>
+                    </div>
+                    <div class="col-sm-9 col-xl-6">
+                        <select name="client" id="client" class="form-control" formControlName="client">
+                            <option value="" hidden >Select client...</option>
+                            <option [disabled]="contactEdit" value="{{ client.id }}" *ngFor="let client of clients">{{ client.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="title">Title</label>
+                    </div>
+                    <div class="col-sm-9 col-xl-6">
+                        <input type="text" id="title" class="form-control" formControlName="title" />
+                        <span class="text-danger"*ngIf="contactForm.controls.title.dirty && contactForm.controls.title.invalid">This field must have a minimum of 4 characters.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="address">Name <span class="asterisk-required">*</span></label>
+                    </div>
+                    <div class="col-sm-9 col-xl-6">
+                        <input type="text" id="name" class="form-control" formControlName="name" />
+                        <span class="text-danger"*ngIf="contactForm.controls.name.touched && contactForm.controls.name.invalid">This field must have a minimum of 3 characters.</span>
+                        <span class="text-danger"*ngIf="nameExist && contactForm.controls.name.touched">Contact with that name already exist.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="address">Email </label>
+                    </div>
+                    <div class="col-sm-9 col-xl-6">
+                        <input type="email" id="email" class="form-control" formControlName="email" />
+                        <span class="text-danger"*ngIf="contactForm.controls.email.touched && contactForm.controls.email.invalid">Enter a valid email.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="address">Phone</label>
+                    </div>
+                    <div class="col-sm-9 col-xl-6">
+                        <input type="text" id="phone" class="form-control" formControlName="phone" />
+                    </div>
+                </div>
+            </div>   
+        </form>
+
+        <div class="col-12 mb-2 d-flex justify-content-end p-0">
+            <button type="submit" class="btn btn-secondary mx-2" routerLink="/manage/clients" >Cancel</button>
+            <button type="submit" class="btn btn-primary"  [disabled]="!isFormValid" (click)="saveContact()" >Save Contact</button>
+        </div>
+    </div>
+</div>

@@ -8,13 +8,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateEditClientCompontent } from './components/clients/create-edit-client/create-edit-client.component';
 import { ManageComponent } from './manage.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateEditContactComponent } from './components/clients/create-edit-contact/create-edit-contact.component';
 
 
 @NgModule({
   declarations: [
     ManageComponent,
     ClientsComponent,
-    CreateEditClientCompontent
+    CreateEditClientCompontent,
+    CreateEditContactComponent
   ],
   imports: [
     ReactiveFormsModule,

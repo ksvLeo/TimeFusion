@@ -1,4 +1,4 @@
-﻿using FusionIT.TimeFusion.Application.Clients.Dtos;
+﻿using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Domain.Entities;
 using MediatR;
@@ -32,14 +32,15 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
         {
             if (string.IsNullOrEmpty(request.Contact.Name))
             {
-                throw new ArgumentException("Name field can't be null.");
+                throw new ArgumentException("Contact name can't be null.");
             }
 
-            Client client = await _context.Clients.Include(c => c.ContactList).FirstOrDefaultAsync(c => c.Id == request.ClientId);
+            bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
+                                                                    c.Name == request.Contact.Name);
 
-            if (client.ContactList.Any(c => c.Name == request.Contact.Name))
+            if (nameExists)
             {
-                throw new ArgumentException("Client already has a contact with that name added.");
+                throw new ArgumentException("Contact attached to Client: " + request.ClientId + " already exists with that name.");
             }
 
             Contact contact = new Contact

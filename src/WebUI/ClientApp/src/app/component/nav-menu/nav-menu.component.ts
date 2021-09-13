@@ -12,27 +12,27 @@ export class NavMenuComponent {
   navItems: NavMenuItemInterface[] = [
     {
       description: "Time",
-      url: "/"
+      url: "**"
     },
     {
       description: "Expenses",
-      url: "/"
+      url: "**"
     },
     {
       description: "Projects",
-      url: "/"
+      url: "**"
     },
     {
       description: "Team",
-      url: "/"
+      url: "**"
     },
     {
       description: "Reports",
-      url: "/"
+      url: "**"
     },
     {
       description: "Invoices",
-      url: "/"
+      url: "**"
     },
     {
       description: "Manage",

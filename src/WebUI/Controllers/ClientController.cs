@@ -6,9 +6,7 @@ using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Clients.Queries;
 using FusionIT.TimeFusion.Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.WebUI.Controllers
@@ -28,7 +26,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<ClientDto>> GetClientByName([FromQuery] GetClientByNameQuery query)
+        public async Task<ActionResult<bool>> GetClientByName([FromQuery] GetClientByNameQuery query)
         {
             return await Mediator.Send(query);
         }
@@ -39,19 +37,13 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
             return await Mediator.Send(query);
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult<List<ContactDto>>> GetContactsByClient(int id)
-        {
-            return await Mediator.Send(new GetReferrersByClientQuery { ClientId = id });
-        }
-
         [HttpPost]
         public async Task<ActionResult<int>> CreateClient(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
-        [HttpPut("reactiveClient")]
+        [HttpPut("[action]")]
         public async Task<ActionResult<bool>> ReactivateClient([FromQuery]ReactivateClientCommand command)
         {
             return await Mediator.Send(command);

@@ -1,5 +1,6 @@
 ﻿using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
+using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Domain.Entities;
 using MediatR;
 using System;
@@ -13,7 +14,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 {
     public class CreateClientCommand : IRequest<int>
     {
-        public ClientDto Client { get; set; }
+        public ClientDto newClient { get; set; }
     }
 
     public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
@@ -27,51 +28,57 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
         public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-             if (string.IsNullOrEmpty(request.Client.Name))
+             if (string.IsNullOrEmpty(request.newClient.Name))
              {
                 throw new ArgumentException("Name field can't be null.");
              }
 
-            Client client = _context.Clients.FirstOrDefault(c => c.Name == request.Client.Name);
+            Client clientNameExist = _context.Clients.FirstOrDefault(c => c.Name == request.newClient.Name);
 
-            if (client != null)
+            if (clientNameExist != null)
             {
-                throw new ArgumentException("Client Name already exist.");
+                throw new ArgumentException($"Client with name: '{ request.newClient.Name }' already exist.");
             }
 
-            Currency currency = _context.Currencies.FirstOrDefault(c => c.Id == request.Client.Currency.Id);
+            Currency currency = _context.Currencies.FirstOrDefault(c => c.Id == request.newClient.Currency.Id);
 
             if (currency == null)
             {
-                throw new ArgumentException("Currency not exist.");
+                throw new ArgumentException($"Unable to find currency with ID: #{ request.newClient.Currency.Id }.");
             }
 
             List<Contact> contacts = new List<Contact>();
 
-            Contact contact = new Contact
+            if (request.newClient.ContactList[0].Name != "")
             {
-                Title = request.Client.ContactList[0].Email,
-                Name = request.Client.ContactList[0].Name,
-                Email = request.Client.ContactList[0].Email,
-                PhoneNumber = request.Client.ContactList[0].PhoneNumber,
-                Active = true
-            };
 
-            contacts.Add(contact);
-            
-            Client entity = new Client
+
+                Contact contact = new Contact
+                {
+                    Title = request.newClient.ContactList[0].Email,
+                    Name = request.newClient.ContactList[0].Name,
+                    Email = request.newClient.ContactList[0].Email,
+                    PhoneNumber = request.newClient.ContactList[0].PhoneNumber,
+                    Active = true
+                };
+
+                contacts.Add(contact);
+
+            }
+
+            Client client = new Client
             {
-                Name = request.Client.Name,
-                Address = request.Client.Address,
+                Name = request.newClient.Name,
+                Address = request.newClient.Address,
                 Currency = currency,
                 ContactList = contacts,
                 Active = true
             };
 
-            _context.Clients.Add(entity);
+            _context.Clients.Add(client);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return client.Id;
         }
     }
 }

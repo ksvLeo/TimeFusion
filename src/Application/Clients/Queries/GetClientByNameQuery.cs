@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Queries
 {
-    public class GetClientByNameQuery : IRequest<ClientDto>
+    public class GetClientByNameQuery : IRequest<bool>
     {
         public string Name { get; set; }
     }
 
-    public class GetClientByNameQueryHandler : IRequestHandler<GetClientByNameQuery, ClientDto>
+    public class GetClientByNameQueryHandler : IRequestHandler<GetClientByNameQuery, bool>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -29,18 +29,16 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
             _mapper = mapper;
         }
 
-        public async Task<ClientDto> Handle(GetClientByNameQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(GetClientByNameQuery request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Name))
             {
                 throw new ArgumentException("Name field can't be null.");
             }
 
-            ClientDto client = await _context.Clients
-                .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Name == request.Name);
+            bool clientByNameExist = await _context.Clients.AnyAsync(c => c.Name == request.Name);
 
-            return client;
+            return clientByNameExist;
         }
     }
 
