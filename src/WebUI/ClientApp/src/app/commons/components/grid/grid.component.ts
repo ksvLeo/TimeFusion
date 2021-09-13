@@ -36,7 +36,7 @@ export class GridComponent {
 
   constructor() {}
 
-  callToParent(){
+  emitPaginate(){
     let pagingParam = new PagingParameters(this._pageIndex, this._itemPerPage, this._order, this._orderField);
     this.loading = true;
     console.log("Loading");
@@ -55,24 +55,30 @@ export class GridComponent {
       this._orderField = info.property;
       this._order = 1;
     }
-    this.callToParent();
+    this.emitPaginate();
   }
 
-  onChangePage(page: number){
+  changePage(page: number){
     this._pageIndex = page;
-    this.callToParent();
+    this.emitPaginate();
   }
 
-  movePage(i: number){
-    this._pageIndex = this._pageIndex + i;
-    this.callToParent();
+  previousPage(){
+    if (this._paginatedList.hasPreviousPage) {
+      this.changePage(this._pageIndex - 1);
+    }
+  }
+
+  nextPage(){
+    if (this._paginatedList.hasNextPage) {
+      this.changePage(this._pageIndex + 1);
+    }
   }
 
   itemPerPage(value){
-    console.log(value);
     this._itemPerPage = value;
     this._pageIndex = 1;
-    this.callToParent();
+    this.emitPaginate();
   }
 
 }
