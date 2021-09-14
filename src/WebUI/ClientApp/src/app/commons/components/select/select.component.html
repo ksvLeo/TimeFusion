@@ -6,7 +6,6 @@
     </div>
     <div class="col-sm-9 col-xl-6">
         <div class="row pl-3">
-            <ng-container>
                 <input type="text" class="form-control w-50" id="name" [(ngModel)]="nameForFind" autocomplete="off" (keyup)="findNameClient()" [disabled]="isSelectOption">
                 <div class="cancel">
                     <div *ngIf="isSelectOption">
@@ -16,8 +15,9 @@
                 <span  class="text-success" *ngIf="isNewClient && isSelectOption">{{ selectInfo.createClientSuccess }}</span>
                 <button *ngIf="!isSelectOption" type="button" class="btn btn-primary ml-2"(click)="createClient()" [disabled]="nameAlreadyExist || nameForFind.length < 3">{{ selectInfo.buttonCreate }}</button>
                 <span  class="text-danger" *ngIf="isNotElement && !isSelectOption" [innerHTML]="selectInfo.notElementMessage"></span>
-            </ng-container>
-            <div *ngIf="!isSelectOption" class="containerItem">
+
+            <div *ngIf="!isSelectOption">
+                <!-- listado de clientes -->
                 <div class="selecetItem">
                     <select name="client" id="client" class="form-control mt-2"*ngIf="_items && _items.length > 0" (change)="selectedClient($event.target.value)">}
                         <option value="" selected hidden>Select a client...</option>
@@ -25,7 +25,6 @@
                             {{ item.name }}
                         </option>
                     </select> 
-
                 </div>
             <div>
         </div>
