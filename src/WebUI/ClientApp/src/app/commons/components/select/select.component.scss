@@ -5,13 +5,27 @@
     top: 2px;
 }
 
-.selecetItem{
-    position: absolute;
-    bottom: 0px;
-    right: 6.0rem;
-    min-width: 70px;
-    max-width: 270px;
+.select-container {
+  position: relative;
+
+  .select-list{
+      position: absolute;
+      z-index: 100;
+      background-color: white;
+      border: 1px solid;
+
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style-type:none;
+        padding: 5px;
+        border-bottom: 1px solid;
+      }
+    }
 }
+
 
 input{
     z-index: 1;

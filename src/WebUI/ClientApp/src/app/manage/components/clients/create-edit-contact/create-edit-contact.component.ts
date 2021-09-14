@@ -23,7 +23,7 @@ export class CreateEditContactComponent implements OnInit {
     nameExist: boolean = false;
 
     // Testing
-    test = new Subject<ClientDto[]>();
+    // test = new Subject<ClientDto[]>();
     selectInfo : SelectInfo = {
         buttonCreate: "Create Client",
         createClientSuccess: "The client was created successfully.",
@@ -33,7 +33,6 @@ export class CreateEditContactComponent implements OnInit {
 
     // Testing
 
-    
     //Edit
     contactEdit: boolean = false;
     contact: ContactDto;
@@ -67,7 +66,7 @@ export class CreateEditContactComponent implements OnInit {
         switch (url[4]) {
             case "create":
                 if (url.length == 4) {
-                    this.getClients();    
+                    this.getClients();
                 } else {
                     this.getClientById(Number(url[5])).then((res: ClientDto) => {
                         this.clients.push(res);
@@ -77,7 +76,7 @@ export class CreateEditContactComponent implements OnInit {
                 break;
             case "edit":
                 this.getContactForEdit();
-
+                this.getClients();
                 break;
             default:
 
@@ -197,17 +196,17 @@ export class CreateEditContactComponent implements OnInit {
     processClientId(id: number){
         console.log(id);
     }
-    
-    getClientsForName(name: string){
-        this.clientClient.getClientsByName(name).subscribe(res => {
-            this.clients = res;
-            this.test.next(this.clients);
-        }, err => {});    
-    }
+
+    // getClientsForName(name: string){
+    //     this.clientClient.getClientsByName(name).subscribe(res => {
+    //         this.clients = res;
+    //         this.test.next(this.clients);
+    //     }, err => {});
+    // }
 
     createNewClient(newClient: ClientDto){
         this.clientClient.createClient(new CreateClientCommand({newClient: newClient})).subscribe(res => {
-            this.getClientsForName(newClient.name);
+            this.getClients();
         });
     }
 

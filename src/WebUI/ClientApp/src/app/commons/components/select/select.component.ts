@@ -12,90 +12,101 @@ import { ClientDto, CurrencyDto } from "src/app/web-api-client";
 
 export class SelectComponent implements OnInit {
 
-    _items: ClientDto[] = null;
     isNotElement: boolean;
     nameForFind: string = "";
     nameAlreadyExist: boolean;
-    _itemId : number;
+    item : any;
     isSelectOption: boolean;
-    isNewClient: boolean = false;
+    isNewEntity: boolean = false;
 
     private evetsSubscription: Subscription;
 
-    @Input() items:  Observable<ClientDto[]>;
+    @Input() items: any[];
     @Input() selectInfo: SelectInfo;
+    @Input() displayProperty: string;
+    @Input() idProperty: string;
 
-    @Output() clientId = new EventEmitter<number>();
+    @Output() selected = new EventEmitter<any>();
     @Output() clientName = new EventEmitter<string>();
-    @Output() newClient = new EventEmitter<ClientDto>();
+    @Output() newEntity = new EventEmitter<ClientDto>();
 
     constructor(){
     }
 
     ngOnInit(){
-        this.evetsSubscription = this.items.subscribe((res) => this.getItems(res));
+        // this.evetsSubscription = this.items.subscribe((res) => this.getItems(res));
     }
 
-    selectedClient($event){
-        this._itemId = $event;
-        this._items.forEach(i => {
-            if(i.id == +this._itemId){
-                this.nameForFind = i.name;
-            }
-        });
-        this.isSelectOption = true;
-        this.clientId.emit(this._itemId);
-    }
+    // selectedClient($event){
+    //     this._itemId = $event;
+    //     this._items.forEach(i => {
+    //         if(i.id == +this._itemId){
+    //             this.nameForFind = i.name;
+    //         }
+    //     });
+    //     this.isSelectOption = true;
+    //     this.clientId.emit(this._itemId);
+    // }
 
     createClient(){
-        // Create new 
-        let newClient = new ClientDto({
-            name : this.nameForFind,
-            currency:  new CurrencyDto({id: 2})
-        });
-        this.isNewClient = true;
+        // Create new
+        let newEntity: any;
+        newEntity[this.displayProperty] = this.nameForFind
+        // new ClientDto({
+        //     name : this.nameForFind,
+        //     currency:  new CurrencyDto({id: 2})
+        // });
+        this.isNewEntity = true;
         this.isSelectOption = true;
-        this.newClient.emit(newClient);
+        this.newEntity.emit(newEntity);
     }
 
-    getItems(res: ClientDto[]){
-        if(this.isNewClient){
+    filterItems(){
+        if(this.isNewEntity){
             return;
         }
 
         this.nameAlreadyExist = false;
 
-        res.forEach(c => {
-            if(c.name.toLowerCase() == this.nameForFind.toLowerCase()){
-                this.nameAlreadyExist = true;
-                return;
-            }
+        let results = this.items.filter(c => {
+          return c[this.displayProperty].toLowerCase().includes(this.nameForFind.toLowerCase());
+            // if(c[this.displayProperty].toLowerCase() == this.nameForFind.toLowerCase()){
+            //     this.nameAlreadyExist = true;
+            //     return;
+            // }
         });
 
-        this._items = res;
-        if(res.length > 0){
+        if(results.length > 0){
             this.isNotElement = false;
-            return;
+            return results;
         }
 
         this.isNotElement = true;
+        return [];
     }
 
     findNameClient(){
-        if(this.nameForFind.length < 3 || this.nameForFind == ""){
-            this.isNotElement = false;
-            this._items = [];
-            return;
-        }
-        this.clientName.emit(this.nameForFind.trim());
+        // if(this.nameForFind.length < 3 || this.nameForFind == ""){
+        //     this.isNotElement = false;
+        //     this._items = [];
+        //     return;
+        // }
+        // this.clientName.emit(this.nameForFind.trim());
     }
 
     cancelSelection(){
-        this.isNewClient = false;
+        this.isNewEntity = false;
         this.isNotElement = false;
         this.isSelectOption = false;
         this.nameAlreadyExist = false;
         this.nameForFind = "";
-        this._items = [];
+        // this._items = [];
+    }
+
+    selectItem(item: any)
+    {
+      console.log("selected: " + item[this.displayProperty]);
+      this.item = item;
+      this.selected.emit(this.item);
     }
 };

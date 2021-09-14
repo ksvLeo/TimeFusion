@@ -109,8 +109,8 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
                     }
                 });
 
-                await context.SaveChangesAsync();
             }
+            await context.SaveChangesAsync();
         }
     }
 }
