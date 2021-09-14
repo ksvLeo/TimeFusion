@@ -27,8 +27,17 @@ export class GridComponent {
   _orderField: string;
   _pageIndex: number;
   _order: number = 1;
-  _pageSize: number = 2;
-  @Input() gridConfiguration: GridConfiguration;
+  _pageSize: number;
+  _fieldsInfo: FieldInfo[];
+  _itemsPerPage: number[];
+  @Input() 
+  set gridConfiguration(val: GridConfiguration){
+    if (val) {
+      this._fieldsInfo = val.FieldInfo;
+      this._itemsPerPage = val.ItemsPerPage;
+      this._pageSize = val.ItemsPerPage[0];
+    }
+  };
   @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
   @Input() actionList: ActionInfo[] = [];
   @Input() allowsActions: boolean = false;
