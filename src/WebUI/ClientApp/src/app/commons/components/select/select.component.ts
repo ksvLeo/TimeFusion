@@ -34,28 +34,12 @@ export class SelectComponent implements OnInit {
     }
 
     ngOnInit(){
-        // this.evetsSubscription = this.items.subscribe((res) => this.getItems(res));
     }
 
-    // selectedClient($event){
-    //     this._itemId = $event;
-    //     this._items.forEach(i => {
-    //         if(i.id == +this._itemId){
-    //             this.nameForFind = i.name;
-    //         }
-    //     });
-    //     this.isSelectOption = true;
-    //     this.clientId.emit(this._itemId);
-    // }
-
-    createClient(){
-        // Create new
+    create(){
+        // Create new entity
         let newEntity: any;
         newEntity[this.displayProperty] = this.nameForFind
-        // new ClientDto({
-        //     name : this.nameForFind,
-        //     currency:  new CurrencyDto({id: 2})
-        // });
         this.isNewEntity = true;
         this.isSelectOption = true;
         this.newEntity.emit(newEntity);
@@ -70,10 +54,6 @@ export class SelectComponent implements OnInit {
 
         let results = this.items.filter(c => {
           return c[this.displayProperty].toLowerCase().includes(this.nameForFind.toLowerCase());
-            // if(c[this.displayProperty].toLowerCase() == this.nameForFind.toLowerCase()){
-            //     this.nameAlreadyExist = true;
-            //     return;
-            // }
         });
 
         if(results.length > 0){
@@ -86,12 +66,6 @@ export class SelectComponent implements OnInit {
     }
 
     findNameClient(){
-        // if(this.nameForFind.length < 3 || this.nameForFind == ""){
-        //     this.isNotElement = false;
-        //     this._items = [];
-        //     return;
-        // }
-        // this.clientName.emit(this.nameForFind.trim());
     }
 
     cancelSelection(){
@@ -100,7 +74,6 @@ export class SelectComponent implements OnInit {
         this.isSelectOption = false;
         this.nameAlreadyExist = false;
         this.nameForFind = "";
-        // this._items = [];
     }
 
     selectItem(item: any)
