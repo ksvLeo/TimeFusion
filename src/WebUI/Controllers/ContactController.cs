@@ -1,4 +1,5 @@
 ﻿using FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact;
+using FusionIT.TimeFusion.Application.Contacts.Commands.DeleteContact;
 using FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact;
 using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetClients;
@@ -19,7 +20,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<ContactDto>>> GetContactsByClient(int id)
+        public async Task<ActionResult<List<ContactDto>>> GetContactsByClient([FromQuery] int id)
         {
             return await Mediator.Send(new GetContactListByClientQuery { ClientId = id });
         }
@@ -35,10 +36,15 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         {
             return await Mediator.Send(command);
         }
-    
 
         [HttpPost]
         public async Task<ActionResult<int>> CreateContact(CreateContactCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteContact ([FromQuery] DeleteContactCommand command)
         {
             return await Mediator.Send(command);
         }

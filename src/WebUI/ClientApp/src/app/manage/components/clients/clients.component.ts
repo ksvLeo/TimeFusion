@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs";
 import { ActionInfo } from "src/app/commons/classes/action-info";
-import { FieldInfo } from "src/app/commons/classes/field-info";
+import { FieldInfo, GridConfiguration } from "src/app/commons/classes/grid-configuration";
 import { PaginatedList } from "src/app/commons/classes/paginated-list";
 import { PagingParameters } from "src/app/commons/classes/paging-parameters";
 import { ClientClient, ClientDto } from "src/app/web-api-client";
@@ -19,7 +19,8 @@ export class ClientsComponent implements OnInit {
 
     closeModal: any;
     paginatedList: PaginatedList<ClientDto>;
-    tableConfig: FieldInfo[];
+    fieldInfo: FieldInfo[] = [];
+    gridConfiguration: GridConfiguration;
     actionList: ActionInfo[] = []
 
     constructor(private clientClient: ClientClient,
@@ -33,10 +34,11 @@ export class ClientsComponent implements OnInit {
     }
 
     configurationGrid(){
-        this.tableConfig = [
+        this.fieldInfo = [
             new FieldInfo("Name", "name", "string", true),
             new FieldInfo("Address", "address", "string", true)
         ];
+        this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1,3,6], true);
     }
 
     getClients(pageNumber: number = 1, pageSize: number = 1, order: number = 1, orderField: string = "name"): void{

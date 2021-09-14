@@ -77,6 +77,7 @@ export class CreateEditContactComponent implements OnInit {
                 break;
             case "edit":
                 this.getContactForEdit();
+
                 break;
             default:
 
@@ -152,6 +153,7 @@ export class CreateEditContactComponent implements OnInit {
                 });
                 this.contactForm.controls.title.setErrors(null);
                 this.contactForm.controls.email.setErrors(null);
+                this.contactForm.get('client').patchValue(res.id)
             });
         });
     }
@@ -207,6 +209,13 @@ export class CreateEditContactComponent implements OnInit {
         this.clientClient.createClient(new CreateClientCommand({newClient: newClient})).subscribe(res => {
             this.getClientsForName(newClient.name);
         });
+    }
+
+    onCancelClick() {
+        if (this.contactEdit)
+            this.router.navigate(['manage/clients/', this.contact.clientId])
+        else
+            this.router.navigate(['manage/clients'])
     }
     // Testing
 }
