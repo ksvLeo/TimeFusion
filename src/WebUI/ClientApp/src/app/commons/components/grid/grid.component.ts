@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActionInfo } from '../../classes/action-info';
-import { FieldInfo } from '../../classes/field-info';
+import { FieldInfo, GridConfiguration } from '../../classes/grid-configuration';
 import { PaginatedList } from '../../classes/paginated-list';
 import { PagingParameters } from '../../classes/paging-parameters';
 
@@ -28,7 +28,7 @@ export class GridComponent {
   _pageIndex: number;
   _order: number = 1;
   _itemPerPage: number = 1;
-  @Input() configurationInfo: FieldInfo[] = [];
+  @Input() gridConfiguration: GridConfiguration;
   @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
   @Input() actionList: ActionInfo[] = [];
   @Input() allowsActions: boolean = false;
