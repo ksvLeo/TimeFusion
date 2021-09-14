@@ -1,5 +1,5 @@
 <div class="m-2" *ngIf="_paginatedList">
-    <div class="row justify-content-between m-2" *ngIf="gridConfiguration.AllowPagination">
+    <div class="row justify-content-between m-2" *ngIf="gridConfiguration.ItemsPerPage[0] != 0">
         <div>
             <label class="small">Showing {{_paginatedList.items.length}} of {{_paginatedList.totalCount}} items</label>
         </div>
@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <th *ngFor="let info of gridConfiguration.FieldInfo">
-                    <span *ngIf="!info.allowSorting || !gridConfiguration.AllowPagination; else sortColumn">
+                    <span *ngIf="!info.allowSorting || gridConfiguration.ItemsPerPage[0] == 0; else sortColumn">
                         {{info.label}}
                     </span>
                     <ng-template #sortColumn>
@@ -43,7 +43,7 @@
         </tbody>
     </table>
 
-    <nav *ngIf="gridConfiguration.AllowPagination">
+    <nav *ngIf="gridConfiguration.ItemsPerPage[0] != 0">
         <ul class="pagination justify-content-center">
 
             <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"

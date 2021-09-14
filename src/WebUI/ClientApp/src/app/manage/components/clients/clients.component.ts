@@ -38,10 +38,10 @@ export class ClientsComponent implements OnInit {
             new FieldInfo("Name", "name", "string", true),
             new FieldInfo("Address", "address", "string", true)
         ];
-        this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1,3,6], true);
+        this.gridConfiguration = new GridConfiguration(this.fieldInfo, [2, 5, 10]);
     }
 
-    getClients(pageNumber: number = 1, pageSize: number = 1, order: number = 1, orderField: string = "name"): void{
+    getClients(pageNumber: number = 1, pageSize: number = 2, order: number = 1, orderField: string = "name"): void{
         this.clientClient.get(pageNumber, pageSize, order, orderField).subscribe(res => this.paginatedList = res);
     }
 

@@ -2,8 +2,7 @@ export class GridConfiguration {
     
     constructor(
         public FieldInfo: FieldInfo[],
-        public ItemsPerPage: number[],
-        public AllowPagination: boolean = false){
+        public ItemsPerPage: number[] = [0]){ //[0] for not paginate
     }
 }
 
