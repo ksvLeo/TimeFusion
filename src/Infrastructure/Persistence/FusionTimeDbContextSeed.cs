@@ -41,10 +41,18 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
                 context.Currencies.Add(UYU); 
             }
 
+            List<Contact> testContacts = new List<Contact>();
+            Contact testContact = new Contact { Name = "Romualdo Rodríguez", Email = "roro1969@hotmail.com", Active = true, Title = "El que paga", PhoneNumber = "099699420" };
+            testContacts.Add(testContact);
+            testContact = new Contact { Name = "Julieta Veganas", Email = "juve3500@realemail.com", Active = true, Title = "La que habilita el pago", PhoneNumber = "08888888" };
+            testContacts.Add(testContact);
+            testContact = new Contact { Name = "Nombrenombre", Email = "email@realemail.com", Active = false, Title = "Los que pagan ya están no sé qué haría este", PhoneNumber = "404" };
+            testContacts.Add(testContact);
+
             if (!context.Clients.Any())
             {
-                context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Active = true, ContactList = new List<Contact>{ new Contact { Name = "Romualdo Rodriguez", Title = "El que paga" } } });
-                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD });
+                context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Active = true, ContactList = testContacts });
+                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, ContactList = testContacts });
             }
 
             if (!context.BudgetTypes.Any())

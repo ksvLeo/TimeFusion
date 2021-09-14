@@ -10,6 +10,7 @@ import { ManageComponent } from './manage.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateEditContactComponent } from './components/clients/create-edit-contact/create-edit-contact.component';
 import { CommonsModule } from '../commons/commons.module';
+import { ClientDetailComponent } from './components/clients/client-detail/client-detail.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { CommonsModule } from '../commons/commons.module';
     ManageComponent,
     ClientsComponent,
     CreateEditClientCompontent,
-    CreateEditContactComponent
+    CreateEditContactComponent,
+    ClientDetailComponent
   ],
   imports: [
     ReactiveFormsModule,

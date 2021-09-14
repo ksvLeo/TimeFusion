@@ -1,7 +1,7 @@
-.table-row {
+.clickable {
     cursor: pointer;
 }
 
-.table-row:hover {
+.clickable:hover {
     background-color: royalblue;
 }

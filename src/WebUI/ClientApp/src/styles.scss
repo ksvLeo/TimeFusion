@@ -19,3 +19,13 @@ code {
 .asterisk-required{
   color:red;
 }
+
+  .btn-orange {
+    border-color: #ff9800;
+    color: orange;
+  }
+  
+  .btn-orange:hover {
+    background: #ff9800;
+    color: white;
+  }

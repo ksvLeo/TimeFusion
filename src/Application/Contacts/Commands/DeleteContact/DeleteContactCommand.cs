@@ -34,6 +34,11 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.DeleteContact
                 throw new ArgumentException("No contact was found with ID #" + request.ContactId);
             }
 
+            if (contact.Active == false)
+            {
+                throw new ArgumentException($"Contact with ID # {request.ContactId} is already inactive");
+            }
+
             contact.Active = false;
 
             await _context.SaveChangesAsync(cancellationToken);

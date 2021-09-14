@@ -31,8 +31,9 @@ export class GridComponent {
   @Input() configurationInfo: FieldInfo[] = [];
   @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
   @Input() actionList: ActionInfo[] = [];
-  @Input() allowsActions: boolean;
+  @Input() allowsActions: boolean = false;
   @Output() itemClickEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Input() allowsClick: boolean = false;
 
   constructor() {}
 
@@ -44,7 +45,6 @@ export class GridComponent {
   }
   
   onItemClick(item: any){
-    console.log("before")
     this.itemClickEvent.emit(item);
   }
 
