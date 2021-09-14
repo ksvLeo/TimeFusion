@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ManageRoutingModule } from './manage-routing.module';
 import { ClientsComponent } from './components/clients/clients.component';
 import { AppRoutingModule } from '../app-routing.module';

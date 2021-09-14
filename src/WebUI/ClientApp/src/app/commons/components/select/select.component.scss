@@ -1,0 +1,18 @@
+.cancel{
+    position: relative;
+    z-index: 1;
+    right: 1.4rem;
+    top: 2px;
+}
+
+.selecetItem{
+    position: absolute;
+    bottom: 0px;
+    right: 6.0rem;
+    min-width: 70px;
+    max-width: 270px;
+}
+
+input{
+    z-index: 1;
+}

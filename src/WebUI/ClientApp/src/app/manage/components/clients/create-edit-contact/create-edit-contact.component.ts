@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
+import { SelectInfo } from "src/app/interfaces/selectInfo";
 import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateContactCommand, UpdateContactCommand } from "src/app/web-api-client";
 
 
@@ -23,6 +24,12 @@ export class CreateEditContactComponent implements OnInit {
 
     // Testing
     test = new Subject<ClientDto[]>();
+    selectInfo : SelectInfo = {
+        buttonCreate: "Create Client",
+        createClientSuccess: "The client was created successfully.",
+        label: 'Client',
+        notElementMessage: 'There is no client with the name entered.<br>¿Do you want to create it?.<br>To create a new client it must have at least 3 characters.'
+    }
 
     // Testing
 

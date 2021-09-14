@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { faSleigh } from "@fortawesome/free-solid-svg-icons";
 import { Observable, Subscription } from "rxjs";
+import { SelectInfo } from "src/app/interfaces/selectInfo";
 import { ClientDto, CurrencyDto } from "src/app/web-api-client";
 
 @Component({
@@ -12,23 +13,21 @@ import { ClientDto, CurrencyDto } from "src/app/web-api-client";
 export class SelectComponent implements OnInit {
 
     _items: ClientDto[] = null;
-    notElement: boolean;
-    nameForFind: string;
+    isNotElement: boolean;
+    nameForFind: string = "";
     nameAlreadyExist: boolean;
-    _itemId : number
-    selectOption: boolean;
-    addNewClient: boolean = false;
-    // Test
-    testing: string;
-    // Test
+    _itemId : number;
+    isSelectOption: boolean;
+    isNewClient: boolean = false;
 
     private evetsSubscription: Subscription;
 
     @Input() items:  Observable<ClientDto[]>;
+    @Input() selectInfo: SelectInfo;
 
-    @Output() clientId = new EventEmitter<number>()    
-    @Output() clientName = new EventEmitter<string>()
-    @Output() newClient = new EventEmitter<ClientDto>()
+    @Output() clientId = new EventEmitter<number>();
+    @Output() clientName = new EventEmitter<string>();
+    @Output() newClient = new EventEmitter<ClientDto>();
 
     constructor(){
     }
@@ -37,17 +36,14 @@ export class SelectComponent implements OnInit {
         this.evetsSubscription = this.items.subscribe((res) => this.getItems(res));
     }
 
-    test($event){
+    selectedClient($event){
         this._itemId = $event;
-        debugger;
         this._items.forEach(i => {
             if(i.id == +this._itemId){
                 this.nameForFind = i.name;
             }
         });
-        this.testing = this.nameForFind;
-        this.nameForFind = null;
-        this.selectOption = true;
+        this.isSelectOption = true;
         this.clientId.emit(this._itemId);
     }
 
@@ -57,12 +53,18 @@ export class SelectComponent implements OnInit {
             name : this.nameForFind,
             currency:  new CurrencyDto({id: 2})
         });
-        this.addNewClient = true;
+        this.isNewClient = true;
+        this.isSelectOption = true;
         this.newClient.emit(newClient);
     }
 
     getItems(res: ClientDto[]){
+        if(this.isNewClient){
+            return;
+        }
+
         this.nameAlreadyExist = false;
+
         res.forEach(c => {
             if(c.name.toLowerCase() == this.nameForFind.toLowerCase()){
                 this.nameAlreadyExist = true;
@@ -72,18 +74,28 @@ export class SelectComponent implements OnInit {
 
         this._items = res;
         if(res.length > 0){
-            this.notElement = false;
+            this.isNotElement = false;
             return;
         }
-        this.notElement = true;
+
+        this.isNotElement = true;
     }
 
     findNameClient(){
-        if(this.nameForFind.length == 0){
-            this.notElement = false;
-            this._items  = [];
+        if(this.nameForFind.length < 3 || this.nameForFind == ""){
+            this.isNotElement = false;
+            this._items = [];
+            return;
         }
-        console.log(this.nameForFind)
         this.clientName.emit(this.nameForFind.trim());
+    }
+
+    cancelSelection(){
+        this.isNewClient = false;
+        this.isNotElement = false;
+        this.isSelectOption = false;
+        this.nameAlreadyExist = false;
+        this.nameForFind = "";
+        this._items = [];
     }
 };
