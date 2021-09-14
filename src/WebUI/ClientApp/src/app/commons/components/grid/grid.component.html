@@ -1,12 +1,17 @@
-<div>
-    <div class="form-inline m-2 justify-content-end">
-        <label class="mr-2 small">Items per page:</label>
-        <select class="form-control form-control-sm" name="itemPerPage" id="itemPerPage"
-            (change)="itemPerPage($event.target.value)">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="5">5</option>
-        </select>
+<div *ngIf="_paginatedList">
+    <div class="row justify-content-between m-2">
+        <div>
+            <label class="small">Showing {{_paginatedList.items.length}} of {{_paginatedList.totalCount}} items</label>
+        </div>
+        <div class="form-inline">
+            <label class="mr-2 small">Items per page:</label>
+            <select class="form-control form-control-sm"
+                (change)="itemPerPage($event.target.value)">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="5">5</option>
+            </select>
+        </div>
     </div>
 
     <table class="table table-striped">
@@ -23,34 +28,42 @@
                             <i class="fas fa-sort-up float-right" *ngIf="info.property == _orderField && _order == 1"></i>
                             <i class="fas fa-sort-down float-right" *ngIf="info.property == _orderField && _order == 2"></i>
                         </div>
-                        <!-- <button (click)="sortByColumn(info)">{{info.label}}</button> -->
                     </ng-template>
                 </th>
+                <th></th>
             </tr>
         </thead>
-        <tbody *ngIf="_paginatedList && _paginatedList.items">
+        <tbody>
             <tr *ngFor="let item of _paginatedList.items" (click)="onItemClick(item)" class="table-row">
                 <td *ngFor="let info of configurationInfo">
                     {{item[info.property]}}
                 </td>
-                <ng-container *ngIf="allowsActions">
+                <td *ngIf="allowsActions" style="width: 50px;">
                     <app-action-list [actions]="actionList" [item]="item"></app-action-list>
-                </ng-container>
+                </td>
             </tr>
         </tbody>
     </table>
 
-    <nav aria-label="Page navigation example" *ngIf="_paginatedList">
+    <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
 
-            <li class="page-item" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
                 (click)="changePage(1)">
-                    <a class="page-link" href="javascript:{}" tabindex="-1" aria-disabled="true">First</a>
+                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-double-left"></i></a>
+            </li>
+            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+                (click)="changePage(1)">
+                    <a class="page-link" href="javascript:{}">First</a>
             </li>
 
-            <li class="page-item" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
                 (click)="previousPage()">
-                    <a class="page-link" href="javascript:{}" tabindex="-1" aria-disabled="true">Previous</a>
+                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-left"></i></a>
+            </li>
+            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+                (click)="previousPage()">
+                    <a class="page-link" href="javascript:{}">Previous</a>
             </li>
 
             <li class="page-item disabled">
@@ -61,14 +74,22 @@
                 <label class="page-link">of {{_paginatedList.totalPages}}</label>
             </li>
 
-            <li class="page-item" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
                 (click)="nextPage()">
                     <a class="page-link" href="javascript:{}">Next</a>
             </li>
+            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+                (click)="nextPage()">
+                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-right"></i></a>
+            </li>
 
-            <li class="page-item" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
                 (click)="changePage(_paginatedList.totalPages)">
-                    <a class="page-link" href="javascript:{}" tabindex="-1" aria-disabled="true">Last</a>
+                    <a class="page-link" href="javascript:{}">Last</a>
+            </li>
+            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+                (click)="changePage(_paginatedList.totalPages)">
+                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-double-right"></i></a>
             </li>
         </ul>
       </nav>
