@@ -26,11 +26,6 @@ import { GenericModalComponent } from './components/generic-modal/generic-modal.
     ActionListComponent,
     SelectComponent
   ],
-  exports:[
-    GridComponent,
-    ActionListComponent,
-    SelectComponent
-  ],
   providers: []
 })
 export class CommonsModule { }
