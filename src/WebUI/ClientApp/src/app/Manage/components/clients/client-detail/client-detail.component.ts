@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionInfo } from 'src/app/commons/classes/action-info';
-import { FieldInfo } from 'src/app/commons/classes/field-info';
+import { FieldInfo, GridConfiguration } from 'src/app/commons/classes/grid-configuration';
 import { ModalInfo } from 'src/app/commons/classes/modal-info';
 import { PaginatedList } from 'src/app/commons/classes/paginated-list';
 import { GenericModalComponent } from 'src/app/commons/components/generic-modal/generic-modal.component';
@@ -19,6 +19,7 @@ export class ClientDetailComponent implements OnInit {
   closeModal: any;
   paginatedList: PaginatedList<ContactDto>;
   tableConfig: FieldInfo[];
+  configurationInfo: GridConfiguration;
   actionList: ActionInfo[] = []
   modalInfo: ModalInfo;
 
@@ -90,6 +91,7 @@ export class ClientDetailComponent implements OnInit {
       new FieldInfo("Phone Number", "phoneNumber", "string", true),
       new FieldInfo("Active", "active", "string", true)
   ];
+    this.configurationInfo = new GridConfiguration(this.tableConfig, [1])
   }
 
   loadActions() {
