@@ -35,4 +35,12 @@
     <ProjectReference Include="..\..\src\WebUI\FusionIT.TimeFusion.WebUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Clients\Folder\" />
+    <Folder Include="Contacts\Commands\" />
+    <Folder Include="Contacts\Queries\" />
+    <Folder Include="Projects\Commands\" />
+    <Folder Include="Projects\Queries\" />
+  </ItemGroup>
+
 </Project>

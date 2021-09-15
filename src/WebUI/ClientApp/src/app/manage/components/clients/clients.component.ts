@@ -78,6 +78,7 @@ export class ClientsComponent implements OnInit {
             if(input == "accept") {
                 if (item.active) {
                     this.clientClient.deleteClient(item.id).subscribe(response => {
+                        console.log(response)
                         this.getClients()
                     })
                     
@@ -102,13 +103,7 @@ export class ClientsComponent implements OnInit {
         action.enable = true;
         action.event.subscribe(item => this.onAddContact(item));
         this.actionList.push(action)
-
-        action = new ActionInfo();
-        action.label = "Edit Contacts";
-        action.enable = true;
-        action.event.subscribe(item => this.onEditContacts(item));
-        this.actionList.push(action);
-
+        
         action = new ActionInfo();
         action.label = "Edit Client";
         action.enable = true;

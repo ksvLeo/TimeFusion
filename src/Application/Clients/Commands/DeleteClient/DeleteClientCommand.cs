@@ -40,7 +40,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
                 throw new ArgumentException("User has active projects with to this client.");
             }
 
-
             client.Status = ClientStatus.Inactive;
 
             await _context.SaveChangesAsync(cancellationToken);
