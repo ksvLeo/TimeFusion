@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { stringify } from 'querystring';
 import { ActionInfo } from 'src/app/commons/classes/action-info';
 import { FieldInfo, GridConfiguration } from 'src/app/commons/classes/grid-configuration';
 import { ModalInfo } from 'src/app/commons/classes/modal-info';
 import { PaginatedList } from 'src/app/commons/classes/paginated-list';
+import { ContactManagementUrlParams } from 'src/app/commons/classes/contactManagementUrlParams';
 import { GenericModalComponent } from 'src/app/commons/components/generic-modal/generic-modal.component';
 import { ClientClient, ClientDto, ContactClient, ContactDto, CurrencyDto } from 'src/app/web-api-client';
 
@@ -36,13 +38,47 @@ export class ClientDetailComponent implements OnInit {
     this.loadActions()
   }
 
+  onDeactivateClient() {
+    let modalInfo = new ModalInfo()
+    modalInfo.title = "Deactivate Client?"
+    modalInfo.message = "Are you ready to finish your work with " + this.clientInfo.name + "?"  
+    this.openModal(modalInfo).then(res => {
+      if (res == "accept") {
+        this.clientService.deleteClient(this.clientInfo.id).subscribe(response => {
+          this.router.navigate(['/manage/clients'])
+        })  
+      } else {
+        
+      }
+    })
+  }
+
+  onReactivateClient() {
+    let modalInfo = new ModalInfo;
+    modalInfo.title = "Reactivate Client?"
+    modalInfo.message = "Are you ready to start working with " + this.clientInfo.name + " again?"  
+    this.openModal(modalInfo).then(input => {
+      if (input == "accept") {
+        console.log(input)
+        this.clientService.reactivateClient(this.clientInfo.id).subscribe(response => {
+          this.getClient()
+        })
+      } else {
+        
+      }
+    })
+  }
+
   onReportContact(item: ContactDto) {
     let mailText = "mailto:"+ item.email +"?subject=files&body=bodyodyody"; // add the links to body
     window.location.href = mailText;
   }
 
   onEditContact(item: ContactDto) {
-    this.router.navigate(['/manage/clients/contact/edit', item.id])
+    let queryParams = new ContactManagementUrlParams()
+    queryParams.mode = "edit"
+    queryParams.id = item.id.toString()
+    this.router.navigate(['/manage/clients/contact', queryParams])
   }
   
   onFlagContact(item: ContactDto) {

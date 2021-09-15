@@ -1,10 +1,10 @@
-import { TransitiveCompileNgModuleMetadata } from "@angular/compiler";
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Observable } from "rxjs";
 import { ActionInfo } from "src/app/commons/classes/action-info";
+import { ContactManagementUrlParams } from "src/app/commons/classes/contactManagementUrlParams";
 import { FieldInfo, GridConfiguration } from "src/app/commons/classes/grid-configuration";
+import { ModalInfo } from "src/app/commons/classes/modal-info";
 import { PaginatedList } from "src/app/commons/classes/paginated-list";
 import { PagingParameters } from "src/app/commons/classes/paging-parameters";
 import { ClientClient, ClientDto } from "src/app/web-api-client";
@@ -51,7 +51,11 @@ export class ClientsComponent implements OnInit {
     }
         
     onAddContact(item: any) {
-        this.router.navigate(['/manage/clients/contact/create', item.id])
+        let urlParams = new ContactManagementUrlParams()
+        urlParams.mode = "create"
+        if(item != null)
+        urlParams.id = item.id.toString()
+        this.router.navigate(['/manage/clients/contact', urlParams]); 
     }
         
     onEditContacts(item: any) {
@@ -64,8 +68,26 @@ export class ClientsComponent implements OnInit {
         this.router.navigate(['/manage/clients/edit', item.id])
     }
 
-    onDeleteClient(item: any) {
-        this.openModal(item)
+    onFlagClient(item: ClientDto) {
+        let modalInfo = new ModalInfo()
+        if(item.active) {
+            modalInfo.title = "Deactivate Client?"
+            modalInfo.message = "Are you ready to finish your work with " + item.name + "?"  
+        } else {
+            modalInfo.title = "Reactivate Client?"
+            modalInfo.message = "Are you ready to work with " + item.name + " again?"
+        }
+        this.openModal(modalInfo).then(input => {
+            if(input == "accept") {
+                if (item.active) {
+                    this.clientClient.deleteClient(item.id)
+                    this.getClients()
+                } else {
+                    this.clientClient.reactivateClient(item.id)
+                    this.getClients()
+                }
+            }
+        })
     }
         
     onViewProjects(item: any) {
@@ -94,9 +116,9 @@ export class ClientsComponent implements OnInit {
         this.actionList.push(action);
 
         action = new ActionInfo();
-        action.label = "Delete Client";
+        action.label = "Flag Client";
         action.enable = true;
-        action.event.subscribe(item => this.onDeleteClient(item));
+        action.event.subscribe(item => this.onFlagClient(item));
         this.actionList.push(action);
 
         action = new ActionInfo();
@@ -110,17 +132,21 @@ export class ClientsComponent implements OnInit {
         this.router.navigate(['/manage/clients', item.id])
     }
 
-    openModal(item: any) {
-        const modalRef = this.modalService.open(GenericModalComponent,
-          {
-            scrollable: true
-          });
-       
-          modalRef.componentInstance.title = "Deactivate client?"
-          modalRef.componentInstance.message = "Are you sure you want to deactivate " + item.Name + "?"
-        modalRef.result.then((result:any) => {
-          console.log(result);
-        }, (reason:any) => {
-        });
-      }
+    openModal(modalInfo: ModalInfo): Promise<string> {
+        var promise = new Promise<string>((resolve) => {
+          setTimeout(() => {
+            var modalRef = this.modalService.open(GenericModalComponent,
+                {
+                  scrollable: true
+  
+                })
+            modalRef.componentInstance.title = modalInfo.title;
+            modalRef.componentInstance.message = modalInfo.message;
+            modalRef.result.then((result:any) => {
+            resolve(result)}, (reason:any) => {
+            });
+          }, 150);
+      });
+      return promise;
+    }
 }

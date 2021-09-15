@@ -13,6 +13,14 @@
                                             <i class="fas fa-pencil-alt"></i>
                                             Edit
                                         </button>
+                                        <ng-container *ngIf="clientInfo.active">
+                                            <button type="button" class="btn btn-danger mx-1" (click)="onDeactivateClient()">
+                                                <i class="fas fa-ban"></i></button>
+                                        </ng-container>
+                                        <ng-container *ngIf="!clientInfo.active">
+                                            <button type="button" class="btn btn-success mx-1" (click)="onReactivateClient()">
+                                                <i class="fas fa-check-circle"></i></button>
+                                        </ng-container>
                                     </div>
                                     <h4>Client</h4>
                                     <h1>{{ clientInfo.name }}</h1>
