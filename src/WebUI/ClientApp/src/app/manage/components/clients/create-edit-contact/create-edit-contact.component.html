@@ -15,12 +15,9 @@
             <!-- Testing -->
             <div class="form-group">
                 <div class="row">
-                    <div class="col-sm-3">
-                        <label for="client">Client <span class="asterisk-required">*</span></label>
+                    <div class="col-12">
+                        <app-select-component [items]="clients" [selectInfo]="selectInfo" (newEntity)="createNewClient($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component>
                     </div>
-                    <div class="col-sm-9 col-xl-6">
-                        <app-select-component [items]="test.asObservable()" (clientName)="getClientsForName($event)"  (clientId)="processClientId($event)" (newClient)="createNewClient($event)"></app-select-component>
-                    </div>   
                 </div>
             </div>
             <!-- Testing -->
@@ -84,7 +81,7 @@
                         <input type="text" id="phone" class="form-control" formControlName="phone" />
                     </div>
                 </div>
-            </div>   
+            </div>
         </form>
 
         <div class="col-12 mb-2 d-flex justify-content-end p-0">

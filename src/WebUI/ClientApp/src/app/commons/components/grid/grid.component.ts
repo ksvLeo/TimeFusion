@@ -18,17 +18,24 @@ export class GridComponent {
   set paginatedList(value: PaginatedList<any>){
     if(value){
       this._paginatedList = value;
-      this.loading = false;
       this._totalPages = Array(value.totalPages).fill(1).map((x,i)=>i+1);
       this._pageIndex = value.pageIndex;
+      this.loading = false;
       console.log("Finish loading");
     }
   };
   _orderField: string;
   _pageIndex: number;
   _order: number = 1;
-  _itemPerPage: number = 1;
-  @Input() gridConfiguration: GridConfiguration;
+  pageSize: number;
+  _gridConfiguration: GridConfiguration;
+  @Input() 
+  set gridConfiguration(val: GridConfiguration){
+    if (val) {
+      this._gridConfiguration = val;
+      this.pageSize = val.ItemsPerPage[0];
+    }
+  };
   @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
   @Input() actionList: ActionInfo[] = [];
   @Input() allowsActions: boolean = false;
@@ -38,7 +45,7 @@ export class GridComponent {
   constructor() {}
 
   emitPaginate(){
-    let pagingParam = new PagingParameters(this._pageIndex, this._itemPerPage, this._order, this._orderField);
+    let pagingParam = new PagingParameters(this._pageIndex, this.pageSize, this._order, this._orderField);
     this.loading = true;
     console.log("Loading");
     this.paginate.emit(pagingParam);
@@ -76,7 +83,7 @@ export class GridComponent {
   }
 
   itemPerPage(value){
-    this._itemPerPage = value;
+    this.pageSize = value;
     this._pageIndex = 1;
     this.emitPaginate();
   }

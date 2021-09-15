@@ -1,0 +1,32 @@
+.cancel{
+    position: relative;
+    z-index: 1;
+    right: 1.4rem;
+    top: 2px;
+}
+
+.select-container {
+  position: relative;
+
+  .select-list{
+      position: absolute;
+      z-index: 100;
+      background-color: white;
+      border: 1px solid;
+
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style-type:none;
+        padding: 5px;
+        border-bottom: 1px solid;
+      }
+    }
+}
+
+
+input{
+    z-index: 1;
+}

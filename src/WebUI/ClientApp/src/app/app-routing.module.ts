@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { HomeComponent } from './component/home/home.component';
-import { ClientDetailComponent } from './Manage/components/clients/client-detail/client-detail.component';
 import { TodoComponent } from './todo/todo.component';
 import { TokenComponent } from './token/token.component';
 

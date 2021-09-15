@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
+import { SelectInfo } from "src/app/interfaces/selectInfo";
 import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateContactCommand, UpdateContactCommand } from "src/app/web-api-client";
 
 
@@ -22,11 +23,16 @@ export class CreateEditContactComponent implements OnInit {
     nameExist: boolean = false;
 
     // Testing
-    test = new Subject<ClientDto[]>();
+    // test = new Subject<ClientDto[]>();
+    selectInfo : SelectInfo = {
+        buttonCreate: "Create Client",
+        createClientSuccess: "The client was created successfully.",
+        label: 'Client',
+        notElementMessage: 'There is no client with the name entered.<br>¿Do you want to create it?.<br>To create a new client it must have at least 3 characters.'
+    }
 
     // Testing
 
-    
     //Edit
     contactEdit: boolean = false;
     contact: ContactDto;
@@ -70,6 +76,7 @@ export class CreateEditContactComponent implements OnInit {
                 break;
             case "edit":
                 this.getContactForEdit();
+                this.getClients();
                 break;
             default:
                 this.router.navigate['/management/clients/']
@@ -185,17 +192,17 @@ export class CreateEditContactComponent implements OnInit {
     processClientId(id: number){
         console.log(id);
     }
-    
-    getClientsForName(name: string){
-        this.clientClient.getClientsByName(name).subscribe(res => {
-            this.clients = res;
-            this.test.next(this.clients);
-        }, err => {});    
-    }
+
+    // getClientsForName(name: string){
+    //     this.clientClient.getClientsByName(name).subscribe(res => {
+    //         this.clients = res;
+    //         this.test.next(this.clients);
+    //     }, err => {});
+    // }
 
     createNewClient(newClient: ClientDto){
         this.clientClient.createClient(new CreateClientCommand({newClient: newClient})).subscribe(res => {
-            this.getClientsForName(newClient.name);
+            this.getClients();
         });
     }
 
