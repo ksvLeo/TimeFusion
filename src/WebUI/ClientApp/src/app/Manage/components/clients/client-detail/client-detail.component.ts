@@ -45,7 +45,7 @@ export class ClientDetailComponent implements OnInit {
     this.openModal(modalInfo).then(res => {
       if (res == "accept") {
         this.clientService.deleteClient(this.clientInfo.id).subscribe(response => {
-          this.router.navigate(['/manage/clients'])
+          this.getClient();
         })  
       } else {
         
@@ -83,30 +83,51 @@ export class ClientDetailComponent implements OnInit {
   
   onFlagContact(item: ContactDto) {
     this.modalInfo = new ModalInfo()
-    this.modalInfo.title = "Deactivate contact?"
-    this.modalInfo.message = "Are you sure you want to deactivate " + item.name + "?"
-      this.openModal(this.modalInfo).then((result:any) => {
-          if (result == "accept") {
-            this.contactService.deleteContact(item.clientId, item.id).subscribe((res: any) => {
+    if(item.active) {
+      this.modalInfo.title = "Deactivate contact?"
+      this.modalInfo.message = "Are you sure you want to deactivate " + item.name + "?"
+        this.openModal(this.modalInfo).then((result:any) => {
+            if (result == "accept") {
+              this.contactService.deleteContact(item.clientId, item.id).subscribe((res: any) => {
+                  this.modalInfo = new ModalInfo()
+                  this.modalInfo.title = "Contact flagged"
+                  this.modalInfo.message = "Contact " + item.name + " succesfully deactivated."
+                  this.openModal(this.modalInfo)
+                  this.getClient()
+              },
+              (error: any) => {
                 this.modalInfo = new ModalInfo()
-                this.modalInfo.title = "Contact flagged"
-                this.modalInfo.message = "Contact " + item.name + " succesfully flagged."
+                this.modalInfo.title = "We couln't do that :("
+                this.modalInfo.message = "An error ocurred.\n" + error
                 this.openModal(this.modalInfo)
-                this.getClient()
-            },
-            (error: any) => {
-              const modalRef = this.modalService.open(GenericModalComponent,
-                {
-                  scrollable: true
-                });
-             
-                modalRef.componentInstance.title = "We couln't get that"
-                modalRef.componentInstance.message = "An error ocurred.\n" + error
-            })
-          }
-      }, (reason:any) => {
-        
-      });
+              })
+            }
+        }, (reason:any) => {
+          
+        });
+    } else {
+      this.modalInfo.title = "Reactivate contact?"
+      this.modalInfo.message = "Are you sure you want to reactivate " + item.name + "?"
+        this.openModal(this.modalInfo).then((result:any) => {
+            if (result == "accept") {
+              this.contactService.reactivateClient(item.id, item.clientId).subscribe((res: any) => {
+                  this.modalInfo = new ModalInfo()
+                  this.modalInfo.title = "Contact flagged"
+                  this.modalInfo.message = "Contact " + item.name + " succesfully reactivated."
+                  this.openModal(this.modalInfo)
+                  this.getClient()
+              },
+              (error: any) => {
+                this.modalInfo = new ModalInfo()
+                this.modalInfo.title = "We couln't do that :("
+                this.modalInfo.message = "An error ocurred.\n" + error
+                this.openModal(this.modalInfo)
+              })
+            }
+        }, (reason:any) => {
+          
+        });
+    }
   }
 
   getClient() {

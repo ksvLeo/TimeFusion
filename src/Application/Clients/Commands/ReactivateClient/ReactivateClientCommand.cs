@@ -34,12 +34,12 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
                 throw new ArgumentException($"Unable to find customer with ID #{ request.ClientId }.");
             }
 
-            if (client.Active == false)
+            if (client.Active == true)
             {
-                throw new ArgumentException($"Client with ID #{ request.ClientId } is already unactive.");
+                throw new ArgumentException($"Client with ID #{ request.ClientId } is already active.");
             }
 
-            client.Active = false;
+            client.Active = true;
 
             await _context.SaveChangesAsync(cancellationToken);
 

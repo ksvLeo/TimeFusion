@@ -36,7 +36,8 @@ export class ClientsComponent implements OnInit {
     configurationGrid(){
         this.fieldInfo = [
             new FieldInfo("Name", "name", "string", true),
-            new FieldInfo("Address", "address", "string", true)
+            new FieldInfo("Address", "address", "string", true),
+            new FieldInfo("Status", "active", "string", true)
         ];
         this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1, 2, 10]);
     }
@@ -46,7 +47,7 @@ export class ClientsComponent implements OnInit {
     }
 
     onPaginate(pagingParameter: PagingParameters){
-        console.log(pagingParameter);
+        // console.log(pagingParameter);
         this.getClients(pagingParameter.PageNumber, pagingParameter.PageSize, pagingParameter.Order, pagingParameter.OrderField);
     }
         
@@ -78,11 +79,14 @@ export class ClientsComponent implements OnInit {
         this.openModal(modalInfo).then(input => {
             if(input == "accept") {
                 if (item.active) {
-                    this.clientClient.deleteClient(item.id)
-                    this.getClients()
+                    this.clientClient.deleteClient(item.id).subscribe(response => {
+                        this.getClients()
+                    })
+                    
                 } else {
-                    this.clientClient.reactivateClient(item.id)
-                    this.getClients()
+                    this.clientClient.reactivateClient(item.id).subscribe(response => {
+                        this.getClients()
+                    })
                 }
             }
         })
