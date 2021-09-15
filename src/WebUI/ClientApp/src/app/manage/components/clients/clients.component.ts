@@ -4,10 +4,10 @@ import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs";
 import { ActionInfo } from "src/app/commons/classes/action-info";
-import { FieldInfo, GridConfiguration } from "src/app/commons/classes/grid-configuration";
+import { FieldFormat, FieldInfo, GridConfiguration } from "src/app/commons/classes/grid-configuration";
 import { PaginatedList } from "src/app/commons/classes/paginated-list";
 import { PagingParameters } from "src/app/commons/classes/paging-parameters";
-import { ClientClient, ClientDto } from "src/app/web-api-client";
+import { ClientClient, ClientDto, ClientStatus } from "src/app/web-api-client";
 import { GenericModalComponent } from "../../../commons/components/generic-modal/generic-modal.component";
 
 @Component({
@@ -35,8 +35,8 @@ export class ClientsComponent implements OnInit {
 
     configurationGrid(){
         this.fieldInfo = [
-            new FieldInfo("Name", "name", "string", true),
-            new FieldInfo("Status", "active", "string", true)
+            new FieldInfo("Name", "name", FieldFormat.text, true),
+            new FieldInfo("Status", "status", FieldFormat.enum, true)
         ];
         this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1, 2, 10]);
     }

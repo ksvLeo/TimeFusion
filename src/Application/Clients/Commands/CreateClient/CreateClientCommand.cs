@@ -2,6 +2,7 @@
 using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Domain.Entities;
+using FusionIT.TimeFusion.Domain.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -69,7 +70,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 Address = request.newClient.Address,
                 Currency = currency,
                 ContactList = contacts,
-                Active = true
+                Status = ClientStatus.Active
             };
 
             _context.Clients.Add(client);

@@ -1585,7 +1585,7 @@ export class ClientDto implements IClientDto {
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
     contactList?: ContactDto[] | undefined;
-    active?: boolean;
+    status?: ClientStatus;
 
     constructor(data?: IClientDto) {
         if (data) {
@@ -1607,7 +1607,7 @@ export class ClientDto implements IClientDto {
                 for (let item of _data["contactList"])
                     this.contactList!.push(ContactDto.fromJS(item));
             }
-            this.active = _data["active"];
+            this.status = _data["status"];
         }
     }
 
@@ -1629,7 +1629,7 @@ export class ClientDto implements IClientDto {
             for (let item of this.contactList)
                 data["contactList"].push(item.toJSON());
         }
-        data["active"] = this.active;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -1640,7 +1640,7 @@ export interface IClientDto {
     address?: string | undefined;
     currency?: CurrencyDto | undefined;
     contactList?: ContactDto[] | undefined;
-    active?: boolean;
+    status?: ClientStatus;
 }
 
 export class CurrencyDto implements ICurrencyDto {
@@ -1749,6 +1749,11 @@ export interface IContactDto {
     email?: string | undefined;
     phoneNumber?: string | undefined;
     active?: boolean;
+}
+
+export enum ClientStatus {
+    Inactive = 0,
+    Active = 1,
 }
 
 export enum PaginationOrder {

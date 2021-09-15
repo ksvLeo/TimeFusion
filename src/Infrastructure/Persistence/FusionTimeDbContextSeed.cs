@@ -1,4 +1,5 @@
 ﻿using FusionIT.TimeFusion.Domain.Entities;
+using FusionIT.TimeFusion.Domain.Enums;
 using FusionIT.TimeFusion.Domain.ValueObjects;
 using FusionIT.TimeFusion.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -51,8 +52,8 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
 
             if (!context.Clients.Any())
             {
-                context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Active = true, ContactList = testContacts });
-                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, ContactList = testContacts });
+                context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Active, ContactList = testContacts });
+                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, Status = ClientStatus.Inactive, ContactList = testContacts });
             }
 
             if (!context.BudgetTypes.Any())

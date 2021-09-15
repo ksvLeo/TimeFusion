@@ -1,4 +1,4 @@
-<div class="m-2" *ngIf="_paginatedList">
+<div class="m-2" *ngIf="_paginatedList && _paginatedList.items.length > 0; else emptyGrid">
     <div class="row justify-content-between m-2" *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
         <div>
             <label class="small">Showing {{_paginatedList.items.length}} of {{_paginatedList.totalCount}} items</label>
@@ -34,7 +34,12 @@
         <tbody *ngIf="_paginatedList && _paginatedList.items">
             <tr *ngFor="let item of _paginatedList.items" (click)="onItemClick(item)" [ngClass]="{'clickable':allowsClick}">
                 <td *ngFor="let info of _gridConfiguration.FieldInfo">
-                    {{item[info.property]}}
+                    <span *ngIf="info.format == FieldFormat.text">
+                        {{item[info.property]}}
+                    </span>
+                    <span *ngIf="info.format == FieldFormat.enum">
+                        {{ getEnumResource(item[info.property]) }}
+                    </span>
                 </td>
                 <td *ngIf="allowsActions" style="width: 50px;">
                     <app-action-list [actions]="actionList" [item]="item"></app-action-list>
@@ -92,3 +97,9 @@
         </ul>
       </nav>
 </div>
+
+<ng-template #emptyGrid>
+    <span>
+        No items to show.
+    </span>
+</ng-template>

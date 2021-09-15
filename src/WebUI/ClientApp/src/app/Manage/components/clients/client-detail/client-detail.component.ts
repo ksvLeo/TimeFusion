@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionInfo } from 'src/app/commons/classes/action-info';
-import { FieldInfo, GridConfiguration } from 'src/app/commons/classes/grid-configuration';
+import { FieldFormat, FieldInfo, GridConfiguration } from 'src/app/commons/classes/grid-configuration';
 import { ModalInfo } from 'src/app/commons/classes/modal-info';
 import { PaginatedList } from 'src/app/commons/classes/paginated-list';
 import { GenericModalComponent } from 'src/app/commons/components/generic-modal/generic-modal.component';
@@ -85,11 +85,11 @@ export class ClientDetailComponent implements OnInit {
 
   configurationGrid() {
     this.tableConfig = [
-      new FieldInfo("Name", "name", "string", true),
-      new FieldInfo("Title", "title", "string", true),
-      new FieldInfo("Email", "email", "string", true),
-      new FieldInfo("Phone Number", "phoneNumber", "string", true),
-      new FieldInfo("Active", "active", "string", true)
+      new FieldInfo("Name", "name", FieldFormat.text, true),
+      new FieldInfo("Title", "title", FieldFormat.text, true),
+      new FieldInfo("Email", "email", FieldFormat.text, true),
+      new FieldInfo("Phone Number", "phoneNumber", FieldFormat.text, true),
+      new FieldInfo("Active", "active", FieldFormat.text, true)
   ];
     this.configurationInfo = new GridConfiguration(this.tableConfig)
   }

@@ -1,5 +1,6 @@
 ﻿using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Domain.Entities;
+using FusionIT.TimeFusion.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,12 +35,12 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
                 throw new ArgumentException($"Unable to find customer with ID #{ request.ClientId }.");
             }
 
-            if (client.Active == false)
+            if (client.Status == ClientStatus.Active)
             {
-                throw new ArgumentException($"Client with ID #{ request.ClientId } is already unactive.");
+                throw new ArgumentException($"Client with ID #{ request.ClientId } is already active.");
             }
 
-            client.Active = false;
+            client.Status = ClientStatus.Active;
 
             await _context.SaveChangesAsync(cancellationToken);
 

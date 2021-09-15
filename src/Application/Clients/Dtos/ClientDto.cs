@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FusionIT.TimeFusion.Domain.Enums;
 
 namespace FusionIT.TimeFusion.Application.Clients.Dtos
 {
@@ -22,6 +23,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Dtos
 
         public List<ContactDto> ContactList { get; set; }
 
-        public bool Active { get; set; }
+        public ClientStatus Status { get; set; }
     }
 }

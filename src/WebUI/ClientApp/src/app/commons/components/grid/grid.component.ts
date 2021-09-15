@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ClientDto, ClientStatus } from 'src/app/web-api-client';
 import { ActionInfo } from '../../classes/action-info';
-import { FieldInfo, GridConfiguration } from '../../classes/grid-configuration';
+import { FieldFormat, FieldInfo, GridConfiguration } from '../../classes/grid-configuration';
 import { PaginatedList } from '../../classes/paginated-list';
 import { PagingParameters } from '../../classes/paging-parameters';
 
@@ -41,6 +42,7 @@ export class GridComponent {
   @Input() allowsActions: boolean = false;
   @Output() itemClickEvent: EventEmitter<any> = new EventEmitter<any>();
   @Input() allowsClick: boolean = false;
+  FieldFormat = FieldFormat;
 
   constructor() {}
 
@@ -86,6 +88,10 @@ export class GridComponent {
     this.pageSize = value;
     this._pageIndex = 1;
     this.emitPaginate();
+  }
+
+  getEnumResource(value) {
+    return ClientStatus[value];
   }
 
 }

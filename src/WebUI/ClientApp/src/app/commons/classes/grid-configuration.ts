@@ -11,7 +11,13 @@ export class FieldInfo {
     constructor(
         public label: string,
         public property: string,
-        public format: string,
+        public format: FieldFormat,
         public allowSorting: boolean = false){
     }
+}
+
+export enum FieldFormat {
+    text,
+    enum,
+    date
 }

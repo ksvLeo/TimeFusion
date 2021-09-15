@@ -1,5 +1,6 @@
 ﻿using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Domain.Entities;
+using FusionIT.TimeFusion.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -40,7 +41,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
             }
 
 
-            client.Active = false;
+            client.Status = ClientStatus.Inactive;
 
             await _context.SaveChangesAsync(cancellationToken);
 

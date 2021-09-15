@@ -1,4 +1,5 @@
 ﻿using FusionIT.TimeFusion.Domain.Common;
+using FusionIT.TimeFusion.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace FusionIT.TimeFusion.Domain.Entities
 
         public List<Contact> ContactList { get; set; }
 
-        public bool Active { get; set; }
+        public ClientStatus Status { get; set; }
 
         public IList<Project> Projects { get; set; }
     }
