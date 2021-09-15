@@ -27,15 +27,13 @@ export class GridComponent {
   _orderField: string;
   _pageIndex: number;
   _order: number = 1;
-  _pageSize: number;
-  _fieldsInfo: FieldInfo[];
-  _itemsPerPage: number[];
+  pageSize: number;
+  _gridConfiguration: GridConfiguration;
   @Input() 
   set gridConfiguration(val: GridConfiguration){
     if (val) {
-      this._fieldsInfo = val.FieldInfo;
-      this._itemsPerPage = val.ItemsPerPage;
-      this._pageSize = val.ItemsPerPage[0];
+      this._gridConfiguration = val;
+      this.pageSize = val.ItemsPerPage[0];
     }
   };
   @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
@@ -47,7 +45,7 @@ export class GridComponent {
   constructor() {}
 
   emitPaginate(){
-    let pagingParam = new PagingParameters(this._pageIndex, this._pageSize, this._order, this._orderField);
+    let pagingParam = new PagingParameters(this._pageIndex, this.pageSize, this._order, this._orderField);
     this.loading = true;
     console.log("Loading");
     this.paginate.emit(pagingParam);
@@ -85,7 +83,7 @@ export class GridComponent {
   }
 
   itemPerPage(value){
-    this._pageSize = value;
+    this.pageSize = value;
     this._pageIndex = 1;
     this.emitPaginate();
   }

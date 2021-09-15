@@ -91,7 +91,7 @@ export class ClientDetailComponent implements OnInit {
       new FieldInfo("Phone Number", "phoneNumber", "string", true),
       new FieldInfo("Active", "active", "string", true)
   ];
-    this.configurationInfo = new GridConfiguration(this.tableConfig, [0])
+    this.configurationInfo = new GridConfiguration(this.tableConfig)
   }
 
   loadActions() {

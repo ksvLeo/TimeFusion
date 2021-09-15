@@ -1,5 +1,5 @@
 <div class="m-2" *ngIf="_paginatedList">
-    <div class="row justify-content-between m-2" *ngIf="_itemsPerPage[0] != 0">
+    <div class="row justify-content-between m-2" *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
         <div>
             <label class="small">Showing {{_paginatedList.items.length}} of {{_paginatedList.totalCount}} items</label>
         </div>
@@ -7,7 +7,7 @@
             <label class="mr-2 small">Items per page:</label>
             <select class="form-control form-control-sm"
                 (change)="itemPerPage($event.target.value)">
-                    <option *ngFor="let val of _itemsPerPage" value="{{val}}">{{val}}</option>
+                    <option *ngFor="let val of _gridConfiguration.ItemsPerPage" value="{{val}}">{{val}}</option>
             </select>
         </div>
     </div>
@@ -15,8 +15,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th *ngFor="let info of _fieldsInfo">
-                    <span *ngIf="!info.allowSorting || _itemsPerPage[0] == 0; else sortColumn">
+                <th *ngFor="let info of _gridConfiguration.FieldInfo">
+                    <span *ngIf="!info.allowSorting || _gridConfiguration.ItemsPerPage[0] == 0; else sortColumn">
                         {{info.label}}
                     </span>
                     <ng-template #sortColumn>
@@ -33,7 +33,7 @@
         </thead>
         <tbody *ngIf="_paginatedList && _paginatedList.items">
             <tr *ngFor="let item of _paginatedList.items" (click)="onItemClick(item)" [ngClass]="{'clickable':allowsClick}">
-                <td *ngFor="let info of _fieldsInfo">
+                <td *ngFor="let info of _gridConfiguration.FieldInfo">
                     {{item[info.property]}}
                 </td>
                 <td *ngIf="allowsActions" style="width: 50px;">
@@ -43,7 +43,7 @@
         </tbody>
     </table>
 
-    <nav *ngIf="_itemsPerPage[0] != 0">
+    <nav *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
         <ul class="pagination justify-content-center">
 
             <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
