@@ -3,9 +3,5 @@
 }
 
 .clickable:hover {
-    background-color: rgba(4, 0, 255, 0.473);
-}
-
-.action-list {
-    z-index: 0;
+    background-color: rgba(4, 0, 255, 0.205);
 }

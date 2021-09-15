@@ -7,7 +7,7 @@
             <label class="mr-2 small">Items per page:</label>
             <select class="form-control form-control-sm"
                 (change)="itemPerPage($event.target.value)">
-                    <option *ngFor="let val of _gridConfiguration.ItemsPerPage" value="{{val}}">{{val}}</option>
+                <option *ngFor="let val of _gridConfiguration.ItemsPerPage" value="{{val}}">{{val}}</option>
             </select>
         </div>
     </div>
@@ -32,8 +32,8 @@
             </tr>
         </thead>
         <tbody *ngIf="_paginatedList && _paginatedList.items">
-            <tr *ngFor="let item of _paginatedList.items" (click)="onItemClick(item)" [ngClass]="{'clickable':allowsClick}">
-                <td *ngFor="let info of _gridConfiguration.FieldInfo">
+            <tr *ngFor="let item of _paginatedList.items" [ngClass]="{'clickable':allowsClick}">
+                <td *ngFor="let info of _gridConfiguration.FieldInfo" (click)="onItemClick(item)">
                     {{item[info.property]}}
                 </td>
                 <td class="action-list" *ngIf="allowsActions" style="width: 50px;">
@@ -41,7 +41,7 @@
                         <app-action-list [actions]="actionList" [item]="item"></app-action-list>
                     </div>
                 </td>
-            </tr>
+            </tr> 
         </tbody>
     </table>
 

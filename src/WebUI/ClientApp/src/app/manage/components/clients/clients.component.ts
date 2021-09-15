@@ -36,7 +36,7 @@ export class ClientsComponent implements OnInit {
     configurationGrid(){
         this.fieldInfo = [
             new FieldInfo("Name", "name", "string", true),
-            new FieldInfo("Status", "active", "string", true)
+            new FieldInfo("Address", "address", "string", true)
         ];
         this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1, 2, 10]);
     }
@@ -61,8 +61,6 @@ export class ClientsComponent implements OnInit {
     onEditContacts(item: any) {
 
     }
-
-
 
     onEditClient(item: any) {
         this.router.navigate(['/manage/clients/edit', item.id])
