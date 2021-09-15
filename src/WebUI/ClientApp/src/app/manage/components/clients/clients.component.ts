@@ -37,6 +37,7 @@ export class ClientsComponent implements OnInit {
         this.fieldInfo = [
             new FieldInfo("Name", "name", FieldFormat.text, true),
             new FieldInfo("Status", "status", FieldFormat.enum, true)
+        ];
         this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1, 2, 10]);
     }
 
@@ -67,7 +68,7 @@ export class ClientsComponent implements OnInit {
 
     onFlagClient(item: ClientDto) {
         let modalInfo = new ModalInfo()
-        if(item.active) {
+        if(item.status == ClientStatus.Active) {
             modalInfo.title = "Deactivate Client?"
             modalInfo.message = "Are you ready to finish your work with " + item.name + "?"  
         } else {
@@ -76,7 +77,7 @@ export class ClientsComponent implements OnInit {
         }
         this.openModal(modalInfo).then(input => {
             if(input == "accept") {
-                if (item.active) {
+                if (item.status == ClientStatus.Active) {
                     this.clientClient.deleteClient(item.id).subscribe(response => {
                         console.log(response)
                         this.getClients()
