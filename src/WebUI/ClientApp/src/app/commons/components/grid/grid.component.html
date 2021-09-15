@@ -33,7 +33,7 @@
         </thead>
         <tbody *ngIf="_paginatedList && _paginatedList.items">
             <tr *ngFor="let item of _paginatedList.items" [ngClass]="{'clickable':allowsClick}">
-                <td *ngFor="let info of _gridConfiguration.FieldInfo" (click)="onItemClick(item)">
+                <td *ngFor="let info of _gridConfiguration.FieldInfo" (click)="rowClick(item)">
                     {{item[info.property]}}
                 </td>
                 <td class="action-list" *ngIf="allowsActions" style="width: 50px;">

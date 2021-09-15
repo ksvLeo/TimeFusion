@@ -176,11 +176,7 @@ export class ClientDetailComponent implements OnInit {
   openModal(modalInfo: ModalInfo): Promise<string> {
       var promise = new Promise<string>((resolve) => {
         setTimeout(() => {
-          var modalRef = this.modalService.open(GenericModalComponent,
-              {
-                scrollable: true
-
-              })
+          var modalRef = this.modalService.open(GenericModalComponent, { modalDialogClass: "", centered: true})
           modalRef.componentInstance.title = modalInfo.title;
           modalRef.componentInstance.message = modalInfo.message;
           modalRef.result.then((result:any) => {
