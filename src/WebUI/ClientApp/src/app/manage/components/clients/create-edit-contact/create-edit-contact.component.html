@@ -16,12 +16,12 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-12">
-                        <app-select-component [items]="clients" [selectInfo]="selectInfo" (newEntity)="createNewClient($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component>
+                        <app-select-component [items]="clients" [selectInfo]="selectInfo" [itemSelected]="slectedItem.asObservable()" (newEntity)="createNewClient($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component>
                     </div>
                 </div>
             </div>
             <!-- Testing -->
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3">
                         <label for="client">Client <span class="asterisk-required">*</span></label>
@@ -33,7 +33,7 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <div class="row">

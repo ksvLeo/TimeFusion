@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { faSleigh } from "@fortawesome/free-solid-svg-icons";
 import { Observable, Subscription } from "rxjs";
-import { SelectInfo } from "src/app/interfaces/selectInfo";
-import { ClientDto, CurrencyDto } from "src/app/web-api-client";
+import { SelectInfo } from "src/app/shared/interfaces/selectInfo";
 
 @Component({
     selector: 'app-select-component',
@@ -14,32 +12,41 @@ export class SelectComponent implements OnInit {
 
     isNotElement: boolean;
     nameForFind: string = "";
-    nameAlreadyExist: boolean;
+    nameAlreadyExists: boolean = false;
     item : any;
     isSelectOption: boolean;
     isNewEntity: boolean = false;
+    showList: boolean = false;
 
-    private evetsSubscription: Subscription;
+    private eventSubscription: Subscription;
 
     @Input() items: any[];
     @Input() selectInfo: SelectInfo;
     @Input() displayProperty: string;
     @Input() idProperty: string;
+    @Input() itemSelected: Observable<number>;
 
     @Output() selected = new EventEmitter<any>();
     @Output() clientName = new EventEmitter<string>();
-    @Output() newEntity = new EventEmitter<ClientDto>();
+    @Output() newEntity = new EventEmitter<any>();
 
     constructor(){
     }
-
+    
     ngOnInit(){
+        this.eventSubscription = this.itemSelected.subscribe(res => this.itemAlredySelected(res));
+    }
+
+    itemAlredySelected(res: number){
+        let item = this.items.find(c => c[this.idProperty] == res);
+        this.selectItem(item);
     }
 
     create(){
         // Create new entity
-        let newEntity: any;
-        newEntity[this.displayProperty] = this.nameForFind
+        let newEntity: any = {};
+        newEntity[this.displayProperty] = this.nameForFind;
+
         this.isNewEntity = true;
         this.isSelectOption = true;
         this.newEntity.emit(newEntity);
@@ -50,10 +57,10 @@ export class SelectComponent implements OnInit {
             return;
         }
 
-        this.nameAlreadyExist = false;
+        this.nameAlreadyExists = false;
 
         let results = this.items.filter(c => {
-          return c[this.displayProperty].toLowerCase().includes(this.nameForFind.toLowerCase());
+            return c[this.displayProperty].toLowerCase().includes(this.nameForFind.toLowerCase());
         });
 
         if(results.length > 0){
@@ -66,20 +73,46 @@ export class SelectComponent implements OnInit {
     }
 
     findNameClient(){
+        let t = this.items.find(c => c[this.displayProperty].toLowerCase() == this.nameForFind.toLocaleLowerCase());
+        if(t){
+            this.nameAlreadyExists = true;
+            this.showList = false;
+            return;
+        }else{
+            this.nameAlreadyExists = false;
+        }
+
+        if(this.items.filter(c => c[this.displayProperty].toLowerCase().includes(this.nameForFind.toLowerCase())).length > 0){
+            this.isNotElement = true;
+        }else{
+            this.isNotElement = false;
+            this.showList = false
+        }
     }
 
     cancelSelection(){
         this.isNewEntity = false;
         this.isNotElement = false;
         this.isSelectOption = false;
-        this.nameAlreadyExist = false;
+        this.nameAlreadyExists = false;
         this.nameForFind = "";
     }
 
     selectItem(item: any)
     {
-      console.log("selected: " + item[this.displayProperty]);
-      this.item = item;
-      this.selected.emit(this.item);
+        this.showList = false;
+        this.isSelectOption = true;
+        this.nameForFind = item[this.displayProperty];
+        this.item = item;
+        this.selected.emit(this.item);
+    }
+
+    onShowList(){
+        if(this.showList){
+            this.showList = false;
+            return;
+        }
+
+        this.showList = true;
     }
 };

@@ -17,7 +17,7 @@
                         <label for="name">Name <span class="asterisk-required">*</span></label>
                     </div>
                     <div class="col-12 col-sm-9 col-xl-6">
-                        <input type="text" id="name" class="form-control" formControlName="name" required />
+                        <input type="text" id="name" class="form-control" autocomplete="off" formControlName="name" required />
                         <span class="text-danger" *ngIf="userExist && clientForm.controls.name.touched">Client with name is already exist.</span>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
 
         <div class="col-12 mb-2 d-flex justify-content-end p-0">
             <button type="submit" class="btn btn-secondary mx-2" routerLink="/manage/clients" >Cancel</button>
-            <button type="submit" class="btn btn-primary"  [disabled]="areFormsValid" (click)="saveClient()" >Save Client</button>
+            <button type="submit" class="btn btn-primary"  [disabled]="!areFormsValid" (click)="saveClient()" >Save Client</button>
         </div>
     </div>
 </div>

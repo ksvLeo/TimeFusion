@@ -1,32 +1,44 @@
 .cancel{
-    position: relative;
-    z-index: 1;
-    right: 1.4rem;
-    top: 2px;
+  position: relative;
+  z-index: 1;
+  right: 1.2rem;
+  top: 2px;
+}
+
+.arrow{
+  position: relative;
+  z-index: 1;
+  top: 7px;
 }
 
 .select-container {
   position: relative;
 
   .select-list{
-      position: absolute;
-      z-index: 100;
-      background-color: white;
-      border: 1px solid;
-
-      ul {
-        margin: 0;
-        padding: 0;
-      }
-      li {
-        list-style-type:none;
-        padding: 5px;
-        border-bottom: 1px solid;
+    position: absolute;
+    z-index: 100;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+    max-height: 100px;
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      list-style-type:none;
+      padding: 5px;
+      border-bottom: 1px solid #80bdff;
+      box-shadow: 0.2rem rgb(0 123 255 / 25%);
       }
     }
-}
 
+  .selectItem{
+    cursor: pointer;
+  }
 
-input{
-    z-index: 1;
+  .selectItem:hover{
+    background: rgb(216, 216, 216);
+  }
 }

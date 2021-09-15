@@ -7,13 +7,15 @@ import { SelectComponent } from './components/select/select.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GenericModalComponent } from './components/generic-modal/generic-modal.component';
+import { FilterItemsPipe } from '../shared/pipes/filterItems';
 
 
 @NgModule({
   declarations: [
     GridComponent,
     ActionListComponent,
-    SelectComponent
+    SelectComponent,
+    FilterItemsPipe
   ],
   imports: [
     CommonModule,

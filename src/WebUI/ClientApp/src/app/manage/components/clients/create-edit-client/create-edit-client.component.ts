@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ContactDto, UpdateClientCommand } from "src/app/web-api-client";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -16,12 +17,13 @@ export class CreateEditClientCompontent implements OnInit{
     createContact: boolean = false;
     isClientFormValid: boolean = false;
     isContactFormValid: boolean = false;
-    areFormsValid: boolean = true;
+    areFormsValid: boolean = false;
 
     // Data
     currencies: CurrencyDto[] = [];
     userExist: boolean;
     defaultCurrency: CurrencyDto;
+    contact: ContactDto;
 
     //Edit
     clientEdit: boolean = false;
@@ -32,7 +34,8 @@ export class CreateEditClientCompontent implements OnInit{
         private clientClient: ClientClient,
         private currencyClient: CurrencyReferenceClient,
         private activeRoute : ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private toastrService: ToastrService
     ){}
 
     ngOnInit(){
@@ -77,7 +80,7 @@ export class CreateEditClientCompontent implements OnInit{
                         address: [this.client.address],
                         currency: [this.client.currency.id]
                     });
-                    this.validForm();
+                    this.areFormsValid = true;
                 }
             });
         });
@@ -87,7 +90,7 @@ export class CreateEditClientCompontent implements OnInit{
         this.currencyClient.getCurrencyReferences().subscribe(res =>{
             this.currencies = res;
             if(!this.clientEdit){
-                this.defaultCurrency = this.currencies.find(c => c.id == 2);
+                this.defaultCurrency = this.currencies.find(c => c.id == 1);
                 this.clientForm.controls.currency.setValue(this.defaultCurrency.id);
             }
         }, err => {});
@@ -104,6 +107,7 @@ export class CreateEditClientCompontent implements OnInit{
         
         if($values.name.length > 0){
             this.isClientFormValid = this.clientForm.valid && !this.clientExistByName();
+            this.areFormsValid = this.isClientFormValid && this.validForm();
         }
     }
 
@@ -135,14 +139,14 @@ export class CreateEditClientCompontent implements OnInit{
 
     validForm(): boolean{
         if(this.isClientFormValid &&!this.createContact && !this.userExist){
-            this.areFormsValid = false;
-            return false;
+            this.areFormsValid = true;
+            return true;
         }
         if(this.isClientFormValid && this.isContactFormValid && this.createContact && !this.userExist){
-            this.areFormsValid = false;
-            return false;
+            this.areFormsValid = true;
+            return true;
         }
-        return true;    
+        return false;    
     }
 
     saveClient(){
@@ -150,10 +154,12 @@ export class CreateEditClientCompontent implements OnInit{
             this.areFormsValid = true;
         }
 
-        if(!this.clientEdit){
-            var referrer = this.mapContact(this.contactForm);
+        if(!this.clientEdit && this.createContact){
+            this.contact = this.mapContact(this.contactForm);
+        }else{
+            this.contact = null;
         }
-        let client  = this.mapClient(this.clientForm, referrer);
+        let client  = this.mapClient(this.clientForm, this.contact);
 
         if(this.clientEdit){
             client.id = this.client.id;
@@ -163,7 +169,10 @@ export class CreateEditClientCompontent implements OnInit{
             let common = new UpdateClientCommand({client: client})
             this.clientClient.updateClient(common).subscribe(res =>{
                 this.clientForm.reset();
+                this.toastrService.success("The client has been update successfully.");
                 this.router.navigate(['manage/clients']);
+            }, err => {
+                this.toastrService.error("An error occurred while updating the client.");
             });
             return;
         }
@@ -173,8 +182,11 @@ export class CreateEditClientCompontent implements OnInit{
             if(this.createContact){
                 this.contactForm.reset();
             }
+            this.toastrService.success("The client has been created successfully.");
             this.router.navigate(['manage/clients']);
-        }, err => {});
+        }, err => {
+            this.toastrService.error("An error occurred while creating the client.");
+        });
 
     }
     

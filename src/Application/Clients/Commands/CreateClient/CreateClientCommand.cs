@@ -41,11 +41,14 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 throw new ArgumentException($"Client with name: '{ request.newClient.Name }' already exist.");
             }
 
-            Currency currency = _context.Currencies.FirstOrDefault(c => c.Id == request.newClient.Currency.Id);
-
-            if (currency == null)
+            Currency currency;
+            if(request.newClient.Currency != null)
             {
-                throw new ArgumentException($"Unable to find currency with ID: #{ request.newClient.Currency.Id }.");
+                currency = _context.Currencies.FirstOrDefault(c => c.Id == request.newClient.Currency.Id);
+            }
+            else
+            {
+                currency = _context.Currencies.FirstOrDefault(c => c.Id == 1);
             }
 
             List<Contact> contacts = new List<Contact>();
