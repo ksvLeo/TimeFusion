@@ -61,16 +61,16 @@ export class CreateEditContactComponent implements OnInit {
             this.contactFormChanges(changes);
         });
 
-        var url = this.router.url.split("/");
-
-        switch (url[4]) {
+        var urlParams = this.activeRoute.snapshot.params
+        console.log(urlParams['mode'])
+        switch (urlParams['mode']) {
             case "create":
-                if (url.length == 4) {
-                    this.getClients();
+                if (urlParams['id'] == null) {
+                    this.getClients();    
                 } else {
-                    this.getClientById(Number(url[5])).then((res: ClientDto) => {
+                    this.getClientById(Number(urlParams['id'])).then((res: ClientDto) => {
                         this.clients.push(res);
-                        this.contactForm.get('client').patchValue(res.id)
+                        this.contactForm.get('client').patchValue(res.id);
                     })
                 }
                 break;
@@ -79,7 +79,7 @@ export class CreateEditContactComponent implements OnInit {
                 this.getClients();
                 break;
             default:
-
+                this.router.navigate['/management/clients/']
                 break;
         }
     }
@@ -132,15 +132,13 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     getClientById(id: number): Promise<ClientDto> {
-        return this.clientClient.getClient(id).toPromise()
+        return this.clientClient.getClient(id).toPromise();
     }
 
     getContactForEdit(){
-        this.activeRoute.params.subscribe(res => {
-            if(res.id == null){
-                return;
-            }
-            this.contactClient.getContact(res.id).subscribe(res =>{
+        let contactId = this.activeRoute.snapshot.params['id']
+            this.contactClient.getContact(contactId).subscribe(res =>{
+                this.getClientById(res.clientId).then(value => this.clients.push(value))
                 this.contactEdit = true;
                 this.contact = res;
                 this.contactForm.setValue({
@@ -152,9 +150,7 @@ export class CreateEditContactComponent implements OnInit {
                 });
                 this.contactForm.controls.title.setErrors(null);
                 this.contactForm.controls.email.setErrors(null);
-                this.contactForm.get('client').patchValue(res.id)
             });
-        });
     }
 
     saveContact(){

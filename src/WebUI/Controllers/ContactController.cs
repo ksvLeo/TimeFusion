@@ -48,5 +48,11 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         {
             return await Mediator.Send(command);
         }
+
+        [HttpPut]
+        public async Task<ActionResult<int>> ReactivateClient ([FromQuery] ReactivateContactCommand command)
+        {
+            return await Mediator.Send(command);
+        }
     }
 }
