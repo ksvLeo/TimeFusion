@@ -66,17 +66,19 @@ export class ClientsComponent implements OnInit {
         urlParams.mode = 1;
         if(item != null)
         urlParams.id = item.id.toString()
-        this.router.navigate(['/manage/client/contact', urlParams]); 
+        this.router.navigate(['/manage/client', urlParams]); 
     }
 
     onAddClient(){
-        let urlParams = new ContactManagementUrlParams()
-        urlParams.mode = 1;
-        this.router.navigate(['/manage/client', urlParams]); 
     }
         
     onEditContacts(item: any) {
-        
+        // Not implemented in list client
+        let urlParams = new ContactManagementUrlParams()
+        urlParams.mode = 2;
+        if(item != null)
+        urlParams.id = item.id.toString()
+        this.router.navigate(['/manage/client', urlParams]); 
     }
 
     onEditClient(item: any) {

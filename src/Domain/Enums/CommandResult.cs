@@ -22,6 +22,14 @@ namespace FusionIT.TimeFusion.Domain.Enums
         Error_ActiveProjects = 3
     }
 
+    public enum ReactivateClientResult
+    {
+        Error = 0,
+        Success = 1,
+        Error_NotFound = 2,
+        Error_AlreadyActive = 3
+    }
+
     public enum UpdateClientResult
     {
         Error = 0,

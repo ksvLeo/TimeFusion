@@ -28,7 +28,7 @@
         </div>
       </ng-container>
 
-      <button *ngIf="!isSelectOption && selectInfo.isButtonCreated" type="button" class="btn btn-primary ml-2" (click)="create()" [disabled]="nameForFind.length < 3 || nameAlreadyExists">
+      <button *ngIf="!isSelectOption && selectInfo.isButtonCreated" type="button" class="btn btn-primary ml-2" (click)="create()" [disabled]="nameAlreadyExists">
         {{ selectInfo.buttonCreateName }}
       </button>
     </div>

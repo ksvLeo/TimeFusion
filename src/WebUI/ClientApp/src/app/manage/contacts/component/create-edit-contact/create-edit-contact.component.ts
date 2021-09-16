@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectInfo } from "src/app/shared/interfaces/selectInfo";
-import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateContactCommand, PaginatedListOfClientDto, UpdateContactCommand } from "src/app/web-api-client";
+import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateClientResult, CreateContactCommand, PaginatedListOfClientDto, UpdateContactCommand } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from "rxjs";
 import { ModeParameter } from "src/app/shared/enums/modeParameter";
@@ -26,7 +26,7 @@ export class CreateEditContactComponent implements OnInit {
 
     selectInfo : SelectInfo = {
         buttonCreateName: "Create Client",
-        isButtonCreated: true,
+        isButtonCreated: false,
         label: 'Client',
         required: true
     }
@@ -61,6 +61,7 @@ export class CreateEditContactComponent implements OnInit {
         var urlParams = this.activeRoute.snapshot.params
         switch (Number(urlParams['mode'])) {
             case ModeParameter.Create:
+                this.getClientsList();
                 if (urlParams['id'] != null){
                     this.clientClient.getClient(Number(urlParams['id'])).subscribe(res => {
                         this.slectedItem.next(res.id);
@@ -68,6 +69,7 @@ export class CreateEditContactComponent implements OnInit {
                 }
                 break;
             case ModeParameter.Edit:
+                this.getClientsList();
                 this.getContactForEdit();
                 break;
             default:
@@ -119,7 +121,7 @@ export class CreateEditContactComponent implements OnInit {
 
 
     getClientsList(): Promise<PaginatedListOfClientDto> {
-        return this.clientClient.get(0,0,1,null,'').toPromise();
+        return this.clientClient.get(0,0,1,null,null).toPromise();
     }
 
     getContactForEdit(){
@@ -180,26 +182,35 @@ export class CreateEditContactComponent implements OnInit {
         });
     }
 
-    // Testing
     processClientId(client: ClientDto){
         this.clientId = client.id;
     }
-
-    createNewClient(newClient : ClientDto){
-        let client: ClientDto = new ClientDto({
-            name : newClient.name,
-            address: null,
-            currency: null,
-            contactList: null
-        });
-        this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res => {
-            this.toastrService.success("The contact has been update successfully.");
-            this.getClientsList();
-        }, err => {
-            this.toastrService.error("An error occurred while creating the client.");
-
-        });
-    }
+    
+    // Testing
+    // Test integration select with createEntity
+    // createNewClient(newClient : ClientDto){
+    //     let client: ClientDto = new ClientDto({
+    //         name : newClient.name,
+    //         address: null,
+    //         currency: null,
+    //         contactList: null
+    //     });
+    //     this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res => {
+    //         switch(res){
+    //             case CreateClientResult.Success:
+    //                 this.toastrService.success("The contact has been created successfully.");
+    //                 this.getClientsList();
+    //                 break;
+    //             case CreateClientResult.Error_NameExists:
+    //                 this.toastrService.warning("Already exists a client with name selected.");
+    //                 break;
+    //             default:
+    //                 this.toastrService.error("An error occurred while creating the client.");
+    //                 break;       
+    //         }
+    //     }, err => {});
+    // }
+    // Testing
 
     onCancelClick() {
         if (this.contactEdit)
@@ -207,5 +218,4 @@ export class CreateEditContactComponent implements OnInit {
         else
             this.router.navigate(['manage/clients'])
     }
-    // Testing
 }

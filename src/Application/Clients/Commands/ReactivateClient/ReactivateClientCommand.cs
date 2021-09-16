@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
 {
-    public class ReactivateClientCommand : IRequest<bool>
+    public class ReactivateClientCommand : IRequest<ReactivateClientResult>
     {
         public int ClientId { get; set; }
     }
 
-    public class ReactivateCustomerCommandHandler : IRequestHandler<ReactivateClientCommand, bool>
+    public class ReactivateCustomerCommandHandler : IRequestHandler<ReactivateClientCommand, ReactivateClientResult>
     {
         private readonly IApplicationDbContext _context;
 
@@ -26,25 +26,25 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
             _context = context;
         }
 
-        public async Task<bool> Handle(ReactivateClientCommand request, CancellationToken cancellationToken)
+        public async Task<ReactivateClientResult> Handle(ReactivateClientCommand request, CancellationToken cancellationToken)
         {
             Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
 
             if (client == null)
             {
-                throw new ArgumentException($"Unable to find customer with ID #{ request.ClientId }.");
+               return ReactivateClientResult.Error_NotFound;
             }
 
             if (client.Status == ClientStatus.Active)
             {
-                throw new ArgumentException($"Client with ID #{ request.ClientId } is already active.");
+                return ReactivateClientResult.Error_AlreadyActive;
             }
 
             client.Status = ClientStatus.Active;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return ReactivateClientResult.Success;
         }
     }
 }

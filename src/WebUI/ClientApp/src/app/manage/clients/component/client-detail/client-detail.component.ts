@@ -7,7 +7,7 @@ import { ModalInfo } from 'src/app/commons/classes/modal-info';
 import { PaginatedList } from 'src/app/commons/classes/paginated-list';
 import { ContactManagementUrlParams } from 'src/app/commons/classes/contactManagementUrlParams';
 import { GenericModalComponent } from 'src/app/commons/components/generic-modal/generic-modal.component';
-import { ClientClient, ClientDto, ContactClient, ContactDto, CurrencyDto, DeleteClientResult } from 'src/app/web-api-client';
+import { ClientClient, ClientDto, ContactClient, ContactDto, CurrencyDto, DeleteClientResult, ReactivateClientResult } from 'src/app/web-api-client';
 import { ToastrService } from 'ngx-toastr';
 import { ModeParameter } from 'src/app/shared/enums/modeParameter';
 @Component({
@@ -42,7 +42,7 @@ export class ClientDetailComponent implements OnInit {
 
   onEditClient(){
     let queryParams = new ContactManagementUrlParams()
-    queryParams.mode = 2
+    queryParams.mode = 2;
     queryParams.id = this.clientInfo.id.toString()
     this.router.navigate(['/manage/client', queryParams])
   }
@@ -56,26 +56,20 @@ export class ClientDetailComponent implements OnInit {
         this.clientService.deleteClient(this.clientInfo.id).subscribe((response: any) => {
           switch (response) {
             case DeleteClientResult.Success:
-              
+              this.toasterService.success(`The client ${this.clientInfo.name} was successfully deactivated.`);
+              this.getClient();
+
               break;
             case DeleteClientResult.Error_ActiveProjects:
-              
+              this.toasterService.warning("An error occurred when deactivating client, you have active projects.");
               break;
             default:
+              this.toasterService.error("An error occurred while deactivating the client.");
               break;
           }
-          
-          if (response == DeleteClientResult.Success) {
-            this.toasterService.clear()
-            this.toasterService.success("Successfully flagged " + this.clientInfo.name);
-            this.getClient();
-          } else if (response == DeleteClientResult.Error_ActiveProjects) {
-            this.toasterService.error("You will need to flag any active projects with this client to deactivate them.")
-          }
-      
-        })  
+        });
       }
-    })
+    });
   }
 
   onReactivateClient() {
@@ -84,20 +78,31 @@ export class ClientDetailComponent implements OnInit {
     modalInfo.message = "Are you ready to start working with " + this.clientInfo.name + " again?"  
     this.openModal(modalInfo).then(input => {
       if (input == "accept") {
-        console.log(input)
         this.clientService.reactivateClient(this.clientInfo.id).subscribe(response => {
-          this.getClient()
-          this.toasterService.clear();
-          this.toasterService.success("Successfully flagged " + this.clientInfo.name);
-        })
-      } else {
-        
-      }
+
+          switch(response){
+            case ReactivateClientResult.Success:
+              this.getClient()
+              this.toasterService.success(`The client ${this.clientInfo.name} has been successfully reactivated.`);
+              break;
+            case ReactivateClientResult.Error_NotFound:
+              this.toasterService.warning(`Unable to faind the client with ID #${this.clientInfo.id}.`);
+              break;
+            case ReactivateClientResult.Error_AlreadyActive:
+              this.toasterService.warning("The client is already active.");
+              break;
+            default:
+              this.toasterService.error("An error occurred while reactivating the client.");
+              break    
+          }
+        }, err => {
+          this.toasterService.error("An error occurred while reactivating the client.");
+        });
+      } else {}
     })
   }
 
   onAddContact(){
-    this.router.navigate(['/manage/client/contact', ModeParameter.Create, this.clientInfo.id])
   }
 
   onReportContact(item: ContactDto) {
@@ -106,10 +111,11 @@ export class ClientDetailComponent implements OnInit {
   }
 
   onEditContact(item: ContactDto) {
-    let queryParams = new ContactManagementUrlParams()
-    queryParams.mode = 2
-    queryParams.id = item.id.toString()
-    this.router.navigate(['/manage/client/contact', queryParams])
+    let urlParams = new ContactManagementUrlParams()
+    urlParams.mode = 1;
+    if(item != null)
+    urlParams.id = item.id.toString()
+    this.router.navigate(['/manage/client', urlParams]); 
   }
   
   onFlagContact(item: ContactDto) {

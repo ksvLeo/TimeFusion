@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ContactDto, UpdateClientCommand } from "src/app/web-api-client";
+import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ContactDto, UpdateClientCommand, CreateClientResult, UpdateClientResult } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
 import { ModeParameter } from "src/app/shared/enums/modeParameter";
+import { of } from "rxjs";
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -179,9 +180,24 @@ export class CreateEditClientCompontent implements OnInit{
             client.address = client.address.toString();
             let common = new UpdateClientCommand({client: client})
             this.clientClient.updateClient(common).subscribe(res => {
-                this.clientForm.reset();
-                this.toastrService.success("The client has been update successfully.");
-                this.router.navigate(['manage/clients']);
+                
+                switch(res){
+                    case UpdateClientResult.Success:
+                        this.clientForm.reset();
+                        this.toastrService.success("The client has been update successfully.");
+                        this.router.navigate(['manage/clients']);
+                        break;
+                    case UpdateClientResult.EmptyName:
+                        this.toastrService.warning("Name field can't be null.");
+                        break;
+                    case UpdateClientResult.Error_NameExists:
+                        this.toastrService.warning("Already exists a client with name selected.");
+                        break;
+                    default:
+                           this.toastrService.error("An error occurred while updating the client.") ;
+                        break;
+                }
+
             }, err => {
                 this.toastrService.error("An error occurred while updating the client.");
             });
@@ -189,12 +205,22 @@ export class CreateEditClientCompontent implements OnInit{
         }
 
         this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res =>{
-            this.clientForm.reset();
-            if(this.createContact){
-                this.contactForm.reset();
+            switch (res.result) {
+                case CreateClientResult.Success:
+                    this.toastrService.success("The contact has been created successfully.");
+                    this.clientForm.reset();
+                    if(this.createContact){
+                        this.contactForm.reset();
+                    }
+                    this.router.navigate(['manage/clients']);
+                    break;
+                case CreateClientResult.Error_NameExists:
+                    this.toastrService.warning("Already exists a client with name selected.");
+                    break;
+                default:
+                    this.toastrService.error("An error occurred while creating the client.");
+                    break;
             }
-            this.toastrService.success("The client has been created successfully.");
-            this.router.navigate(['manage/clients']);
         }, err => {
             this.toastrService.error("An error occurred while creating the client.");
         });
