@@ -74,7 +74,12 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
             _context.Clients.Add(client);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            var clientId = await _context.SaveChangesAsync(cancellationToken);
+
+            if (client == null)
+            {
+                return CreateClientResult.Error;
+            }
 
             return CreateClientResult.Success;
         }
