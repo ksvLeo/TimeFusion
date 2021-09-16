@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-12 col-sm-9 col-xl-6">
                         <input type="text" id="name" class="form-control" autocomplete="off" formControlName="name" required />
-                        <span class="text-danger" *ngIf="userExist && clientForm.controls.name.touched">Client with name is already exist.</span>
+                        <span class="text-danger" *ngIf="userExist || clientForm.controls.name.touched && clientForm.controls.name.invalid">Client with name is already exist.</span>
                     </div>
                 </div>
             </div>

@@ -55,7 +55,7 @@ export class CreateEditClientCompontent implements OnInit{
         
         this.clientForm = this.fb.group({
             name: ["",[Validators.minLength(3),Validators.required]],
-            address: [""],
+            address: ["", [Validators.minLength(3)]],
             currency: ["", [Validators.required]]
         });
         
@@ -90,6 +90,7 @@ export class CreateEditClientCompontent implements OnInit{
                         address: [this.client.address],
                         currency: [this.client.currency.id]
                     });
+                    this.clientForm.controls.address.setErrors(null);
                     this.areFormsValid = true;
                 }
             });
@@ -212,7 +213,11 @@ export class CreateEditClientCompontent implements OnInit{
 
     mapClient(clientForm: FormGroup, contact: ContactDto) : ClientDto{
         let contacts : ContactDto[] = [];
-        contacts.push(contact);
+        if(this.contact != null){
+            contacts.push(contact);
+        }else{
+            contacts = null;
+        }
         let currency = this.currencies.find(c => c.id == clientForm.get('currency').value);
         let client =  new ClientDto({
             name : clientForm.get('name').value,

@@ -9,8 +9,8 @@ import { FieldFormat, FieldInfo, GridConfiguration } from "src/app/commons/class
 import { ModalInfo } from "src/app/commons/classes/modal-info";
 import { PaginatedList } from "src/app/commons/classes/paginated-list";
 import { PagingParameters } from "src/app/commons/classes/paging-parameters";
+import { GenericModalComponent } from "src/app/commons/components/generic-modal/generic-modal.component";
 import { ClientClient, ClientDto, ClientStatus } from "src/app/web-api-client";
-import { GenericModalComponent } from "../../../commons/components/generic-modal/generic-modal.component";
 
 @Component({
     selector: 'app-clients-component',
