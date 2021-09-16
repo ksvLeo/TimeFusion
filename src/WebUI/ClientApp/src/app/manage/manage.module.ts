@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ManageRoutingModule } from './manage-routing.module';
-import { ClientsComponent } from './components/clients/clients.component';
-import { AppRoutingModule } from '../app-routing.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CreateEditClientCompontent } from './components/clients/create-edit-client/create-edit-client.component';
-import { ManageComponent } from './manage.component';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateEditContactComponent } from './components/clients/create-edit-contact/create-edit-contact.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from '../app-routing.module';
 import { CommonsModule } from '../commons/commons.module';
-import { ClientDetailComponent } from './components/clients/client-detail/client-detail.component';
+import { ClientsComponent } from './clients/clients.component';
+import { ClientDetailComponent } from './clients/component/client-detail/client-detail.component';
+import { CreateEditClientCompontent } from './clients/component/create-edit-client/create-edit-client.component';
+import { CreateEditContactComponent } from './contacts/component/create-edit-contact/create-edit-contact.component';
+import { ManageRoutingModule } from './manage-routing.module';
+import { ManageComponent } from './manage.component';
 
 
 @NgModule({
@@ -17,8 +17,8 @@ import { ClientDetailComponent } from './components/clients/client-detail/client
     ManageComponent,
     ClientsComponent,
     CreateEditClientCompontent,
-    CreateEditContactComponent,
-    ClientDetailComponent
+    ClientDetailComponent,
+    CreateEditContactComponent
   ],
   imports: [
     ReactiveFormsModule,
