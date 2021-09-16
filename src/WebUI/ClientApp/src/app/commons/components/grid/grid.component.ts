@@ -53,7 +53,7 @@ export class GridComponent {
     this.paginate.emit(pagingParam);
   }
   
-  onItemClick(item: any){
+  rowClick(item: any){
     this.itemClickEvent.emit(item);
   }
 

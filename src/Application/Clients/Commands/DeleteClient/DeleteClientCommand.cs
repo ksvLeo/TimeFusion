@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
 {
-    public class DeleteClientCommand : IRequest<int>
+    public class DeleteClientCommand : IRequest<DeleteClientResult>
     {
         public int ClientId { get; set; }
     }
 
-    public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand, int>
+    public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand, DeleteClientResult>
     {
         private readonly IApplicationDbContext _context;
 
@@ -24,27 +24,35 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
             _context = context;
         }
 
-        public async Task<int> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteClientResult> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {
-            Client client = _context.Clients.FirstOrDefault(c => c.Id == request.ClientId);
+
+            Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
 
             if (client == null)
             {
-                throw new ArgumentException($"Unable to find client with ID #{ request.ClientId }.");
+                return DeleteClientResult.Error_NotFound; 
             }
 
-            bool activeProject = await _context.Projects.AnyAsync(c => c.ClientId == request.ClientId && c.ProjectStatus.Id.Equals(1));
+            bool activeProject = await _context.Projects.AnyAsync(c => c.ClientId == request.ClientId && c.ProjectStatus.Id.Equals(1), cancellationToken);
 
             if (activeProject)
             {
-                throw new ArgumentException("User has active projects with to this client.");
+                return DeleteClientResult.Error_ActiveProjects;
             }
 
             client.Status = ClientStatus.Inactive;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return request.ClientId;
+            client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == client.Id, cancellationToken);
+
+            if(client.Status.Equals(ClientStatus.Active))
+            {
+                return DeleteClientResult.Error;
+            }
+
+            return DeleteClientResult.Success;
         }
     }
 }

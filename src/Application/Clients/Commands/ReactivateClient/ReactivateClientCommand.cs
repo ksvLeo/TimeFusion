@@ -28,7 +28,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
 
         public async Task<bool> Handle(ReactivateClientCommand request, CancellationToken cancellationToken)
         {
-            Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId);
+            Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
 
             if (client == null)
             {
