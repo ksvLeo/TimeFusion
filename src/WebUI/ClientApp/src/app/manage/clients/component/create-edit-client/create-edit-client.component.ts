@@ -116,7 +116,7 @@ export class CreateEditClientCompontent implements OnInit{
             return;
         }
         
-        if($values.name.length > 0){
+        if($values && $values.name.length > 0){
             this.isClientFormValid = this.clientForm.valid && !this.clientExistByName();
             this.areFormsValid = this.isClientFormValid && this.validForm();
         }
@@ -178,7 +178,7 @@ export class CreateEditClientCompontent implements OnInit{
             client.name = client.name.toString();
             client.address = client.address.toString();
             let common = new UpdateClientCommand({client: client})
-            this.clientClient.updateClient(common).subscribe(res =>{
+            this.clientClient.updateClient(common).subscribe(res => {
                 this.clientForm.reset();
                 this.toastrService.success("The client has been update successfully.");
                 this.router.navigate(['manage/clients']);
