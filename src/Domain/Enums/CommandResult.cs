@@ -21,6 +21,14 @@ namespace FusionIT.TimeFusion.Domain.Enums
         Error_NotFound = 2,
         Error_ActiveProjects = 3
     }
+
+    public enum UpdateClientResult
+    {
+        Error = 0,
+        Success = 1,
+        Error_NameExists = 2,
+        EmptyName = 3
+    }
     
     public enum CreateContactResult
     {

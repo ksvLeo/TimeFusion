@@ -39,7 +39,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateClientResult>> CreateClient(CreateClientCommand command)
+        public async Task<ActionResult<CreateClientResultDto>> CreateClient(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
@@ -51,7 +51,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<ActionResult<bool>> UpdateClient(UpdateClientCommand command)
+        public async Task<ActionResult<UpdateClientResult>> UpdateClient(UpdateClientCommand command)
         {
             return await Mediator.Send(command);
         }

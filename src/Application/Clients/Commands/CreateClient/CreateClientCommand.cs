@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 {
-    public class CreateClientCommand : IRequest<CreateClientResult>
+    public class CreateClientCommand : IRequest<CreateClientResultDto>
     {
         public ClientDto NewClient { get; set; }
     }
 
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, CreateClientResult>
+    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, CreateClientResultDto>
     {
         private readonly IApplicationDbContext _context;
 
@@ -27,13 +27,16 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
             _context = context;
         }
 
-        public async Task<CreateClientResult> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<CreateClientResultDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+            CreateClientResultDto result = new CreateClientResultDto();
+
             Client clientNameExist = _context.Clients.FirstOrDefault(c => c.Name == request.NewClient.Name);
 
             if (clientNameExist != null)
             {
-                return CreateClientResult.Error_NameExists;
+                result.result = CreateClientResult.Error_NameExists;
+                return result;
             }
 
             Currency currency;
@@ -74,9 +77,10 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
             _context.Clients.Add(client);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            result.Id = await _context.SaveChangesAsync(cancellationToken);
+            result.result = CreateClientResult.Success;
 
-            return CreateClientResult.Success;
+            return result;
         }
     }
 }
