@@ -1,5 +1,6 @@
 ﻿using FusionIT.TimeFusion.Application.Common.Interfaces;
 using FusionIT.TimeFusion.Domain.Entities;
+using FusionIT.TimeFusion.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 {
-    public class ReactivateContactCommand : IRequest<int>
+    public class ReactivateContactCommand : IRequest<ReactivateContactResult>
     {
         public int ContactId { get; set; }
         public int ClientId { get; set; }
     }
 
-    public class ReactivateContactCommandHandler : IRequestHandler<ReactivateContactCommand, int>
+    public class ReactivateContactCommandHandler : IRequestHandler<ReactivateContactCommand, ReactivateContactResult>
     {
         private readonly IApplicationDbContext _context;
         
@@ -26,13 +27,14 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
             _context = context;
         }
 
-        public async Task<int> Handle(ReactivateContactCommand request, CancellationToken cancellationToken)
+        public async Task<ReactivateContactResult> Handle(ReactivateContactCommand request, CancellationToken cancellationToken)
         {
             Contact contact = await _context.Contacts.FirstOrDefaultAsync(c => c.ClientId == request.ClientId && c.Id == request.ContactId);
 
             if (contact == null)
             {
-                throw new ArgumentException("No contact was found with ID #" + request.ContactId);
+                return ReactivateContactResult.Error_NotFound;
+                //throw new ArgumentException("No contact was found with ID #" + request.ContactId);
             }
 
             if (contact.Active == true)
@@ -44,7 +46,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return request.ContactId;
+            return ReactivateContactResult.Success;
         }
     }
 

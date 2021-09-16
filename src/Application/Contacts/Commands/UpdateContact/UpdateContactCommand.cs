@@ -9,16 +9,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FusionIT.TimeFusion.Domain.Enums;
 
 namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 {
-    public class UpdateContactCommand : IRequest<int>
+    public class UpdateContactCommand : IRequest<UpdateContactResult>
     {
         public ContactDto newContact { get; set; }
         public int ClientId { get; set; }
     }
 
-    public class UpdateContactCommandHandler : IRequestHandler<UpdateContactCommand, int>
+    public class UpdateContactCommandHandler : IRequestHandler<UpdateContactCommand, UpdateContactResult>
     {
         private readonly IApplicationDbContext _context;
 
@@ -26,12 +27,13 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
         {
             _context = context; 
         }
-        public async Task<int> Handle(UpdateContactCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateContactResult> Handle(UpdateContactCommand request, CancellationToken cancellationToken)
         {
 
             if (string.IsNullOrEmpty(request.newContact.Name))
             {
-                throw new ArgumentException("Contact name must not be null.");
+                return UpdateContactResult.EmptyName;
+                //throw new ArgumentException("Contact name must not be null.");
             }
 
             bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
@@ -40,7 +42,8 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
 
             if (nameExists)
             {
-                throw new ArgumentException($"Contact name : {request.newContact.Name} already exists in client.");
+                return UpdateContactResult.Error_NameExists;
+                //throw new ArgumentException($"Contact name : {request.newContact.Name} already exists in client.");
             }
 
             Contact contact = new Contact
@@ -57,7 +60,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
             _context.Contacts.Update(contact);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return contact.Id;
+            return UpdateContactResult.Success;
         }
     }
 }

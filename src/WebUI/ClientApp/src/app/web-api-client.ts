@@ -16,13 +16,13 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IClientClient {
     get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined, filter: string | null | undefined): Observable<PaginatedListOfClientDto>;
-    createClient(command: CreateClientCommand): Observable<CreateClientResult>;
+    createClient(command: CreateClientCommand): Observable<CreateClientResultDto>;
     deleteClient(clientId: number | undefined): Observable<DeleteClientResult>;
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     validateClientNameExistQuery(name: string | null | undefined): Observable<boolean>;
     getClient(clientId: number | undefined): Observable<ClientDto>;
     reactivateClient(clientId: number | undefined): Observable<boolean>;
-    updateClient(command: UpdateClientCommand): Observable<boolean>;
+    updateClient(command: UpdateClientCommand): Observable<UpdateClientResult>;
 }
 
 @Injectable({
@@ -102,7 +102,7 @@ export class ClientClient implements IClientClient {
         return _observableOf<PaginatedListOfClientDto>(<any>null);
     }
 
-    createClient(command: CreateClientCommand): Observable<CreateClientResult> {
+    createClient(command: CreateClientCommand): Observable<CreateClientResultDto> {
         let url_ = this.baseUrl + "/api/Client";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -125,14 +125,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processCreateClient(<any>response_);
                 } catch (e) {
-                    return <Observable<CreateClientResult>><any>_observableThrow(e);
+                    return <Observable<CreateClientResultDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<CreateClientResult>><any>_observableThrow(response_);
+                return <Observable<CreateClientResultDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateClient(response: HttpResponseBase): Observable<CreateClientResult> {
+    protected processCreateClient(response: HttpResponseBase): Observable<CreateClientResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -143,7 +143,7 @@ export class ClientClient implements IClientClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            result200 = CreateClientResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -151,7 +151,7 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<CreateClientResult>(<any>null);
+        return _observableOf<CreateClientResultDto>(<any>null);
     }
 
     deleteClient(clientId: number | undefined): Observable<DeleteClientResult> {
@@ -414,7 +414,7 @@ export class ClientClient implements IClientClient {
         return _observableOf<boolean>(<any>null);
     }
 
-    updateClient(command: UpdateClientCommand): Observable<boolean> {
+    updateClient(command: UpdateClientCommand): Observable<UpdateClientResult> {
         let url_ = this.baseUrl + "/api/Client/UpdateClient";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -437,14 +437,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processUpdateClient(<any>response_);
                 } catch (e) {
-                    return <Observable<boolean>><any>_observableThrow(e);
+                    return <Observable<UpdateClientResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<boolean>><any>_observableThrow(response_);
+                return <Observable<UpdateClientResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processUpdateClient(response: HttpResponseBase): Observable<boolean> {
+    protected processUpdateClient(response: HttpResponseBase): Observable<UpdateClientResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -463,18 +463,18 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<boolean>(<any>null);
+        return _observableOf<UpdateClientResult>(<any>null);
     }
 }
 
 export interface IContactClient {
     getContact(contactId: number | undefined): Observable<ContactDto>;
-    createContact(command: CreateContactCommand): Observable<number>;
-    deleteContact(clientId: number | undefined, contactId: number | undefined): Observable<number>;
-    reactivateClient(contactId: number | undefined, clientId: number | undefined): Observable<number>;
+    createContact(command: CreateContactCommand): Observable<CreateContactResultDto>;
+    deleteContact(clientId: number | undefined, contactId: number | undefined): Observable<DeleteContactResult>;
+    reactivateContact(contactId: number | undefined, clientId: number | undefined): Observable<ReactivateContactResult>;
     getContactsByClient(id: number | undefined): Observable<ContactDto[]>;
     validateName(contactId: number | null | undefined, clientId: number | undefined, contactName: string | null | undefined): Observable<boolean>;
-    updateContact(command: UpdateContactCommand): Observable<number>;
+    updateContact(command: UpdateContactCommand): Observable<UpdateContactResult>;
 }
 
 @Injectable({
@@ -542,7 +542,7 @@ export class ContactClient implements IContactClient {
         return _observableOf<ContactDto>(<any>null);
     }
 
-    createContact(command: CreateContactCommand): Observable<number> {
+    createContact(command: CreateContactCommand): Observable<CreateContactResultDto> {
         let url_ = this.baseUrl + "/api/Contact";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -565,14 +565,14 @@ export class ContactClient implements IContactClient {
                 try {
                     return this.processCreateContact(<any>response_);
                 } catch (e) {
-                    return <Observable<number>><any>_observableThrow(e);
+                    return <Observable<CreateContactResultDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<number>><any>_observableThrow(response_);
+                return <Observable<CreateContactResultDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateContact(response: HttpResponseBase): Observable<number> {
+    protected processCreateContact(response: HttpResponseBase): Observable<CreateContactResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -583,7 +583,7 @@ export class ContactClient implements IContactClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            result200 = CreateContactResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -591,10 +591,10 @@ export class ContactClient implements IContactClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<number>(<any>null);
+        return _observableOf<CreateContactResultDto>(<any>null);
     }
 
-    deleteContact(clientId: number | undefined, contactId: number | undefined): Observable<number> {
+    deleteContact(clientId: number | undefined, contactId: number | undefined): Observable<DeleteContactResult> {
         let url_ = this.baseUrl + "/api/Contact?";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
@@ -621,14 +621,14 @@ export class ContactClient implements IContactClient {
                 try {
                     return this.processDeleteContact(<any>response_);
                 } catch (e) {
-                    return <Observable<number>><any>_observableThrow(e);
+                    return <Observable<DeleteContactResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<number>><any>_observableThrow(response_);
+                return <Observable<DeleteContactResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processDeleteContact(response: HttpResponseBase): Observable<number> {
+    protected processDeleteContact(response: HttpResponseBase): Observable<DeleteContactResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -647,10 +647,10 @@ export class ContactClient implements IContactClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<number>(<any>null);
+        return _observableOf<DeleteContactResult>(<any>null);
     }
 
-    reactivateClient(contactId: number | undefined, clientId: number | undefined): Observable<number> {
+    reactivateContact(contactId: number | undefined, clientId: number | undefined): Observable<ReactivateContactResult> {
         let url_ = this.baseUrl + "/api/Contact?";
         if (contactId === null)
             throw new Error("The parameter 'contactId' cannot be null.");
@@ -671,20 +671,20 @@ export class ContactClient implements IContactClient {
         };
 
         return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processReactivateClient(response_);
+            return this.processReactivateContact(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processReactivateClient(<any>response_);
+                    return this.processReactivateContact(<any>response_);
                 } catch (e) {
-                    return <Observable<number>><any>_observableThrow(e);
+                    return <Observable<ReactivateContactResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<number>><any>_observableThrow(response_);
+                return <Observable<ReactivateContactResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processReactivateClient(response: HttpResponseBase): Observable<number> {
+    protected processReactivateContact(response: HttpResponseBase): Observable<ReactivateContactResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -703,7 +703,7 @@ export class ContactClient implements IContactClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<number>(<any>null);
+        return _observableOf<ReactivateContactResult>(<any>null);
     }
 
     getContactsByClient(id: number | undefined): Observable<ContactDto[]> {
@@ -818,7 +818,7 @@ export class ContactClient implements IContactClient {
         return _observableOf<boolean>(<any>null);
     }
 
-    updateContact(command: UpdateContactCommand): Observable<number> {
+    updateContact(command: UpdateContactCommand): Observable<UpdateContactResult> {
         let url_ = this.baseUrl + "/api/Contact/UpdateContact";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -841,14 +841,14 @@ export class ContactClient implements IContactClient {
                 try {
                     return this.processUpdateContact(<any>response_);
                 } catch (e) {
-                    return <Observable<number>><any>_observableThrow(e);
+                    return <Observable<UpdateContactResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<number>><any>_observableThrow(response_);
+                return <Observable<UpdateContactResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processUpdateContact(response: HttpResponseBase): Observable<number> {
+    protected processUpdateContact(response: HttpResponseBase): Observable<UpdateContactResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -867,7 +867,7 @@ export class ContactClient implements IContactClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<number>(<any>null);
+        return _observableOf<UpdateContactResult>(<any>null);
     }
 }
 
@@ -1820,6 +1820,46 @@ export enum PaginationOrder {
     DESC = 2,
 }
 
+export class CreateClientResultDto implements ICreateClientResultDto {
+    id?: number;
+    result?: CreateClientResult;
+
+    constructor(data?: ICreateClientResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.result = _data["result"];
+        }
+    }
+
+    static fromJS(data: any): CreateClientResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateClientResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["result"] = this.result;
+        return data; 
+    }
+}
+
+export interface ICreateClientResultDto {
+    id?: number;
+    result?: CreateClientResult;
+}
+
 export enum CreateClientResult {
     Error = 0,
     Success = 1,
@@ -1860,6 +1900,13 @@ export class CreateClientCommand implements ICreateClientCommand {
 
 export interface ICreateClientCommand {
     newClient?: ClientDto | undefined;
+}
+
+export enum UpdateClientResult {
+    Error = 0,
+    Success = 1,
+    Error_NameExists = 2,
+    EmptyName = 3,
 }
 
 export class UpdateClientCommand implements IUpdateClientCommand {
@@ -1905,6 +1952,13 @@ export enum DeleteClientResult {
     Error_ActiveProjects = 3,
 }
 
+export enum UpdateContactResult {
+    Error = 0,
+    Success = 1,
+    Error_NameExists = 2,
+    EmptyName = 3,
+}
+
 export class UpdateContactCommand implements IUpdateContactCommand {
     newContact?: ContactDto | undefined;
     clientId?: number;
@@ -1945,6 +1999,53 @@ export interface IUpdateContactCommand {
     clientId?: number;
 }
 
+export class CreateContactResultDto implements ICreateContactResultDto {
+    id?: number;
+    result?: CreateContactResult;
+
+    constructor(data?: ICreateContactResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.result = _data["result"];
+        }
+    }
+
+    static fromJS(data: any): CreateContactResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateContactResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["result"] = this.result;
+        return data; 
+    }
+}
+
+export interface ICreateContactResultDto {
+    id?: number;
+    result?: CreateContactResult;
+}
+
+export enum CreateContactResult {
+    Error = 0,
+    Success = 1,
+    Error_NameExists = 3,
+    EmptyName = 3,
+}
+
 export class CreateContactCommand implements ICreateContactCommand {
     clientId?: number;
     contact?: ContactDto | undefined;
@@ -1983,6 +2084,18 @@ export class CreateContactCommand implements ICreateContactCommand {
 export interface ICreateContactCommand {
     clientId?: number;
     contact?: ContactDto | undefined;
+}
+
+export enum DeleteContactResult {
+    Error = 0,
+    Success = 1,
+    Error_NotFound = 2,
+}
+
+export enum ReactivateContactResult {
+    Error = 0,
+    Success = 1,
+    Error_NotFound = 2,
 }
 
 export class PaginatedListOfTodoItemDto implements IPaginatedListOfTodoItemDto {

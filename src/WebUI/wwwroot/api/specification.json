@@ -94,7 +94,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateClientResult"
+                  "$ref": "#/components/schemas/CreateClientResultDto"
                 }
               }
             }
@@ -282,7 +282,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/UpdateClientResult"
                 }
               }
             }
@@ -343,8 +343,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/CreateContactResultDto"
                 }
               }
             }
@@ -382,8 +381,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/DeleteContactResult"
                 }
               }
             }
@@ -394,7 +392,7 @@
         "tags": [
           "Contact"
         ],
-        "operationId": "Contact_ReactivateClient",
+        "operationId": "Contact_ReactivateContact",
         "parameters": [
           {
             "name": "ContactId",
@@ -421,8 +419,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/ReactivateContactResult"
                 }
               }
             }
@@ -538,8 +535,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/UpdateContactResult"
                 }
               }
             }
@@ -1150,6 +1146,19 @@
           2
         ]
       },
+      "CreateClientResultDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateClientResult"
+          }
+        }
+      },
       "CreateClientResult": {
         "type": "integer",
         "description": "",
@@ -1177,6 +1186,22 @@
             ]
           }
         }
+      },
+      "UpdateClientResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NameExists",
+          "EmptyName"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
       },
       "UpdateClientCommand": {
         "type": "object",
@@ -1208,6 +1233,22 @@
           3
         ]
       },
+      "UpdateContactResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NameExists",
+          "EmptyName"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
       "UpdateContactCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1226,6 +1267,35 @@
           }
         }
       },
+      "CreateContactResultDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateContactResult"
+          }
+        }
+      },
+      "CreateContactResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NameExists",
+          "EmptyName"
+        ],
+        "enum": [
+          0,
+          1,
+          3,
+          3
+        ]
+      },
       "CreateContactCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1243,6 +1313,34 @@
             ]
           }
         }
+      },
+      "DeleteContactResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NotFound"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ReactivateContactResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NotFound"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
       },
       "PaginatedListOfTodoItemDto": {
         "type": "object",

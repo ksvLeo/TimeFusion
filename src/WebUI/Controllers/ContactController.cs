@@ -5,6 +5,7 @@ using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetClients;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetContacts;
 using FusionIT.TimeFusion.Application.Contacts.Queries.ValidateContactName;
+using FusionIT.TimeFusion.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,25 +33,25 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> UpdateContact(UpdateContactCommand command)
+        public async Task<ActionResult<UpdateContactResult>> UpdateContact(UpdateContactCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateContact(CreateContactCommand command)
+        public async Task<ActionResult<CreateContactResultDto>> CreateContact(CreateContactCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteContact ([FromQuery] DeleteContactCommand command)
+        public async Task<ActionResult<DeleteContactResult>> DeleteContact ([FromQuery] DeleteContactCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPut]
-        public async Task<ActionResult<int>> ReactivateClient ([FromQuery] ReactivateContactCommand command)
+        public async Task<ActionResult<ReactivateContactResult>> ReactivateContact ([FromQuery] ReactivateContactCommand command)
         {
             return await Mediator.Send(command);
         }

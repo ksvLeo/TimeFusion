@@ -9,17 +9,18 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FusionIT.TimeFusion.Domain.Enums;
 
 namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
 {
-    public class CreateContactCommand : IRequest<int>
+    public class CreateContactCommand : IRequest<Dtos.CreateContactResultDto>
     {
         public int ClientId { get; set; }
 
         public ContactDto Contact { get; set; }
     }
 
-    public class CreateContactCommandHandler : IRequestHandler<CreateContactCommand, int>
+    public class CreateContactCommandHandler : IRequestHandler<CreateContactCommand, Dtos.CreateContactResultDto>
     {
         private readonly IApplicationDbContext _context;
 
@@ -28,11 +29,15 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
             _context = context;
         }
 
-        public async Task<int> Handle(CreateContactCommand request, CancellationToken cancellationToken)
+        public async Task<Dtos.CreateContactResultDto> Handle(CreateContactCommand request, CancellationToken cancellationToken)
         {
+            Dtos.CreateContactResultDto result = new Dtos.CreateContactResultDto();
+
             if (string.IsNullOrEmpty(request.Contact.Name))
             {
-                throw new ArgumentException("Contact name can't be null.");
+                result.Result = Domain.Enums.CreateContactResult.EmptyName;
+                return result;
+                //throw new ArgumentException("Contact name can't be null.");
             }
 
             bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
@@ -40,7 +45,9 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
 
             if (nameExists)
             {
-                throw new ArgumentException("Contact attached to Client: " + request.ClientId + " already exists with that name.");
+                result.Result = Domain.Enums.CreateContactResult.Error_NameExists;
+                return result;
+                //throw new ArgumentException("Contact attached to Client: " + request.ClientId + " already exists with that name.");
             }
 
             Contact contact = new Contact
@@ -55,9 +62,10 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
 
             _context.Contacts.Add(contact);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            result.Id = await _context.SaveChangesAsync(cancellationToken);
+            result.Result = Domain.Enums.CreateContactResult.Success;
 
-            return contact.Id;
+            return result;
         }
     }
 }
