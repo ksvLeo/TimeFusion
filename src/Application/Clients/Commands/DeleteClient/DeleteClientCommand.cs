@@ -43,7 +43,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
 
             client.Status = ClientStatus.Inactive;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            var clientId = await _context.SaveChangesAsync(cancellationToken);
 
             client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == client.Id, cancellationToken);
 

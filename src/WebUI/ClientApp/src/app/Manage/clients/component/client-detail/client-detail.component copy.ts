@@ -54,6 +54,17 @@ export class ClientDetailComponent implements OnInit {
     this.openModal(modalInfo).then(res => {
       if (res == "accept") {
         this.clientService.deleteClient(this.clientInfo.id).subscribe((response: any) => {
+          switch (response) {
+            case DeleteClientResult.Success:
+              
+              break;
+            case DeleteClientResult.Error_ActiveProjects:
+              
+              break;
+            default:
+              break;
+          }
+          
           if (response == DeleteClientResult.Success) {
             this.toasterService.clear()
             this.toasterService.success("Successfully flagged " + this.clientInfo.name);

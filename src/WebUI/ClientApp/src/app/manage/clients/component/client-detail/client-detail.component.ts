@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { stringify } from 'querystring';
 import { ActionInfo } from 'src/app/commons/classes/action-info';
 import { FieldFormat, FieldInfo, GridConfiguration } from 'src/app/commons/classes/grid-configuration';
 import { ModalInfo } from 'src/app/commons/classes/modal-info';
 import { PaginatedList } from 'src/app/commons/classes/paginated-list';
 import { ContactManagementUrlParams } from 'src/app/commons/classes/contactManagementUrlParams';
 import { GenericModalComponent } from 'src/app/commons/components/generic-modal/generic-modal.component';
-import { ClientClient, ClientDto, ContactClient, ContactDto, CurrencyDto } from 'src/app/web-api-client';
-
+import { ClientClient, ClientDto, ContactClient, ContactDto, CurrencyDto, DeleteClientResult } from 'src/app/web-api-client';
+import { ToastrService } from 'ngx-toastr';
+import { ModeParameter } from 'src/app/shared/enums/modeParameter';
 @Component({
   selector: 'app-client-detail',
   templateUrl: './client-detail.component.html',
@@ -24,13 +24,15 @@ export class ClientDetailComponent implements OnInit {
   configurationInfo: GridConfiguration;
   actionList: ActionInfo[] = []
   modalInfo: ModalInfo;
+  result: DeleteClientResult;
 
   constructor(private clientService: ClientClient,
               
               private router: Router,
               private route: ActivatedRoute,
               private modalService: NgbModal,
-              private contactService: ContactClient) { }
+              private contactService: ContactClient,
+              private toasterService: ToastrService) { }
 
   ngOnInit(): void {
     this.getClient();
@@ -51,11 +53,27 @@ export class ClientDetailComponent implements OnInit {
     modalInfo.message = "Are you ready to finish your work with " + this.clientInfo.name + "?"  
     this.openModal(modalInfo).then(res => {
       if (res == "accept") {
-        this.clientService.deleteClient(this.clientInfo.id).subscribe(response => {
-          this.getClient();
+        this.clientService.deleteClient(this.clientInfo.id).subscribe((response: any) => {
+          switch (response) {
+            case DeleteClientResult.Success:
+              
+              break;
+            case DeleteClientResult.Error_ActiveProjects:
+              
+              break;
+            default:
+              break;
+          }
+          
+          if (response == DeleteClientResult.Success) {
+            this.toasterService.clear()
+            this.toasterService.success("Successfully flagged " + this.clientInfo.name);
+            this.getClient();
+          } else if (response == DeleteClientResult.Error_ActiveProjects) {
+            this.toasterService.error("You will need to flag any active projects with this client to deactivate them.")
+          }
+      
         })  
-      } else {
-        
       }
     })
   }
@@ -69,11 +87,17 @@ export class ClientDetailComponent implements OnInit {
         console.log(input)
         this.clientService.reactivateClient(this.clientInfo.id).subscribe(response => {
           this.getClient()
+          this.toasterService.clear();
+          this.toasterService.success("Successfully flagged " + this.clientInfo.name);
         })
       } else {
         
       }
     })
+  }
+
+  onAddContact(){
+    this.router.navigate(['/manage/client/contact', ModeParameter.Create, this.clientInfo.id])
   }
 
   onReportContact(item: ContactDto) {
@@ -93,20 +117,13 @@ export class ClientDetailComponent implements OnInit {
     if(item.active) {
       this.modalInfo.title = "Deactivate contact?"
       this.modalInfo.message = "Are you sure you want to deactivate " + item.name + "?"
-        this.openModal(this.modalInfo).then((result:any) => {
+        this.openModal(this.modalInfo).then((result: any) => {
             if (result == "accept") {
               this.contactService.deleteContact(item.clientId, item.id).subscribe((res: any) => {
-                  this.modalInfo = new ModalInfo()
-                  this.modalInfo.title = "Contact flagged"
-                  this.modalInfo.message = "Contact " + item.name + " succesfully deactivated."
-                  this.openModal(this.modalInfo)
-                  this.getClient()
+                    this.toasterService.success("Successfully flagged " + item.name);
+                    this.getClient();
               },
               (error: any) => {
-                this.modalInfo = new ModalInfo()
-                this.modalInfo.title = "We couln't do that :("
-                this.modalInfo.message = "An error ocurred.\n" + error
-                this.openModal(this.modalInfo)
               })
             }
         }, (reason:any) => {
