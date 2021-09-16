@@ -19,11 +19,11 @@
           </div>
         </div>
         <div class="cancel">
-          <div *ngIf="isSelectOption">
+          <div *ngIf="isSelectOption && !disabledCancel">
             <span class="text-danger" (click)="cancelSelection()"><i class="fas fa-times"></i></span>
           </div>
           <div class="arrow" *ngIf="!isSelectOption">
-            <span><i class="fas fa-angle-down"></i></span>
+            <span (click)="onShowList()"><i class="fas fa-angle-down"></i></span>
           </div>
         </div>
       </ng-container>

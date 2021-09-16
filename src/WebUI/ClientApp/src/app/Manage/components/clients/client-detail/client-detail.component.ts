@@ -38,6 +38,13 @@ export class ClientDetailComponent implements OnInit {
     this.loadActions()
   }
 
+  onEditClient(){
+    let queryParams = new ContactManagementUrlParams()
+    queryParams.mode = 2
+    queryParams.id = this.clientInfo.id.toString()
+    this.router.navigate(['/manage/client', queryParams])
+  }
+
   onDeactivateClient() {
     let modalInfo = new ModalInfo()
     modalInfo.title = "Deactivate Client?"
@@ -76,9 +83,9 @@ export class ClientDetailComponent implements OnInit {
 
   onEditContact(item: ContactDto) {
     let queryParams = new ContactManagementUrlParams()
-    queryParams.mode = "edit"
+    queryParams.mode = 2
     queryParams.id = item.id.toString()
-    this.router.navigate(['/manage/clients/contact', queryParams])
+    this.router.navigate(['/manage/client/contact', queryParams])
   }
   
   onFlagContact(item: ContactDto) {

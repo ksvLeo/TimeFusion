@@ -17,6 +17,7 @@ export class SelectComponent implements OnInit {
     isSelectOption: boolean;
     isNewEntity: boolean = false;
     showList: boolean = false;
+    disabledCancel: boolean = false;
 
     private eventSubscription: Subscription;
 
@@ -38,6 +39,7 @@ export class SelectComponent implements OnInit {
     }
 
     itemAlredySelected(res: number){
+        this.disabledCancel = true;
         let item = this.items.find(c => c[this.idProperty] == res);
         this.selectItem(item);
     }
@@ -102,8 +104,8 @@ export class SelectComponent implements OnInit {
     {
         this.showList = false;
         this.isSelectOption = true;
-        this.nameForFind = item[this.displayProperty];
         this.item = item;
+        this.nameForFind = item[this.displayProperty];
         this.selected.emit(this.item);
     }
 

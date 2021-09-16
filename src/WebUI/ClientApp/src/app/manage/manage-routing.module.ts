@@ -9,10 +9,9 @@ import { ClientDetailComponent } from './components/clients/client-detail/client
 const routes: Routes = [
   { path: 'manage', component: ManageComponent, children: [
     { path: 'clients', component: ClientsComponent},
-    { path: 'clients/create', component:  CreateEditClientCompontent },
-    { path: 'clients/edit/:id', component:  CreateEditClientCompontent },
-    { path: 'clients/contact', component:  CreateEditContactComponent },
-    { path: 'clients/:id', component: ClientDetailComponent}
+    { path: 'client', component:  CreateEditClientCompontent },
+    { path: 'client/contact', component:  CreateEditContactComponent },
+    { path: 'client/:id', component: ClientDetailComponent}
   ]},
 ];
 

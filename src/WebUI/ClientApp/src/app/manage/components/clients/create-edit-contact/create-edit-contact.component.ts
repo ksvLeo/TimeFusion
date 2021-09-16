@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectInfo } from "src/app/shared/interfaces/selectInfo";
-import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateContactCommand, UpdateContactCommand } from "src/app/web-api-client";
+import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateContactCommand, PaginatedListOfClientDto, UpdateContactCommand } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from "rxjs";
+import { ModeParameter } from "src/app/shared/enums/modeParameter";
 
 @Component({
     selector: 'app-create-edit-contact-component',
@@ -21,20 +22,17 @@ export class CreateEditContactComponent implements OnInit {
     // Data
     clients: ClientDto[] = [];
     nameExist: boolean = false;
+    clientId: number;
 
-    // Testing
     selectInfo : SelectInfo = {
         buttonCreateName: "Create Client",
-        isButtonCreated: false,
+        isButtonCreated: true,
         label: 'Client',
         required: true
     }
-    // Testing
-
     //Edit
     contactEdit: boolean = false;
     contact: ContactDto;
-    editItemId: number;
     slectedItem: Subject<number> = new Subject<number>();
 
     constructor(
@@ -44,7 +42,9 @@ export class CreateEditContactComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         private router: Router,
         private toastrService: ToastrService 
-    ){}
+    ){ 
+        this.getClientsList().then(res => this.clients = res.items);
+    }
 
     ngOnInit(){
 
@@ -58,59 +58,26 @@ export class CreateEditContactComponent implements OnInit {
         this.contactForm.valueChanges.subscribe(changes => {
             this.contactFormChanges(changes);
         });
-
-        // Testing
-        this.activeRoute.params.subscribe(res => {
-            console.log(res);
-            if(res.mode == "create"){
-                this.getClients();
-
-                if(this.clients != null && res.id != null){
-                    let r =this.clients.find(c => c.id == res.id)
-                    this.slectedItem.next(r.id);
-
-                    return;
+        var urlParams = this.activeRoute.snapshot.params
+        switch (Number(urlParams['mode'])) {
+            case ModeParameter.Create:
+                if (urlParams['id'] != null){
+                    this.clientClient.getClient(Number(urlParams['id'])).subscribe(res => {
+                        this.slectedItem.next(res.id);
+                    });
                 }
-            }
-
-            if(res.mode == "edit"){
-                this.getClients();
+                break;
+            case ModeParameter.Edit:
                 this.getContactForEdit();
-                return;
-            }
-            
-            if(res.mode != "create" && res.mode != "edit"){
-                this.router.navigate(['/manage/clients/']);
-
-            }
-        });
-        // Testing
-
-        // var urlParams = this.activeRoute.snapshot.params
-        // console.log(urlParams['mode'])
-        // switch (urlParams['mode']) {
-        //     case "create":
-        //         if (urlParams['id'] == null) {
-        //             this.getClients();    
-        //         } else {
-        //             this.getClientById(Number(urlParams['id'])).then((res: ClientDto) => {
-        //                 this.clients.push(res);
-        //                 this.contactForm.get('client').patchValue(res.id);
-        //             })
-        //         }
-        //         break;
-        //     case "edit":
-        //         this.getClients();
-        //         this.getContactForEdit();
-        //         break;
-        //     default:
-        //         this.router.navigate['/management/clients/']
-        //         break;
-        // }
+                break;
+            default:
+                this.router.navigate['/management/clients/']
+                break;
+        }
     }
 
     contactFormChanges($values){
-        if(!this.contactEdit && !$values || this.editItemId == null || $values.name.length < 3){
+        if(!this.contactEdit && !$values || this.clientId == null || $values.name.length < 3){
             this.isFormValid = false;
             this.nameExist = false;
             if(this.contactEdit){
@@ -123,7 +90,7 @@ export class CreateEditContactComponent implements OnInit {
             this.isFormValid = true;
             return;
         }
-        this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.editItemId,+$values.client, $values.name);
+        this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.clientId,+$values.client, $values.name);
     }
 
     contactNameExists(contactId: number ,clientId: number, contactName: string): boolean{
@@ -150,16 +117,9 @@ export class CreateEditContactComponent implements OnInit {
         return  this.nameExist;
     }
 
-    getClients(){
-        this.clientClient.get(0,0,1, null).subscribe(res => {
-            this.clients = res.items;
-        }, err => {
-            this.toastrService.error("An error occurred while obtaining the clients.");
-        });
-    }
 
-    getClientById(id: number): Promise<ClientDto> {
-        return this.clientClient.getClient(id).toPromise();
+    getClientsList(): Promise<PaginatedListOfClientDto> {
+        return this.clientClient.get(0,0,1,null).toPromise();
     }
 
     getContactForEdit(){
@@ -189,7 +149,7 @@ export class CreateEditContactComponent implements OnInit {
             contact.title = contact.title.toString();
             contact.id = this.contact.id;
             contact.email = contact.email.toString();
-            this.contactClient.updateContact(new UpdateContactCommand({ clientId: +this.contactForm.get('client').value, newContact: contact})).subscribe(res => {
+            this.contactClient.updateContact(new UpdateContactCommand({ clientId: this.clientId, newContact: contact})).subscribe(res => {
                 if(res){
                     this.contactForm.reset();
                     this.toastrService.success("The contact has been update successfully.");
@@ -200,7 +160,7 @@ export class CreateEditContactComponent implements OnInit {
             });
             return;
         }
-        this.contactClient.createContact(new CreateContactCommand({ clientId: +this.contactForm.get('client').value, contact: contact })).subscribe(res => {
+        this.contactClient.createContact(new CreateContactCommand({ clientId: this.clientId, contact: contact })).subscribe(res => {
             if(res){
                 this.contactForm.reset();
                 this.toastrService.success("The contact has been created successfully.");
@@ -221,7 +181,8 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     // Testing
-    processClientId(id: number){
+    processClientId(client: ClientDto){
+        this.clientId = client.id;
     }
 
     createNewClient(newClient : ClientDto){
@@ -233,7 +194,7 @@ export class CreateEditContactComponent implements OnInit {
         });
         this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res => {
             this.toastrService.success("The contact has been update successfully.");
-            this.getClients();
+            this.getClientsList();
         }, err => {
             this.toastrService.error("An error occurred while creating the client.");
 
@@ -242,7 +203,7 @@ export class CreateEditContactComponent implements OnInit {
 
     onCancelClick() {
         if (this.contactEdit)
-            this.router.navigate(['manage/clients/', this.contact.clientId])
+            this.router.navigate(['manage/client/', this.contact.clientId])
         else
             this.router.navigate(['manage/clients'])
     }

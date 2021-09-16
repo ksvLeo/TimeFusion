@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ContactDto, UpdateClientCommand } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
+import { ModeParameter } from "src/app/shared/enums/modeParameter";
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -37,8 +38,20 @@ export class CreateEditClientCompontent implements OnInit{
         private router: Router,
         private toastrService: ToastrService
     ){}
-
+    
     ngOnInit(){
+        this.getCurrencies();
+        var urlParams = this.activeRoute.snapshot.params
+        switch (Number(urlParams['mode'])) {
+            case ModeParameter.Create:
+                break;
+            case ModeParameter.Edit:
+                this.getClientForEdit();
+                break;
+            default:
+                this.router.navigate['/manage/clients/']
+                break;
+        }
         
         this.clientForm = this.fb.group({
             name: ["",[Validators.minLength(3),Validators.required]],
@@ -46,9 +59,6 @@ export class CreateEditClientCompontent implements OnInit{
             currency: ["", [Validators.required]]
         });
         
-        this.getClientForEdit();
-            
-        this.getCurrencies();
     
         this.clientForm.valueChanges.subscribe(changes => {
             this.clientFormChanges(changes);

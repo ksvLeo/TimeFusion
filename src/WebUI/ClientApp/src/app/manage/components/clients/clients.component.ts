@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ActionInfo } from "src/app/commons/classes/action-info";
 import { ContactManagementUrlParams } from "src/app/commons/classes/contactManagementUrlParams";
@@ -23,9 +23,12 @@ export class ClientsComponent implements OnInit {
     gridConfiguration: GridConfiguration;
     actionList: ActionInfo[] = []
 
-    constructor(private clientClient: ClientClient,
-                private router: Router,
-                private modalService: NgbModal){}
+    constructor(
+        private clientClient: ClientClient,
+        private router: Router,
+        private modalService: NgbModal,
+        private route: ActivatedRoute
+    ){}
 
     ngOnInit(): void {
         this.configurationGrid();
@@ -52,18 +55,28 @@ export class ClientsComponent implements OnInit {
         
     onAddContact(item: any) {
         let urlParams = new ContactManagementUrlParams()
-        urlParams.mode = "create"
+        urlParams.mode = 1;
         if(item != null)
         urlParams.id = item.id.toString()
-        this.router.navigate(['/manage/clients/contact', urlParams]); 
+        this.router.navigate(['/manage/client/contact', urlParams]); 
+    }
+
+    onAddClient(){
+        let urlParams = new ContactManagementUrlParams()
+        urlParams.mode = 1;
+        this.router.navigate(['/manage/client', urlParams]); 
     }
         
     onEditContacts(item: any) {
-
+        
     }
 
     onEditClient(item: any) {
-        this.router.navigate(['/manage/clients/edit', item.id])
+        let urlParams = new ContactManagementUrlParams()
+        urlParams.mode = 2;
+        if(item != null)
+        urlParams.id = item.id.toString()
+        this.router.navigate(['/manage/client', urlParams]); 
     }
 
     onFlagClient(item: ClientDto) {
@@ -125,7 +138,7 @@ export class ClientsComponent implements OnInit {
     }
 
     onClientDetailClick(item: any) {
-        this.router.navigate(['/manage/clients', item.id])
+        this.router.navigate(['/manage/client', item.id])
     }
 
     openModal(modalInfo: ModalInfo): Promise<string> {
