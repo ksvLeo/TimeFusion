@@ -35,6 +35,7 @@
             <tr *ngFor="let item of _paginatedList.items" [ngClass]="{'clickable':allowsClick}">
                 <td *ngFor="let info of _gridConfiguration.FieldInfo" (click)="onItemClick(item)">
                     <span *ngIf="info.format == FieldFormat.text">
+                        <i class="fas fa-user-times" *ngIf="item.status == 0"></i>
                         {{item[info.property]}}
                     </span>
                     <span *ngIf="info.format == FieldFormat.enum">

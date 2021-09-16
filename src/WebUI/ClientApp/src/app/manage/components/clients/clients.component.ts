@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { filter } from "rxjs/operators";
 import { ActionInfo } from "src/app/commons/classes/action-info";
 import { ContactManagementUrlParams } from "src/app/commons/classes/contactManagementUrlParams";
 import { FieldFormat, FieldInfo, GridConfiguration } from "src/app/commons/classes/grid-configuration";
@@ -21,6 +23,8 @@ export class ClientsComponent implements OnInit {
     paginatedList: PaginatedList<ClientDto>;
     fieldInfo: FieldInfo[] = [];
     gridConfiguration: GridConfiguration;
+    pagingParams: PagingParameters = new PagingParameters(1, 10, 1, "name");
+    filter = new FormControl('');
     actionList: ActionInfo[] = []
 
     constructor(private clientClient: ClientClient,
@@ -38,16 +42,20 @@ export class ClientsComponent implements OnInit {
             new FieldInfo("Name", "name", FieldFormat.text, true),
             new FieldInfo("Status", "status", FieldFormat.enum, true)
         ];
-        this.gridConfiguration = new GridConfiguration(this.fieldInfo, [1, 2, 10]);
+        this.gridConfiguration = new GridConfiguration(this.fieldInfo, [10, 20, 30]);
     }
 
-    getClients(pageNumber: number = 1, pageSize: number = 1, order: number = 1, orderField: string = "name"): void{
-        this.clientClient.get(pageNumber, pageSize, order, orderField).subscribe(res => this.paginatedList = res);
+    getClients(pageNumber: number = 1, pageSize: number = 10, order: number = 1, orderField: string = "name", filter: string = ""): void{
+        this.clientClient.get(pageNumber, pageSize, order, orderField, filter).subscribe(res => this.paginatedList = res);
     }
 
     onPaginate(pagingParameter: PagingParameters){
-        // console.log(pagingParameter);
-        this.getClients(pagingParameter.PageNumber, pagingParameter.PageSize, pagingParameter.Order, pagingParameter.OrderField);
+        this.pagingParams = pagingParameter;
+        this.getClients(pagingParameter.PageNumber, pagingParameter.PageSize, pagingParameter.Order, pagingParameter.OrderField, this.filter.value);
+    }
+
+    changeFilter(){
+        this.getClients(this.pagingParams.PageNumber, this.pagingParams.PageSize, this.pagingParams.Order, this.pagingParams.OrderField, this.filter.value);
     }
         
     onAddContact(item: any) {

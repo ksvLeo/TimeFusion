@@ -7,6 +7,7 @@ using FusionIT.TimeFusion.Application.Common.Models;
 using MediatR;
 using System;
 using System.Linq.Dynamic.Core;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
         public int PageSize { get; set; } = 10;
         public PaginationOrder Order { get; set; } = PaginationOrder.ASC;
         public string OrderField { get; set; } = "Name";
+        public string Filter { get; set; } = "";
     }
 
     public class GetClientsWithPaginationQueryHandle : IRequestHandler<GetClientsWithPaginationQuery, PaginatedList<ClientDto>>
@@ -40,6 +42,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Queries
                 throw new ArgumentException("Order field not found");
 
             PaginatedList<ClientDto> clients = await _context.Clients
+                .Where(c => string.IsNullOrEmpty(request.Filter) || c.Name.Contains(request.Filter))
                 .OrderBy(request.OrderField + " " + request.Order)
                 .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);

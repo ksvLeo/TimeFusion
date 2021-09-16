@@ -126,7 +126,7 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     getClients(){
-        this.clientClient.get(0,0,1, null).subscribe(res => {
+        this.clientClient.get(0,0,1, null, '').subscribe(res => {
             this.clients = res.items;
         }, err => {});
     }

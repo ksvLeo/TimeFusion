@@ -22,7 +22,6 @@ export class GridComponent {
       this._totalPages = Array(value.totalPages).fill(1).map((x,i)=>i+1);
       this._pageIndex = value.pageIndex;
       this.loading = false;
-      console.log("Finish loading");
     }
   };
   _orderField: string;
@@ -49,7 +48,6 @@ export class GridComponent {
   emitPaginate(){
     let pagingParam = new PagingParameters(this._pageIndex, this.pageSize, this._order, this._orderField);
     this.loading = true;
-    console.log("Loading");
     this.paginate.emit(pagingParam);
   }
   
