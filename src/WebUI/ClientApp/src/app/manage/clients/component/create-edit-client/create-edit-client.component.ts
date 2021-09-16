@@ -116,7 +116,7 @@ export class CreateEditClientCompontent implements OnInit{
             return;
         }
         
-        if($values && $values.name.length > 0){
+        if($values && $values.name && $values.name.length > 0){
             this.isClientFormValid = this.clientForm.valid && !this.clientExistByName();
             this.areFormsValid = this.isClientFormValid && this.validForm();
         }
