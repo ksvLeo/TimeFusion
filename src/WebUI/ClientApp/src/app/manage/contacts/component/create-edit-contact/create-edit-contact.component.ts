@@ -119,7 +119,7 @@ export class CreateEditContactComponent implements OnInit {
 
 
     getClientsList(): Promise<PaginatedListOfClientDto> {
-        return this.clientClient.get(0,0,1,null).toPromise();
+        return this.clientClient.get(0,0,1,null,'').toPromise();
     }
 
     getContactForEdit(){

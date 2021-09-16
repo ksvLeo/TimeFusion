@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IClientClient {
-    get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined): Observable<PaginatedListOfClientDto>;
+    get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined, filter: string | null | undefined): Observable<PaginatedListOfClientDto>;
     createClient(command: CreateClientCommand): Observable<CreateClientResult>;
     deleteClient(clientId: number | undefined): Observable<DeleteClientResult>;
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
@@ -38,7 +38,7 @@ export class ClientClient implements IClientClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined): Observable<PaginatedListOfClientDto> {
+    get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined, filter: string | null | undefined): Observable<PaginatedListOfClientDto> {
         let url_ = this.baseUrl + "/api/Client?";
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
@@ -54,6 +54,8 @@ export class ClientClient implements IClientClient {
             url_ += "Order=" + encodeURIComponent("" + order) + "&";
         if (orderField !== undefined && orderField !== null)
             url_ += "OrderField=" + encodeURIComponent("" + orderField) + "&";
+        if (filter !== undefined && filter !== null)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
