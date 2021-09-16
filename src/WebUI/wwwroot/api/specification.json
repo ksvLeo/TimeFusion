@@ -94,8 +94,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/CreateClientResult"
                 }
               }
             }
@@ -124,8 +123,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/DeleteClientResult"
                 }
               }
             }
@@ -1152,6 +1150,20 @@
           2
         ]
       },
+      "CreateClientResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NameExists"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
       "CreateClientCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1179,6 +1191,22 @@
             ]
           }
         }
+      },
+      "DeleteClientResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NotFound",
+          "Error_ActiveProjects"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
       },
       "UpdateContactCommand": {
         "type": "object",

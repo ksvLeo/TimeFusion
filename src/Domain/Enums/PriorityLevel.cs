@@ -9,12 +9,4 @@
         High = 3
     }
 
-    public enum DeleteClientResult
-    {
-        Error = 0,
-        Success = 1,
-        Error_NotFound = 2,
-        Error_ActiveProjects = 3
-    }
-
 }

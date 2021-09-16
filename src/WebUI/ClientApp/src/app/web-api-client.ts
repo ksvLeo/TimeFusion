@@ -16,8 +16,8 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IClientClient {
     get(pageNumber: number | undefined, pageSize: number | undefined, order: PaginationOrder | undefined, orderField: string | null | undefined, filter: string | null | undefined): Observable<PaginatedListOfClientDto>;
-    createClient(command: CreateClientCommand): Observable<number>;
-    deleteClient(clientId: number | undefined): Observable<number>;
+    createClient(command: CreateClientCommand): Observable<CreateClientResult>;
+    deleteClient(clientId: number | undefined): Observable<DeleteClientResult>;
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     validateClientNameExistQuery(name: string | null | undefined): Observable<boolean>;
     getClient(clientId: number | undefined): Observable<ClientDto>;
@@ -102,7 +102,7 @@ export class ClientClient implements IClientClient {
         return _observableOf<PaginatedListOfClientDto>(<any>null);
     }
 
-    createClient(command: CreateClientCommand): Observable<number> {
+    createClient(command: CreateClientCommand): Observable<CreateClientResult> {
         let url_ = this.baseUrl + "/api/Client";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -125,14 +125,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processCreateClient(<any>response_);
                 } catch (e) {
-                    return <Observable<number>><any>_observableThrow(e);
+                    return <Observable<CreateClientResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<number>><any>_observableThrow(response_);
+                return <Observable<CreateClientResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateClient(response: HttpResponseBase): Observable<number> {
+    protected processCreateClient(response: HttpResponseBase): Observable<CreateClientResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -151,10 +151,10 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<number>(<any>null);
+        return _observableOf<CreateClientResult>(<any>null);
     }
 
-    deleteClient(clientId: number | undefined): Observable<number> {
+    deleteClient(clientId: number | undefined): Observable<DeleteClientResult> {
         let url_ = this.baseUrl + "/api/Client?";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
@@ -177,14 +177,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processDeleteClient(<any>response_);
                 } catch (e) {
-                    return <Observable<number>><any>_observableThrow(e);
+                    return <Observable<DeleteClientResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<number>><any>_observableThrow(response_);
+                return <Observable<DeleteClientResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processDeleteClient(response: HttpResponseBase): Observable<number> {
+    protected processDeleteClient(response: HttpResponseBase): Observable<DeleteClientResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -203,7 +203,7 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<number>(<any>null);
+        return _observableOf<DeleteClientResult>(<any>null);
     }
 
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]> {
@@ -1820,6 +1820,12 @@ export enum PaginationOrder {
     DESC = 2,
 }
 
+export enum CreateClientResult {
+    Error = 0,
+    Success = 1,
+    Error_NameExists = 2,
+}
+
 export class CreateClientCommand implements ICreateClientCommand {
     newClient?: ClientDto | undefined;
 
@@ -1890,6 +1896,13 @@ export class UpdateClientCommand implements IUpdateClientCommand {
 
 export interface IUpdateClientCommand {
     client?: ClientDto | undefined;
+}
+
+export enum DeleteClientResult {
+    Error = 0,
+    Success = 1,
+    Error_NotFound = 2,
+    Error_ActiveProjects = 3,
 }
 
 export class UpdateContactCommand implements IUpdateContactCommand {

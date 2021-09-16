@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 {
-    public class CreateClientCommand : IRequest<int>
+    public class CreateClientCommand : IRequest<CreateClientResult>
     {
-        public ClientDto newClient { get; set; }
+        public ClientDto NewClient { get; set; }
     }
 
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
+    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, CreateClientResult>
     {
         private readonly IApplicationDbContext _context;
 
@@ -27,59 +27,56 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
             _context = context;
         }
 
-        public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<CreateClientResult> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-             if (string.IsNullOrEmpty(request.newClient.Name))
-             {
-                throw new ArgumentException("Name field can't be null.");
-             }
-
-            Client clientNameExist = _context.Clients.FirstOrDefault(c => c.Name == request.newClient.Name);
+            Client clientNameExist = _context.Clients.FirstOrDefault(c => c.Name == request.NewClient.Name);
 
             if (clientNameExist != null)
             {
-                throw new ArgumentException($"Client with name: '{ request.newClient.Name }' already exist.");
+                return CreateClientResult.Error_NameExists;
             }
 
             Currency currency;
-            if(request.newClient.Currency != null)
+
+            if(request.NewClient.Currency != null)
             {
-                currency = _context.Currencies.FirstOrDefault(c => c.Id == request.newClient.Currency.Id);
+                currency = _context.Currencies.FirstOrDefault(c => c.Id == request.NewClient.Currency.Id);
             }
             else
             {
-                currency = _context.Currencies.FirstOrDefault(c => c.Id == 1);
+                currency = null;
             }
 
-            List<Contact> contacts = new List<Contact>();
+            var contacts = new List<Contact>();
 
-            if (request.newClient.ContactList != null)
+            if (request.NewClient.ContactList != null)
             {
-                Contact contact = new Contact
+                var contact = new Contact
                 {
-                    Title = request.newClient.ContactList[0].Email,
-                    Name = request.newClient.ContactList[0].Name,
-                    Email = request.newClient.ContactList[0].Email,
-                    PhoneNumber = request.newClient.ContactList[0].PhoneNumber,
+                    Title = request.NewClient.ContactList[0].Email,
+                    Name = request.NewClient.ContactList[0].Name,
+                    Email = request.NewClient.ContactList[0].Email,
+                    PhoneNumber = request.NewClient.ContactList[0].PhoneNumber,
                     Active = true
                 };
 
                 contacts.Add(contact);
             }
 
-            Client client = new Client
+            var client = new Client
             {
-                Name = request.newClient.Name,
-                Address = request.newClient.Address,
+                Name = request.NewClient.Name,
+                Address = request.NewClient.Address,
                 Currency = currency,
                 ContactList = contacts,
                 Status = ClientStatus.Active
             };
 
             _context.Clients.Add(client);
+
             await _context.SaveChangesAsync(cancellationToken);
 
-            return client.Id;
+            return CreateClientResult.Success;
         }
     }
 }

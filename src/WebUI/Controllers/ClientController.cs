@@ -5,6 +5,7 @@ using FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer;
 using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Clients.Queries;
 using FusionIT.TimeFusion.Application.Common.Models;
+using FusionIT.TimeFusion.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateClient(CreateClientCommand command)
+        public async Task<ActionResult<CreateClientResult>> CreateClient(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
@@ -56,7 +57,7 @@ namespace FusionIT.TimeFusion.WebUI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteClient([FromQuery]DeleteClientCommand command)
+        public async Task<ActionResult<DeleteClientResult>> DeleteClient([FromQuery]DeleteClientCommand command)
         {
             return await Mediator.Send(command);
         }
