@@ -16,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { TokenComponent } from './token/token.component';
 import { ManageModule } from './manage/manage.module';
 import { CommonsModule } from './commons/commons.module';
+import { ToastrModule }  from  'ngx-toastr' ;
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { CommonsModule } from './commons/commons.module';
     ApiAuthorizationModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     ModalModule.forRoot(),
     ManageModule,
     CommonsModule

@@ -29,7 +29,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
         {
             Client client = await _context.Clients.Include(c => c.ContactList).FirstOrDefaultAsync(c => c.Id == request.Client.Id);
 
-
             if (client == null)
             {
                 throw new ArgumentException($"Unable to find client with ID #{ request.Client.Id }");

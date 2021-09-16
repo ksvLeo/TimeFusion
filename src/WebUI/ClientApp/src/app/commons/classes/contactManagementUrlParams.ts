@@ -1,4 +1,4 @@
 export class ContactManagementUrlParams {
-    mode: string
+    mode: number
     id: string
 }
