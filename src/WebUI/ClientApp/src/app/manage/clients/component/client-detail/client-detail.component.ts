@@ -118,9 +118,10 @@ export class ClientDetailComponent implements OnInit {
 
   onEditContact(item: ContactDto) {
     let urlParams = new ContactManagementUrlParams()
-    urlParams.mode = 1;
+    urlParams.mode = 2;
     if(item != null)
-    urlParams.id = item.id.toString()
+    urlParams.id = item.clientId.toString()
+    urlParams.contactId = item.id
     this.router.navigate(['/manage/client/contact', urlParams]); 
   }
   

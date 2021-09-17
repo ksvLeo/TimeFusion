@@ -16,8 +16,8 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-12">
-                        <!-- <app-select-component [items]="clients" [selectInfo]="selectInfo" [itemSelected]="slectedItem.asObservable()" (newEntity)="createNewClient($event)" (selected)="processClientId($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component> -->
-                        <app-select-component [items]="clients" [selectInfo]="selectInfo" [itemSelected]="slectedItem.asObservable()" (selected)="processClientId($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component>
+                        <!-- <app-select-component [items]="clients" [selectInfo]="selectInfo" [itemSelected]="selectedItem.asObservable()" (newEntity)="createNewClient($event)" (selected)="processClientId($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component> -->
+                        <app-select-component [items]="clients" [selectInfo]="selectInfo" [itemSelected]="selectedItem.asObservable()" (selected)="processClientId($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-sm-9 col-xl-6">
                         <input type="text" id="name" class="form-control" formControlName="name" />
-                        <span class="text-danger"*ngIf="contactForm.controls.name.touched && contactForm.controls.name.invalid">This field must have a minimum of 3 characters.</span>
+                        <!-- <span class="text-danger"*ngIf="contactForm.controls.name.touched && contactForm.controls.name.invalid">This field must have a minimum of 3 characters.</span> -->
                         <span class="text-danger"*ngIf="nameExist && contactForm.controls.name.touched">Contact with that name already exist.</span>
                     </div>
                 </div>

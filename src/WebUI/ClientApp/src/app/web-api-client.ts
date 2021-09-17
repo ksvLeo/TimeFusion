@@ -2049,8 +2049,8 @@ export interface ICreateContactResultDto {
 export enum CreateContactResult {
     Error = 0,
     Success = 1,
-    Error_NameExists = 3,
-    EmptyName = 3,
+    EmptyName = 2,
+    Error_NameExists = 3
 }
 
 export class CreateContactCommand implements ICreateContactCommand {

@@ -33,7 +33,7 @@ export class CreateEditContactComponent implements OnInit {
     //Edit
     contactEdit: boolean = false;
     contact: ContactDto;
-    slectedItem: Subject<number> = new Subject<number>();
+    selectedItem: Subject<number> = new Subject<number>();
 
     constructor(
         private fb: FormBuilder,
@@ -48,8 +48,8 @@ export class CreateEditContactComponent implements OnInit {
     ngOnInit(){
         
         this.contactForm = this.fb.group({
-            title: ["", [Validators.minLength(3)]],
-            name: [ "", [Validators.minLength(3), Validators.required]],
+            title: ["", []],
+            name: [ "", [Validators.required]],
             email: [ "", [Validators.email]],
             phone: ["", []],
         });
@@ -58,23 +58,23 @@ export class CreateEditContactComponent implements OnInit {
             this.contactFormChanges(changes);
         });
 
-        this.getClientsList().then(() => { this.processRoutParameter() });
+        this.getClientsList().then(() => { this.processRouteParameter() });
     }
 
-    processRoutParameter(){
+    processRouteParameter(){
         var urlParams = this.activeRoute.snapshot.params
         switch (Number(urlParams['mode'])){
             case ModeParameter.Create:
                 if (urlParams['id'] != null){
-                    this.clientClient.getClient(Number(urlParams['id'] != null)).subscribe(res =>{
-                        this.slectedItem.next(res.id);
+                    this.clientClient.getClient(Number(urlParams['id'])).subscribe(res =>{
+                        this.selectedItem.next(res.id);
                     });
                 }
                 break;
             case ModeParameter.Edit:
-                if (urlParams['id'] != null){
-                    this.getContactForEdit(Number(urlParams['id']));
-                }
+                if (urlParams['contactId'] != null){
+                    this.getContactForEdit(Number(urlParams['id']), Number(urlParams['contactId']));
+                } 
                 break;
             default:
                 this.router.navigate['/management/clients/']
@@ -127,11 +127,12 @@ export class CreateEditContactComponent implements OnInit {
         return  this.nameExist;
     }
 
-    getContactForEdit(id: number){
-        this.contactClient.getContact(id).subscribe(res =>{
+    getContactForEdit(id: number, contactId: number){
+        this.clientId = id;
+        this.contactClient.getContact(contactId).subscribe(res =>{
             this.contactEdit = true;
             this.contact = res;
-            this.slectedItem.next(this.contact.clientId);
+            this.selectedItem.next(this.contact.clientId);
             this.contactForm.setValue({
                 title: [ this.contact.title],
                 name: [ this.contact.name],
@@ -158,7 +159,7 @@ export class CreateEditContactComponent implements OnInit {
                     case UpdateContactResult.Success:
                         this.contactForm.reset();
                         this.toastrService.success("The contact has been update successfully.");
-                        this.router.navigate(['/manage/clients']);
+                        this.router.navigate(['/manage/client/', this.clientId]);
                         break;
                     case UpdateContactResult.EmptyName:
                         this.toastrService.warning("Name field can't be null.");

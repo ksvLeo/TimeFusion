@@ -66,15 +66,15 @@
                                 <div class="project-manager">
                                     <h4>Active Projects</h4>
                                     <ng-container *ngIf="clientInfo != null && clientInfo.id == 3">
-                                        <ul class="tag-list" style="padding: 0">
+                                        <ul class="tag-list mt-3" style="padding: 0">
                                             <li class=""><a href=""><i class="fas fa-project-diagram"></i><span class="hellipsis-tag text-truncate">&ensp;Portal Usuarios para la Gestión de Trámites Corporativos</span></a></li>
                                             <li class=""><a href=""><i class="fas fa-project-diagram"></i><span class="hellipsis-tag text-truncate">&ensp;Project SAN</span></a></li>
                                             <li class=""><a href=""><i class="fas fa-project-diagram"></i><span class="hellipsis-tag text-truncate">&ensp;Project Herge</span></a></li>
                                         </ul>
                                     </ng-container>
                                     <ng-container *ngIf="clientInfo != null && clientInfo.id != 3">
-                                        <div class="text-center">
-                                            <p><i class="fas fa-clipboard-check"></i>&ensp;No more active projects</p>
+                                        <div class="m-2">
+                                            <p class="m-3 mt-5"><i class="fas fa-clipboard-check"></i>&ensp;No active projects.</p>
                                         </div>
                                     </ng-container>
                                 </div>

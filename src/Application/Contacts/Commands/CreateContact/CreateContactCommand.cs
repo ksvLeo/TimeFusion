@@ -61,8 +61,9 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
             };
 
             _context.Contacts.Add(contact);
+            await _context.SaveChangesAsync(cancellationToken);
 
-            result.Id = await _context.SaveChangesAsync(cancellationToken);
+            result.Id = contact.Id;
             result.Result = Domain.Enums.CreateContactResult.Success;
 
             return result;

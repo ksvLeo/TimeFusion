@@ -42,6 +42,7 @@ export class CreateEditClientCompontent implements OnInit{
     
     ngOnInit(){
         this.getCurrencies();
+        
         var urlParams = this.activeRoute.snapshot.params
         switch (Number(urlParams['mode'])) {
             case ModeParameter.Create:
@@ -73,7 +74,7 @@ export class CreateEditClientCompontent implements OnInit{
         });
 
         this.contactForm.valueChanges.subscribe(changes =>{
-            this.contactFromChanges(changes);
+            this.contactFormChanges(changes);
         });
     }
 
@@ -123,7 +124,7 @@ export class CreateEditClientCompontent implements OnInit{
         }
     }
 
-    contactFromChanges($values){
+    contactFormChanges($values){
         this.isContactFormValid = this.contactForm.valid;
         this.areFormsValid = this.isContactFormValid && !this.validForm();
     }
