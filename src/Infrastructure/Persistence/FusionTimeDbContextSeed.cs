@@ -42,6 +42,19 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
                 context.Currencies.Add(UYU); 
             }
 
+            var projectActive = new ProjectStatus { Description = "Inactive" };
+            var projectInactive = new ProjectStatus { Description = "Active" };
+            var projectFinished = new ProjectStatus { Description = "Finished" };
+
+
+            if (!context.ProjectStatuses.Any())
+            {
+                context.ProjectStatuses.Add(projectActive);
+                context.ProjectStatuses.Add(projectInactive);
+                //context.ProjectStatuses.Add(new ProjectStatus { Description = "On hold" });
+                context.ProjectStatuses.Add(projectFinished);
+            }
+
             List<Contact> testContacts = new List<Contact>();
             Contact testContact = new Contact { Name = "Romualdo Rodríguez", Email = "roro1969@hotmail.com", Active = true, Title = "Dpto. Técnico", PhoneNumber = "099699420" };
             testContacts.Add(testContact);
@@ -54,11 +67,15 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
             testContact = new Contact { Name = "José Gomez", Email = "josegomez@gmail.com", Active = true, Title = "Recursos Humanos", PhoneNumber = "0945386" };
             testContacts.Add(testContact);
 
+            var testProject = new Project { ClientId = 3, ProjectStatus = projectActive , StartDate = System.DateTime.Now, FinishDate = System.DateTime.Now, WorkTimeTicks = 0, Created = System.DateTime.Now };
+            var testProjectList = new List<Project>();
+            testProjectList.Add(testProject);
+
             if (!context.Clients.Any())
             {
                 context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Inactive});
                 context.Clients.Add(new Client { Name = "Fusion IT Uruguay", Address = "Siempre viva 1263", Currency = USD, Status = ClientStatus.Active });
-                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, Status = ClientStatus.Active, ContactList = testContacts });
+                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, Status = ClientStatus.Active, ContactList = testContacts, Projects = testProjectList });
                 context.Clients.Add(new Client { Name = "Consultorio Odontológico", Address = "Enfrente, se ve por la ventana", Currency = USD, Status = ClientStatus.Inactive });
                 context.Clients.Add(new Client { Name = "Santander Chile", Address = "Santa Clara 301 Local 1804", Currency = USD, Status = ClientStatus.Active });
                 context.Clients.Add(new Client { Name = "Ministerio de Salud Pública", Address = "Zabala 1500, 11000 Montevideo", Currency = USD, Status = ClientStatus.Inactive });
@@ -72,13 +89,6 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
                 context.BudgetTypes.Add(new BudgetType { Description = "By The Fee" });
             }
 
-            if (!context.ProjectStatuses.Any())
-            {
-                context.ProjectStatuses.Add(new ProjectStatus { Description = "Inactive" });
-                context.ProjectStatuses.Add(new ProjectStatus { Description = "Active" });
-                //context.ProjectStatuses.Add(new ProjectStatus { Description = "On hold" });
-                context.ProjectStatuses.Add(new ProjectStatus { Description = "Finished" });
-            }
 
             if (!context.ProjectTypes.Any())
             {
