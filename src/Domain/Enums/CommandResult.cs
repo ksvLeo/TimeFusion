@@ -42,7 +42,7 @@ namespace FusionIT.TimeFusion.Domain.Enums
     {
         Error = 0,
         Success = 1,
-        Error_NameExists = 3,
+        Error_NameExists = 2,
         EmptyName = 3
     }
 

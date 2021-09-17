@@ -18,6 +18,7 @@ export class CreateEditContactComponent implements OnInit {
     // Form
     contactForm: FormGroup;
     isFormValid: boolean = false;
+    isNotSelectedClient: boolean;
 
     // Data
     clients: ClientDto[] = [];
@@ -87,7 +88,12 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     contactFormChanges($values){
-        if(!this.contactEdit && !$values|| this.clientId == null){
+        if(!this.clientId){
+            this.isNotSelectedClient = true;
+            return;
+        }
+        
+        if(this.contactEdit && !$values){
             this.isFormValid = false;
             this.nameExist = false;
             if(this.contactEdit){
@@ -95,42 +101,28 @@ export class CreateEditContactComponent implements OnInit {
             }
             return;
         }
-
+        
         if(this.contactEdit &&  this.contact.name == $values.name){
             this.isFormValid = true;
             return;
         }
-        this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.clientId,+$values.client, $values.name);
+        
+        debugger;
+        this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.contact? this.contact.id : null, this.clientId, $values.name);
     }
 
     contactNameExists(contactId: number ,clientId: number, contactName: string): boolean{
-        if(this.contactEdit){
-            this.contactClient.validateName(contactId, clientId,contactName).subscribe(res => {
-                if(res){
-                    this.nameExist = res;
-                    return;
-                }
-                this.nameExist = false;
-            }, err => {});
-
-            return this.nameExist;
-        };
-
-        this.contactClient.validateName(null, clientId, contactName).subscribe(res =>{
-            if(res){
-                this.nameExist = res;
-                this.isFormValid = false;
-                return;
-            }
-            this.nameExist = false;
+        this.contactClient.validateName(contactId, clientId,contactName).subscribe(res => {
+            this.nameExist = res;
         }, err => {});
-        return  this.nameExist;
+        return this.nameExist;
     }
 
     getContactForEdit(id: number, contactId: number){
         this.clientId = id;
         this.contactClient.getContact(contactId).subscribe(res =>{
             this.contactEdit = true;
+            debugger;
             this.contact = res;
             this.selectedItem.next(this.contact.clientId);
             this.contactForm.setValue({
@@ -208,33 +200,35 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     processClientId(client: ClientDto){
+        debugger;
         this.clientId = client.id;
+        this.isNotSelectedClient = false;
     }
     
     // Testing
     // Test integration select with createEntity
-    // createNewClient(newClient : ClientDto){
-    //     let client: ClientDto = new ClientDto({
-    //         name : newClient.name,
-    //         address: null,
-    //         currency: null,
-    //         contactList: null
-    //     });
-    //     this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res => {
-    //         switch(res){
-    //             case CreateClientResult.Success:
-    //                 this.toastrService.success("The contact has been created successfully.");
-    //                 this.getClientsList();
-    //                 break;
-    //             case CreateClientResult.Error_NameExists:
-    //                 this.toastrService.warning("Already exists a client with name selected.");
-    //                 break;
-    //             default:
-    //                 this.toastrService.error("An error occurred while creating the client.");
-    //                 break;       
-    //         }
-    //     }, err => {});
-    // }
+    createNewClient(newClient : ClientDto){
+        let client: ClientDto = new ClientDto({
+            name : newClient.name,
+            address: null,
+            currency: null,
+            contactList: null
+        });
+        this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res => {
+            switch(res.result){
+                case CreateClientResult.Success:
+                    this.toastrService.success("The contact has been created successfully.");
+                    this.getClientsList();
+                    break;
+                case CreateClientResult.Error_NameExists:
+                    this.toastrService.warning("Already exists a client with name selected.");
+                    break;
+                default:
+                    this.toastrService.error("An error occurred while creating the client.");
+                    break;       
+            }
+        }, err => {});
+    }
     // Testing
 
     onCancelClick() {
