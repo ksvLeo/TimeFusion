@@ -184,8 +184,9 @@ export class CreateEditClientCompontent implements OnInit{
                 switch(res){
                     case UpdateClientResult.Success:
                         this.clientForm.reset();
-                        this.toastrService.success("The client has been update successfully.");
-                        this.router.navigate(['manage/clients']);
+                        this.toastrService.success("The client was successfully updated.");
+                        history.back();
+                        // this.router.navigate(['manage/clients']);
                         break;
                     case UpdateClientResult.EmptyName:
                         this.toastrService.warning("Name field can't be null.");
@@ -253,5 +254,9 @@ export class CreateEditClientCompontent implements OnInit{
         });
 
         return client;
+    }
+
+    fuckGoBack() {
+        history.back();
     }
 }
