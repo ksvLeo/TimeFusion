@@ -1,109 +1,117 @@
-<div class="m-2" *ngIf="_paginatedList && _paginatedList.items.length > 0; else emptyGrid">
-    <div class="row justify-content-between m-2" *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
-        <div>
-            <label class="small">Showing {{_paginatedList.items.length}} of {{_paginatedList.totalCount}} items</label>
+<div *ngIf="!loading">
+    <div class="m-2" *ngIf="_paginatedList && _paginatedList.items.length > 0; else emptyGrid">
+        <div class="row justify-content-between m-2" *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
+            <div>
+                <label class="small">Showing {{_paginatedList.items.length}} of {{_paginatedList.totalCount}} items</label>
+            </div>
+            <div class="form-inline">
+                <label class="mr-2 small">Items per page:</label>
+                <select class="form-control form-control-sm"
+                    (change)="itemPerPage($event.target.value)">
+                    <option *ngFor="let val of _gridConfiguration.ItemsPerPage" value="{{val}}">{{val}}</option>
+                </select>
+            </div>
         </div>
-        <div class="form-inline">
-            <label class="mr-2 small">Items per page:</label>
-            <select class="form-control form-control-sm"
-                (change)="itemPerPage($event.target.value)">
-                <option *ngFor="let val of _gridConfiguration.ItemsPerPage" value="{{val}}">{{val}}</option>
-            </select>
-        </div>
-    </div>
-
-    <table class="table table-striped table-responsive-sm">
-        <thead>
-            <tr>
-                <th *ngFor="let info of _gridConfiguration.FieldInfo">
-                    <span *ngIf="!info.allowSorting || _gridConfiguration.ItemsPerPage[0] == 0; else sortColumn">
-                        {{info.label}}
-                    </span>
-                    <ng-template #sortColumn>
-                        <div (click)="sortByColumn(info)">
-                            <span>{{info.label}}</span>
-                            <i class="fas fa-sort float-right" *ngIf="info.property != _orderField"></i>
-                            <i class="fas fa-sort-up float-right" *ngIf="info.property == _orderField && _order == 1"></i>
-                            <i class="fas fa-sort-down float-right" *ngIf="info.property == _orderField && _order == 2"></i>
+    
+        <table class="table table-striped table-responsive-sm">
+            <thead>
+                <tr>
+                    <th *ngFor="let info of _gridConfiguration.FieldInfo">
+                        <span *ngIf="!info.allowSorting || _gridConfiguration.ItemsPerPage[0] == 0; else sortColumn">
+                            {{info.label}}
+                        </span>
+                        <ng-template #sortColumn>
+                            <div (click)="sortByColumn(info)">
+                                <span>{{info.label}}</span>
+                                <i class="fas fa-sort float-right" *ngIf="info.property != _orderField"></i>
+                                <i class="fas fa-sort-up float-right" *ngIf="info.property == _orderField && _order == 1"></i>
+                                <i class="fas fa-sort-down float-right" *ngIf="info.property == _orderField && _order == 2"></i>
+                            </div>
+                        </ng-template>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody *ngIf="_paginatedList && _paginatedList.items">
+                <tr *ngFor="let item of _paginatedList.items" [ngClass]="{'clickable':allowsClick}">
+                    <td *ngFor="let info of _gridConfiguration.FieldInfo" (click)="rowClick(item)">
+                        <span *ngIf="info.format == FieldFormat.text">
+                            <i class="fas fa-users-slash" *ngIf="item.status == 0"></i>
+                            <i class="fas fa-users" *ngIf="item.status == 1"></i>
+                            {{item[info.property]}}
+                        </span>
+                        <span *ngIf="info.format == FieldFormat.enum">
+                            {{ getEnumResource(item[info.property]) }}
+                        </span>
+                    </td>
+                    <td class="action-list" *ngIf="allowsActions" style="width: 50px;">
+                        <div class="d-flex container-fluid action-list order-lg-1 order-md-1">
+                            <app-action-list [actions]="actionList" [item]="item"></app-action-list>
                         </div>
-                    </ng-template>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody *ngIf="_paginatedList && _paginatedList.items">
-            <tr *ngFor="let item of _paginatedList.items" [ngClass]="{'clickable':allowsClick}">
-                <td *ngFor="let info of _gridConfiguration.FieldInfo" (click)="rowClick(item)">
-                    <span *ngIf="info.format == FieldFormat.text">
-                        <i class="fas fa-users-slash" *ngIf="item.status == 0 && info.label == 'Name'"></i>
-                        <i class="fas fa-users" *ngIf="item.status == 1 && info.label == 'Name'"></i>
-                        {{item[info.property]}}
-                    </span>
-                    <span *ngIf="info.format == FieldFormat.enum">
-                        {{ getEnumResource(item[info.property]) }}
-                    </span>
-                </td>
-                <td class="action-list" *ngIf="allowsActions" style="width: 50px;">
-                    <div class="d-flex container-fluid action-list order-lg-1 order-md-1">
-                        <app-action-list [actions]="actionList" [item]="item"></app-action-list>
-                    </div>
-                </td>
-            </tr> 
-        </tbody>
-    </table>
-
-    <nav *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
-        <ul class="pagination justify-content-center">
-
-            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
-                (click)="changePage(1)">
-                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-double-left"></i></a>
-            </li>
-            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
-                (click)="changePage(1)">
-                    <a class="page-link" href="javascript:{}">First</a>
-            </li>
-
-            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
-                (click)="previousPage()">
-                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-left"></i></a>
-            </li>
-            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
-                (click)="previousPage()">
-                    <a class="page-link" href="javascript:{}">Previous</a>
-            </li>
-
-            <li class="page-item disabled">
-                <span class="page-link" style="background-color:lightgray;">{{_pageIndex}}</span>
-            </li>
-
-            <li class="page-item disabled">
-                <label class="page-link">of {{_paginatedList.totalPages}}</label>
-            </li>
-
-            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
-                (click)="nextPage()">
-                    <a class="page-link" href="javascript:{}">Next</a>
-            </li>
-            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
-                (click)="nextPage()">
-                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-right"></i></a>
-            </li>
-
-            <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
-                (click)="changePage(_paginatedList.totalPages)">
-                    <a class="page-link" href="javascript:{}">Last</a>
-            </li>
-            <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
-                (click)="changePage(_paginatedList.totalPages)">
-                    <a class="page-link" href="javascript:{}"><i class="fas fa-angle-double-right"></i></a>
-            </li>
-        </ul>
-      </nav>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
+    
+        <nav *ngIf="_gridConfiguration.ItemsPerPage[0] != 0">
+            <ul class="pagination justify-content-center">
+    
+                <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+                    (click)="changePage(1)">
+                        <a class="page-link" href="javascript:{}"><i class="fas fa-angle-double-left"></i></a>
+                </li>
+                <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+                    (click)="changePage(1)">
+                        <a class="page-link" href="javascript:{}">First</a>
+                </li>
+    
+                <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+                    (click)="previousPage()">
+                        <a class="page-link" href="javascript:{}"><i class="fas fa-angle-left"></i></a>
+                </li>
+                <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasPreviousPage}"
+                    (click)="previousPage()">
+                        <a class="page-link" href="javascript:{}">Previous</a>
+                </li>
+    
+                <li class="page-item disabled">
+                    <span class="page-link" style="background-color:lightgray;">{{_pageIndex}}</span>
+                </li>
+    
+                <li class="page-item disabled">
+                    <label class="page-link">of {{_paginatedList.totalPages}}</label>
+                </li>
+    
+                <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+                    (click)="nextPage()">
+                        <a class="page-link" href="javascript:{}">Next</a>
+                </li>
+                <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+                    (click)="nextPage()">
+                        <a class="page-link" href="javascript:{}"><i class="fas fa-angle-right"></i></a>
+                </li>
+    
+                <li class="page-item d-none d-md-block" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+                    (click)="changePage(_paginatedList.totalPages)">
+                        <a class="page-link" href="javascript:{}">Last</a>
+                </li>
+                <li class="page-item d-md-none" [ngClass]="{'disabled':!_paginatedList.hasNextPage}"
+                    (click)="changePage(_paginatedList.totalPages)">
+                        <a class="page-link" href="javascript:{}"><i class="fas fa-angle-double-right"></i></a>
+                </li>
+            </ul>
+          </nav>
+    </div>
+    
+    <ng-template #emptyGrid>
+        <span>
+            No items to show.
+        </span>
+    </ng-template>
 </div>
 
-<ng-template #emptyGrid>
-    <span>
-        No items to show.
-    </span>
-</ng-template>
+<div class="d-flex justify-content-center" *ngIf="loading">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

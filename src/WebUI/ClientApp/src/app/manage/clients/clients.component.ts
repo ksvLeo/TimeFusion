@@ -59,6 +59,7 @@ export class ClientsComponent implements OnInit {
     }
 
     changeFilter(){
+        this.pagingParams.PageNumber = 1;
         this.getClients(this.pagingParams.PageNumber, this.pagingParams.PageSize, this.pagingParams.Order, this.pagingParams.OrderField, this.filter.value);
     }
         
@@ -108,7 +109,6 @@ export class ClientsComponent implements OnInit {
             if(input == "accept") {
                 if (item.status == ClientStatus.Active) {
                     this.clientClient.deleteClient(item.id).subscribe(response => {
-                        console.log(response)
                         this.getClients()
                     })
                     

@@ -43,34 +43,38 @@ export class CreateEditContactComponent implements OnInit {
         private router: Router,
         private toastrService: ToastrService 
     ){ 
-        this.getClientsList().then(res => this.clients = res.items);
     }
-
+    
     ngOnInit(){
-
+        
         this.contactForm = this.fb.group({
             title: ["", [Validators.minLength(3)]],
             name: [ "", [Validators.minLength(3), Validators.required]],
             email: [ "", [Validators.email]],
             phone: ["", []],
         });
-
+        
         this.contactForm.valueChanges.subscribe(changes => {
             this.contactFormChanges(changes);
         });
+
+        this.getClientsList().then(() => { this.processRoutParameter() });
+    }
+
+    processRoutParameter(){
         var urlParams = this.activeRoute.snapshot.params
-        switch (Number(urlParams['mode'])) {
+        switch (Number(urlParams['mode'])){
             case ModeParameter.Create:
-                this.getClientsList();
                 if (urlParams['id'] != null){
-                    this.clientClient.getClient(Number(urlParams['id'])).subscribe(res => {
+                    this.clientClient.getClient(Number(urlParams['id'] != null)).subscribe(res =>{
                         this.slectedItem.next(res.id);
                     });
                 }
                 break;
             case ModeParameter.Edit:
-                this.getClientsList();
-                this.getContactForEdit();
+                if (urlParams['id'] != null){
+                    this.getContactForEdit(Number(urlParams['id']));
+                }
                 break;
             default:
                 this.router.navigate['/management/clients/']
@@ -78,8 +82,12 @@ export class CreateEditContactComponent implements OnInit {
         }
     }
 
+    getClientsList(): Promise<any>{
+        return this.clientClient.get(0,0,1,null,null).toPromise().then(res => this.clients = res.items);
+    }
+
     contactFormChanges($values){
-        if(!this.contactEdit && !$values || this.clientId == null || $values.name.length < 3){
+        if(!this.contactEdit && !$values|| this.clientId == null){
             this.isFormValid = false;
             this.nameExist = false;
             if(this.contactEdit){
@@ -119,14 +127,8 @@ export class CreateEditContactComponent implements OnInit {
         return  this.nameExist;
     }
 
-
-    getClientsList(): Promise<PaginatedListOfClientDto> {
-        return this.clientClient.get(0,0,1,null,null).toPromise();
-    }
-
-    getContactForEdit(){
-        let contactId = this.activeRoute.snapshot.params['id'];
-        this.contactClient.getContact(contactId).subscribe(res =>{
+    getContactForEdit(id: number){
+        this.contactClient.getContact(id).subscribe(res =>{
             this.contactEdit = true;
             this.contact = res;
             this.slectedItem.next(this.contact.clientId);

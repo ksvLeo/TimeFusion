@@ -15,6 +15,16 @@ export class GridComponent {
   loading: boolean = true;
   _paginatedList: PaginatedList<any>;
   _totalPages: number[] = [];
+  _orderField: string;
+  _pageIndex: number;
+  _order: number = 1;
+  pageSize: number;
+  _gridConfiguration: GridConfiguration;
+  FieldFormat = FieldFormat;
+  
+  @Input() actionList: ActionInfo[] = [];
+  @Input() allowsActions: boolean = false;
+  @Input() allowsClick: boolean = false;
   @Input() 
   set paginatedList(value: PaginatedList<any>){
     if(value){
@@ -24,11 +34,6 @@ export class GridComponent {
       this.loading = false;
     }
   };
-  _orderField: string;
-  _pageIndex: number;
-  _order: number = 1;
-  pageSize: number;
-  _gridConfiguration: GridConfiguration;
   @Input() 
   set gridConfiguration(val: GridConfiguration){
     if (val) {
@@ -36,12 +41,9 @@ export class GridComponent {
       this.pageSize = val.ItemsPerPage[0];
     }
   };
-  @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
-  @Input() actionList: ActionInfo[] = [];
-  @Input() allowsActions: boolean = false;
+  
   @Output() itemClickEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Input() allowsClick: boolean = false;
-  FieldFormat = FieldFormat;
+  @Output() paginate: EventEmitter<PagingParameters> = new EventEmitter<PagingParameters>();
 
   constructor() {}
 
