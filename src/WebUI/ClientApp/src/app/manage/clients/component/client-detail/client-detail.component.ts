@@ -25,6 +25,7 @@ export class ClientDetailComponent implements OnInit {
   actionList: ActionInfo[] = []
   modalInfo: ModalInfo;
   result: DeleteClientResult;
+  projectList = [1,2,3,4,5]
 
   constructor(private clientService: ClientClient,
               
@@ -131,7 +132,7 @@ export class ClientDetailComponent implements OnInit {
         this.openModal(this.modalInfo).then((result: any) => {
             if (result == "accept") {
               this.contactService.deleteContact(item.clientId, item.id).subscribe((res: any) => {
-                    this.toasterService.success("Successfully flagged " + item.name);
+                    this.toasterService.success("Contact " + item.name + " succesfully deactivated.");
                     this.getClient();
               },
               (error: any) => {
@@ -180,7 +181,7 @@ export class ClientDetailComponent implements OnInit {
       new FieldInfo("Name", "name", FieldFormat.text, true),
       new FieldInfo("Title", "title", FieldFormat.text, true),
       new FieldInfo("Email", "email", FieldFormat.text, true),
-      new FieldInfo("Phone Number", "phoneNumber", FieldFormat.text, true),
+      new FieldInfo("Phone", "phoneNumber", FieldFormat.text, true),
       new FieldInfo("Active", "active", FieldFormat.text, true)
   ];
     this.configurationInfo = new GridConfiguration(this.tableConfig)

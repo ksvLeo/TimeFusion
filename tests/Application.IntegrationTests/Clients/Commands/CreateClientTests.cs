@@ -44,19 +44,13 @@ namespace FusionIT.TimeFusion.Application.IntegrationTests.Clients.Commands
         public async Task ShouldCreateClient()
         {
             var userId = await RunAsDefaultUserAsync();
-
-            var testClient = new ClientDto();
-            testClient.Name = "test";
-            testClient.Id = 1;
-
-            var command = new CreateClientCommand
+            
+            var clientId = await SendAsync(new CreateClientCommand
             {
-                NewClient = testClient
-            };
-
-            await SendAsync(command);
-
-            var client = await FindAsync<Client>(1);
+                NewClient = new ClientDto { Name = "test" }
+            });
+            
+            var client = await FindAsync<Client>(clientId.Id);
 
             client.Should().NotBeNull();
             client.Name.Should().NotBeNull();

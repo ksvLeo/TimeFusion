@@ -43,17 +43,24 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
             }
 
             List<Contact> testContacts = new List<Contact>();
-            Contact testContact = new Contact { Name = "Romualdo Rodríguez", Email = "roro1969@hotmail.com", Active = true, Title = "El que paga", PhoneNumber = "099699420" };
+            Contact testContact = new Contact { Name = "Romualdo Rodríguez", Email = "roro1969@hotmail.com", Active = true, Title = "Dpto. Técnico", PhoneNumber = "099699420" };
             testContacts.Add(testContact);
-            testContact = new Contact { Name = "Julieta Veganas", Email = "juve3500@realemail.com", Active = true, Title = "La que habilita el pago", PhoneNumber = "08888888" };
+            testContact = new Contact { Name = "Julieta Veganas", Email = "juve3500@gmail.com", Active = true, Title = "Dpto. Ventas", PhoneNumber = "08888888" };
             testContacts.Add(testContact);
-            testContact = new Contact { Name = "Nombrenombre", Email = "email@realemail.com", Active = false, Title = "Los que pagan ya están no sé qué haría este", PhoneNumber = "404" };
+            testContact = new Contact { Name = "Rubén Vazquez Santana", Email = "ruben2003@realemail.com", Active = false, Title = "Asistente al Proyecto", PhoneNumber = "09483456" };
+            testContacts.Add(testContact);
+            testContact = new Contact { Name = "Jimena Martin Perez", Email = "jime.marp@protonmail.com", Active = true, Title = "Project Manager", PhoneNumber = "094563486" };
+            testContacts.Add(testContact);
+            testContact = new Contact { Name = "José Gomez", Email = "josegomez@gmail.com", Active = true, Title = "Recursos Humanos", PhoneNumber = "0945386" };
             testContacts.Add(testContact);
 
             if (!context.Clients.Any())
             {
-                context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Active, ContactList = testContacts });
-                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, Status = ClientStatus.Inactive, ContactList = testContacts });
+                context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Inactive});
+                context.Clients.Add(new Client { Name = "Fusion IT Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Active });
+                context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, Status = ClientStatus.Active, ContactList = testContacts });
+                context.Clients.Add(new Client { Name = "Consultorio Odontológico de enfrente", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Inactive });
+                context.Clients.Add(new Client { Name = "Santander Chile", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Active });
             }
 
             if (!context.BudgetTypes.Any())
