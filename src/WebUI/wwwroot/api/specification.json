@@ -250,7 +250,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/ReactivateClientResult"
                 }
               }
             }
@@ -1186,6 +1186,22 @@
             ]
           }
         }
+      },
+      "ReactivateClientResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Error",
+          "Success",
+          "Error_NotFound",
+          "Error_AlreadyActive"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
       },
       "UpdateClientResult": {
         "type": "integer",

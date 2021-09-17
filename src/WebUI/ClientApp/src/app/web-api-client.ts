@@ -21,7 +21,7 @@ export interface IClientClient {
     getClientsByName(name: string | null | undefined): Observable<ClientDto[]>;
     validateClientNameExistQuery(name: string | null | undefined): Observable<boolean>;
     getClient(clientId: number | undefined): Observable<ClientDto>;
-    reactivateClient(clientId: number | undefined): Observable<boolean>;
+    reactivateClient(clientId: number | undefined): Observable<ReactivateClientResult>;
     updateClient(command: UpdateClientCommand): Observable<UpdateClientResult>;
 }
 
@@ -362,7 +362,7 @@ export class ClientClient implements IClientClient {
         return _observableOf<ClientDto>(<any>null);
     }
 
-    reactivateClient(clientId: number | undefined): Observable<boolean> {
+    reactivateClient(clientId: number | undefined): Observable<ReactivateClientResult> {
         let url_ = this.baseUrl + "/api/Client/ReactivateClient?";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
@@ -385,14 +385,14 @@ export class ClientClient implements IClientClient {
                 try {
                     return this.processReactivateClient(<any>response_);
                 } catch (e) {
-                    return <Observable<boolean>><any>_observableThrow(e);
+                    return <Observable<ReactivateClientResult>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<boolean>><any>_observableThrow(response_);
+                return <Observable<ReactivateClientResult>><any>_observableThrow(response_);
         }));
     }
 
-    protected processReactivateClient(response: HttpResponseBase): Observable<boolean> {
+    protected processReactivateClient(response: HttpResponseBase): Observable<ReactivateClientResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -411,7 +411,7 @@ export class ClientClient implements IClientClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<boolean>(<any>null);
+        return _observableOf<ReactivateClientResult>(<any>null);
     }
 
     updateClient(command: UpdateClientCommand): Observable<UpdateClientResult> {
@@ -1900,6 +1900,13 @@ export class CreateClientCommand implements ICreateClientCommand {
 
 export interface ICreateClientCommand {
     newClient?: ClientDto | undefined;
+}
+
+export enum ReactivateClientResult {
+    Error = 0,
+    Success = 1,
+    Error_NotFound = 2,
+    Error_AlreadyActive = 3,
 }
 
 export enum UpdateClientResult {

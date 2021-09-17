@@ -140,7 +140,7 @@ export class ClientDetailComponent implements OnInit {
       this.modalInfo.message = "Are you sure you want to reactivate " + item.name + "?"
         this.openModal(this.modalInfo).then((result:any) => {
             if (result == "accept") {
-              this.contactService.reactivateClient(item.id, item.clientId).subscribe((res: any) => {
+              this.contactService.reactivateContact(item.id, item.clientId).subscribe((res: any) => {
                   this.modalInfo = new ModalInfo()
                   this.modalInfo.title = "Contact flagged"
                   this.modalInfo.message = "Contact " + item.name + " succesfully reactivated."
