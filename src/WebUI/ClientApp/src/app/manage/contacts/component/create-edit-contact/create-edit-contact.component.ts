@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectInfo } from "src/app/shared/interfaces/selectInfo";
-import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateClientResult, CreateContactCommand, PaginatedListOfClientDto, UpdateContactCommand } from "src/app/web-api-client";
+import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateClientResult, CreateContactCommand, CreateContactResult, CreateContactResultDto, PaginatedListOfClientDto, UpdateContactCommand, UpdateContactResult } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from "rxjs";
 import { ModeParameter } from "src/app/shared/enums/modeParameter";
@@ -152,10 +152,21 @@ export class CreateEditContactComponent implements OnInit {
             contact.id = this.contact.id;
             contact.email = contact.email.toString();
             this.contactClient.updateContact(new UpdateContactCommand({ clientId: this.clientId, newContact: contact})).subscribe(res => {
-                if(res){
-                    this.contactForm.reset();
-                    this.toastrService.success("The contact has been update successfully.");
-                    this.router.navigate(['/manage/clients']);
+                switch (res) {
+                    case UpdateContactResult.Success:
+                        this.contactForm.reset();
+                        this.toastrService.success("The contact has been update successfully.");
+                        this.router.navigate(['/manage/clients']);
+                        break;
+                    case UpdateContactResult.EmptyName:
+                        this.toastrService.warning("Name field can't be null.");
+                        break;
+                    case UpdateContactResult.Error_NameExists:
+                        this.toastrService.warning("Already exists a client with name selected.");
+                        break;
+                
+                    default:
+                        break;
                 }
             }, err => {
                 this.toastrService.error("An error occurred while updating the contact.");
@@ -163,10 +174,21 @@ export class CreateEditContactComponent implements OnInit {
             return;
         }
         this.contactClient.createContact(new CreateContactCommand({ clientId: this.clientId, contact: contact })).subscribe(res => {
-            if(res){
-                this.contactForm.reset();
-                this.toastrService.success("The contact has been created successfully.");
-                this.router.navigate(['/manage/clients']);
+            switch (res.result) {
+                case CreateContactResult.Success:
+                    this.contactForm.reset();
+                    this.toastrService.success("The contact has been created successfully.");
+                    this.router.navigate(['/manage/clients']);
+                    break;
+                case CreateContactResult.EmptyName:
+                    this.toastrService.warning("Name field can't be null.");
+                    break;
+                case CreateContactResult.Error_NameExists:
+                    this.toastrService.warning("Already exists a contact with name selected.");
+                    break;
+            
+                default:
+                    break;
             }
         }, err => {
             this.toastrService.error("An error occurred while creating the contact.");
