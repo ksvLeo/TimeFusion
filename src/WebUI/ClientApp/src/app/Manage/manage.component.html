@@ -1,5 +1,5 @@
 <div class="content">
-    <div class="row p-1">
+    <div class="row align-content-center align-items-center justify-content-center p-1">
         <button class="btn btn-none manage-menu mx-1"  routerLinkActive="manage-menu-active"   *ngFor="let menu of manageMenu" routerLink="{{menu.url}}">{{ menu.description }}</button>
     </div>
     <router-outlet></router-outlet>
