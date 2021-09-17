@@ -10,7 +10,7 @@
         <div class="w-50 select-container">
           <input type="text" class="form-control w-100" id="name" [(ngModel)]="nameForFind" autocomplete="off"
             (keyup)="findNameClient()" (click)="onShowList()" [disabled]="isSelectOption">
-          <div *ngIf="!isSelectOption  && showList" class="w-100 select-list overflow-auto">
+          <div *ngIf="!isSelectOption && showList" class="w-100 select-list overflow-auto">
             <ul>
               <li class="selectItem" (click)="selectItem(item)" *ngFor="let item of items | filterItems: nameForFind : displayProperty">
                 {{ item[displayProperty] }}
