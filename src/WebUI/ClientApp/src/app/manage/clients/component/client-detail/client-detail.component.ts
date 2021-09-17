@@ -103,6 +103,11 @@ export class ClientDetailComponent implements OnInit {
   }
 
   onAddContact(){
+    let urlParams = new ContactManagementUrlParams()
+    urlParams.mode = 1;
+    urlParams.id = this.clientInfo.id.toString()
+    this.router.navigate(['/manage/client/contact', urlParams]);
+
   }
 
   onReportContact(item: ContactDto) {
@@ -115,7 +120,7 @@ export class ClientDetailComponent implements OnInit {
     urlParams.mode = 1;
     if(item != null)
     urlParams.id = item.id.toString()
-    this.router.navigate(['/manage/client', urlParams]); 
+    this.router.navigate(['/manage/client/contact', urlParams]); 
   }
   
   onFlagContact(item: ContactDto) {
