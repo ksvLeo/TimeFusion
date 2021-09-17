@@ -63,7 +63,6 @@ export class SelectComponent implements OnInit {
         if(this.isNewEntity){
             return;
         }
-
         this.nameAlreadyExists = false;
 
         let results = this.items.filter(c => {
@@ -80,6 +79,9 @@ export class SelectComponent implements OnInit {
     }
 
     findNameClient(){
+        if(this.nameForFind.length < 0){
+            this.selected.emit(null);
+        }
         let t = this.items.find(c => c[this.displayProperty].toLowerCase() == this.nameForFind.toLocaleLowerCase());
         if(t){
             this.nameAlreadyExists = true;

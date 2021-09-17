@@ -32,7 +32,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Queries.ValidateContactName
         {
             bool nameExists;
 
-            if (request.ClientId > 0)
+            if (request.ContactId != null && request.ContactId > 0)
             {
             
                 nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId && c.Id != request.ContactId && c.Name == request.ContactName);

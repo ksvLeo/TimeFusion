@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ClientClient, ClientDto, CreateClientCommand, CurrencyDto, CurrencyReferenceClient, ContactDto, UpdateClientCommand, CreateClientResult, UpdateClientResult } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
 import { ModeParameter } from "src/app/shared/enums/modeParameter";
-import { of } from "rxjs";
 
 @Component({
     selector: 'app-create-edit-client-component',
@@ -56,7 +55,7 @@ export class CreateEditClientCompontent implements OnInit{
         }
         
         this.clientForm = this.fb.group({
-            name: ["",[Validators.minLength(3),Validators.required]],
+            name: ["",[Validators.required]],
             address: ["", [Validators.minLength(3)]],
             currency: ["", [Validators.required]]
         });
@@ -126,7 +125,7 @@ export class CreateEditClientCompontent implements OnInit{
 
     contactFormChanges($values){
         this.isContactFormValid = this.contactForm.valid;
-        this.areFormsValid = this.isContactFormValid && !this.validForm();
+        this.areFormsValid = this.isContactFormValid && this.validForm();
     }
 
     onCreateContact(){
