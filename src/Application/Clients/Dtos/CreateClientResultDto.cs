@@ -10,6 +10,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Dtos
     public class CreateClientResultDto
     {
         public int Id { get; set; }
-        public CreateClientResult result { get; set; }
+        public CreateClientResult Result { get; set; }
     }
 }

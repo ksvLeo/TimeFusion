@@ -36,7 +36,7 @@ export class NavMenuComponent {
     },
     {
       description: "Manage",
-      url: "/manage"
+      url: "/manage/clients"
     },
   ]
 

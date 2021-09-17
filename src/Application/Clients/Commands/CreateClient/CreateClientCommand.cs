@@ -35,7 +35,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
 
             if (clientNameExist != null)
             {
-                result.result = CreateClientResult.Error_NameExists;
+                result.Result = CreateClientResult.Error_NameExists;
                 return result;
             }
 
@@ -78,7 +78,8 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
             _context.Clients.Add(client);
 
             result.Id = await _context.SaveChangesAsync(cancellationToken);
-            result.result = CreateClientResult.Success;
+
+            result.Result = CreateClientResult.Success;
 
             return result;
         }
