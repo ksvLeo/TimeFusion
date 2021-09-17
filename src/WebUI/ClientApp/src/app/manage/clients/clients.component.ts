@@ -43,6 +43,7 @@ export class ClientsComponent implements OnInit {
     configurationGrid(){
         this.fieldInfo = [
             new FieldInfo("Name", "name", FieldFormat.text, true),
+            new FieldInfo("Address", "address", FieldFormat.text, true),
             new FieldInfo("Status", "status", FieldFormat.enum, true)
         ];
         this.gridConfiguration = new GridConfiguration(this.fieldInfo, [10, 20, 30]);

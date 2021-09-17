@@ -45,12 +45,12 @@ namespace FusionIT.TimeFusion.Application.IntegrationTests.Clients.Commands
         {
             var userId = await RunAsDefaultUserAsync();
             
-            var clientId = await SendAsync(new CreateClientCommand
+            var clientResult = await SendAsync(new CreateClientCommand
             {
                 NewClient = new ClientDto { Name = "test" }
             });
             
-            var client = await FindAsync<Client>(clientId.Id);
+            var client = await FindAsync<Client>(clientResult.Id);
 
             client.Should().NotBeNull();
             client.Name.Should().NotBeNull();

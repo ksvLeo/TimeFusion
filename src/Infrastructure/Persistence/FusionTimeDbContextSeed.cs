@@ -57,10 +57,12 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
             if (!context.Clients.Any())
             {
                 context.Clients.Add(new Client { Name = "Santander Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Inactive});
-                context.Clients.Add(new Client { Name = "Fusion IT Uruguay", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Active });
+                context.Clients.Add(new Client { Name = "Fusion IT Uruguay", Address = "Siempre viva 1263", Currency = USD, Status = ClientStatus.Active });
                 context.Clients.Add(new Client { Name = "BHCU", Address = "8 de Octubre 3239 bis", Currency = USD, Status = ClientStatus.Active, ContactList = testContacts });
-                context.Clients.Add(new Client { Name = "Consultorio Odontológico de enfrente", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Inactive });
-                context.Clients.Add(new Client { Name = "Santander Chile", Address = "Calle Falsa 123", Currency = USD, Status = ClientStatus.Active });
+                context.Clients.Add(new Client { Name = "Consultorio Odontológico", Address = "Enfrente, se ve por la ventana", Currency = USD, Status = ClientStatus.Inactive });
+                context.Clients.Add(new Client { Name = "Santander Chile", Address = "Santa Clara 301 Local 1804", Currency = USD, Status = ClientStatus.Active });
+                context.Clients.Add(new Client { Name = "Ministerio de Salud Pública", Address = "Zabala 1500, 11000 Montevideo", Currency = USD, Status = ClientStatus.Inactive });
+                context.Clients.Add(new Client { Name = "Hexxus, la más grande", Address = "haceme descuento", Currency = USD, Status = ClientStatus.Active });
             }
 
             if (!context.BudgetTypes.Any())
