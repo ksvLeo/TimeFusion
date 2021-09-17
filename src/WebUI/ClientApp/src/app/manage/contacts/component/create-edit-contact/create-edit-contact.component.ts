@@ -88,12 +88,17 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     contactFormChanges($values){
-        if(!this.clientId){
+        this.existsNameSelected(this.contact? this.contact.id : null, this.clientId, $values.name).then(() => { this.validatorsContact()});
+       
+    }
+
+    validatorsContact(){
+         if(!this.clientId){
             this.isNotSelectedClient = true;
             return;
         }
         
-        if(this.contactEdit && !$values){
+        if(this.contactEdit){
             this.isFormValid = false;
             this.nameExist = false;
             if(this.contactEdit){
@@ -102,20 +107,19 @@ export class CreateEditContactComponent implements OnInit {
             return;
         }
         
-        if(this.contactEdit &&  this.contact.name == $values.name){
+        if(this.contactEdit &&  this.contact.name == this.contactForm.get('name').value){
             this.isFormValid = true;
             return;
         }
         
         debugger;
-        this.isFormValid = this.contactForm.valid && !this.contactNameExists(this.contact? this.contact.id : null, this.clientId, $values.name);
+        this.isFormValid = this.contactForm.valid && !this.nameExist;
     }
 
-    contactNameExists(contactId: number ,clientId: number, contactName: string): boolean{
-        this.contactClient.validateName(contactId, clientId,contactName).subscribe(res => {
-            this.nameExist = res;
-        }, err => {});
-        return this.nameExist;
+    
+    existsNameSelected(contactId: number ,clientId: number, contactName: string): Promise<any>{
+        this.contactClient.validateName(contactId, clientId,contactName).toPromise().then(res => this.nameExist = res);
+        return this.clientClient.get(0,0,1,null,null).toPromise().then(res => this.clients = res.items);
     }
 
     getContactForEdit(id: number, contactId: number){
@@ -201,6 +205,9 @@ export class CreateEditContactComponent implements OnInit {
 
     processClientId(client: ClientDto){
         debugger;
+        if(!client){
+            this.isFormValid = false;
+        }
         this.clientId = client.id;
         this.isNotSelectedClient = false;
     }

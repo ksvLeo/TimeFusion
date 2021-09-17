@@ -79,6 +79,7 @@ export class SelectComponent implements OnInit {
     }
 
     findNameClient(){
+        debugger;
         if(this.nameForFind.length < 0){
             this.selected.emit(null);
         }
@@ -105,6 +106,7 @@ export class SelectComponent implements OnInit {
         this.isSelectOption = false;
         this.nameAlreadyExists = false;
         this.nameForFind = "";
+        this.selected.emit(null);
     }
 
     selectItem(item: any)
