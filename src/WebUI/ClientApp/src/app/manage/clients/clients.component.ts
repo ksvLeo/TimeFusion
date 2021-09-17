@@ -108,7 +108,6 @@ export class ClientsComponent implements OnInit {
             if(input == "accept") {
                 if (item.status == ClientStatus.Active) {
                     this.clientClient.deleteClient(item.id).subscribe(response => {
-                        console.log(response)
                         this.getClients()
                     })
                     

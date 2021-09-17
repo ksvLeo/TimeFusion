@@ -18,6 +18,7 @@ export class SelectComponent implements OnInit {
     isNewEntity: boolean = false;
     showList: boolean = false;
     disabledCancel: boolean = false;
+    itemSelectedId: number;
 
     private eventSubscription: Subscription;
 
@@ -35,11 +36,14 @@ export class SelectComponent implements OnInit {
     }
     
     ngOnInit(){
-        this.eventSubscription = this.itemSelected.subscribe(res => this.itemAlredySelected(res));
+        this.eventSubscription = this.itemSelected.subscribe(res => this.select(res));
+    }
+    select(res: any){
+        this.itemSelectedId = res;;
+        this.itemAlredySelected(this.itemSelectedId);
     }
 
     itemAlredySelected(res: number){
-        debugger;
         this.disabledCancel = true;
         let item = this.items.find(c => c[this.idProperty] == res);
         this.selectItem(item);
@@ -108,7 +112,6 @@ export class SelectComponent implements OnInit {
         this.item = item;
         this.nameForFind = item[this.displayProperty];
         this.selected.emit(this.item);
-        this.items = [];
     }
 
     onShowList(){
