@@ -177,7 +177,7 @@ export class CreateEditContactComponent implements OnInit {
                 case CreateContactResult.Success:
                     this.contactForm.reset();
                     this.toastrService.success("The contact has been created successfully.");
-                    this.router.navigate(['/manage/clients']);
+                    history.back();
                     break;
                 case CreateContactResult.EmptyName:
                     this.toastrService.warning("Name field can't be null.");
@@ -239,9 +239,10 @@ export class CreateEditContactComponent implements OnInit {
     // Testing
 
     onCancelClick() {
-        if (this.contactEdit)
-            this.router.navigate(['manage/client/', this.contact.clientId])
-        else
-            this.router.navigate(['manage/clients'])
+        history.back()
+        // if (this.contactEdit)
+        //     this.router.navigate(['manage/client/', this.contact.clientId])
+        // else
+        //     this.router.navigate(['manage/clients'])
     }
 }

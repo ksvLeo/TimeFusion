@@ -79,7 +79,7 @@ namespace FusionIT.TimeFusion.Infrastructure.Persistence
                 context.Clients.Add(new Client { Name = "Consultorio Odontológico", Address = "Enfrente, se ve por la ventana", Currency = USD, Status = ClientStatus.Inactive });
                 context.Clients.Add(new Client { Name = "Santander Chile", Address = "Santa Clara 301 Local 1804", Currency = USD, Status = ClientStatus.Active });
                 context.Clients.Add(new Client { Name = "Ministerio de Salud Pública", Address = "Zabala 1500, 11000 Montevideo", Currency = USD, Status = ClientStatus.Inactive });
-                context.Clients.Add(new Client { Name = "Hexxus, la más grande", Address = "haceme descuento", Currency = USD, Status = ClientStatus.Active });
+                context.Clients.Add(new Client { Name = "Hexxus, el más grande", Address = "haceme descuento", Currency = USD, Status = ClientStatus.Active });
             }
 
             if (!context.BudgetTypes.Any())

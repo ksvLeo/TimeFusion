@@ -20,8 +20,8 @@
                         <app-select-component [items]="clients" [selectInfo]="selectInfo" [itemSelected]="selectedItem.asObservable()" (selected)="processClientId($event)" [displayProperty]="'name'" [idProperty]="'id'"></app-select-component>
                     </div>  
 
-                    <div class="col-sm-9 col-xl-6 text-danger text-center ml-2">
-                        <span *ngIf="isNotSelectedClient">The client is required.</span>
+                    <div class="col-sm-9 col-xl-6 text-danger text-center ml-2 margen">
+                        <span class="margen" *ngIf="isNotSelectedClient">The client is required.</span>
                     </div>
                 </div>
             </div>
