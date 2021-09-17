@@ -39,7 +39,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 return result;
             }
 
-            Currency currency;
+            Currency currency = null;
 
             if(request.NewClient.Currency != null)
             {
