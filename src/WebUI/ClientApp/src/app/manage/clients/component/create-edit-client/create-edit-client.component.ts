@@ -67,7 +67,7 @@ export class CreateEditClientCompontent implements OnInit{
 
         this.contactForm = this.fb.group({
             title : [ "" , [Validators.minLength(3)]],
-            name: [ "", [Validators.minLength(3), Validators.required]],
+            name: [ "", [Validators.required]],
             email: [ "", [Validators.email]],
             phone: [ "", []]
         });
@@ -207,7 +207,7 @@ export class CreateEditClientCompontent implements OnInit{
         this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res =>{
             switch (res.result) {
                 case CreateClientResult.Success:
-                    this.toastrService.success("The contact has been created successfully.");
+                    this.toastrService.success("The client has been created successfully.");
                     this.clientForm.reset();
                     if(this.createContact){
                         this.contactForm.reset();
