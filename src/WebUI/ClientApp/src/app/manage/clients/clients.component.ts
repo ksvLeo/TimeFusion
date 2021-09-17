@@ -66,10 +66,15 @@ export class ClientsComponent implements OnInit {
         urlParams.mode = 1;
         if(item != null)
         urlParams.id = item.id.toString()
-        this.router.navigate(['/manage/client', urlParams]); 
+        this.router.navigate(['/manage/client/contact', urlParams]); 
     }
 
-    onAddClient(){
+    onAddClient(item: any){
+        let urlParams = new ContactManagementUrlParams()
+        urlParams.mode = 1;
+        if(item != null)
+        urlParams.id = item.id.toString()
+        this.router.navigate(['/manage/client', urlParams])
     }
         
     onEditContacts(item: any) {
@@ -78,7 +83,7 @@ export class ClientsComponent implements OnInit {
         urlParams.mode = 2;
         if(item != null)
         urlParams.id = item.id.toString()
-        this.router.navigate(['/manage/client', urlParams]); 
+        this.router.navigate(['/manage/contact', urlParams]); 
     }
 
     onEditClient(item: any) {

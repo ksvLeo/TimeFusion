@@ -39,6 +39,7 @@ export class SelectComponent implements OnInit {
     }
 
     itemAlredySelected(res: number){
+        debugger;
         this.disabledCancel = true;
         let item = this.items.find(c => c[this.idProperty] == res);
         this.selectItem(item);
@@ -107,6 +108,7 @@ export class SelectComponent implements OnInit {
         this.item = item;
         this.nameForFind = item[this.displayProperty];
         this.selected.emit(this.item);
+        this.items = [];
     }
 
     onShowList(){
