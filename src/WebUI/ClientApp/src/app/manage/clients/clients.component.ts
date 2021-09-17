@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { filter } from "rxjs/operators";
 import { ActionInfo } from "src/app/commons/classes/action-info";
 import { ContactManagementUrlParams } from "src/app/commons/classes/contactManagementUrlParams";
 import { FieldFormat, FieldInfo, GridConfiguration } from "src/app/commons/classes/grid-configuration";
@@ -60,7 +59,10 @@ export class ClientsComponent implements OnInit {
 
     changeFilter(){
         this.pagingParams.PageNumber = 1;
-        this.getClients(this.pagingParams.PageNumber, this.pagingParams.PageSize, this.pagingParams.Order, this.pagingParams.OrderField, this.filter.value);
+        setTimeout(() => {
+            this.getClients(this.pagingParams.PageNumber, this.pagingParams.PageSize, this.pagingParams.Order, this.pagingParams.OrderField, this.filter.value);    
+        }, 750);
+        
     }
         
     onAddContact(item: any) {
