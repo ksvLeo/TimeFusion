@@ -11,9 +11,9 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal"
-            (click)="activeModal.close('close')">Close</button>
+            (click)="activeModal.close(false)">Close</button>
             <button type="button" class="btn btn-primary btn-ok" data-dismiss="modal"
-                    (click)="activeModal.close('accept')">Ok</button>
+                    (click)="activeModal.close(true)">Ok</button>
         </div>
     </div>
 </div>

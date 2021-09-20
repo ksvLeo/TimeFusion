@@ -237,7 +237,6 @@ export class CreateEditClientCompontent implements OnInit{
         });
     }
 
-
     mapClient(clientForm: FormGroup, contact: ContactDto) : ClientDto{
         let contacts : ContactDto[] = [];
         if(this.contact != null){
@@ -256,7 +255,7 @@ export class CreateEditClientCompontent implements OnInit{
         return client;
     }
 
-    fuckGoBack() {
+    goBack() {
         history.back();
     }
 }

@@ -19,7 +19,7 @@ export class GenericModalComponent implements OnInit {
 
   }
      
-  closeModal(message: string) {
+  closeModal(message: boolean) {
     this.activeModal.close();
   }
   

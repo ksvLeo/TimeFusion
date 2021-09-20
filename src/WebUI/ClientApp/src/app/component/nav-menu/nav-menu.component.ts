@@ -24,7 +24,7 @@ export class NavMenuComponent {
     },
     {
       description: "Team",
-      url: "**"
+      url: "/team"
     },
     {
       description: "Reports",

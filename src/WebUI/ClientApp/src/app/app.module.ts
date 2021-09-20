@@ -16,6 +16,7 @@ import { TokenComponent } from './token/token.component';
 import { ManageModule } from './manage/manage.module';
 import { CommonsModule } from './commons/commons.module';
 import { ToastrModule }  from  'ngx-toastr' ;
+import { TeamComponent } from './team/team.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ToastrModule }  from  'ngx-toastr' ;
     NavMenuComponent,
     HomeComponent,
     TodoComponent,
-    TokenComponent
+    TokenComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

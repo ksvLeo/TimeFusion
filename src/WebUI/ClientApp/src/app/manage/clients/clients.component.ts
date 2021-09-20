@@ -122,11 +122,6 @@ export class ClientsComponent implements OnInit {
             }
         })
     }
-        
-    onViewProjects(item: any) {
-
-    }
-
 
     loadActions() {
         let action: ActionInfo
@@ -147,12 +142,7 @@ export class ClientsComponent implements OnInit {
         action.enable = true;
         action.event.subscribe(item => this.onFlagClient(item));
         this.actionList.push(action);
-
-        action = new ActionInfo();
-        action.label = "View Projects";
-        action.enable = true;
-        action.event.subscribe(item => this.onViewProjects(item));
-        this.actionList.push(action);
+        
     }
 
     onClientDetailClick(item: any) {
@@ -162,11 +152,7 @@ export class ClientsComponent implements OnInit {
     openModal(modalInfo: ModalInfo): Promise<string> {
         var promise = new Promise<string>((resolve) => {
           setTimeout(() => {
-            var modalRef = this.modalService.open(GenericModalComponent,
-                {
-                  scrollable: true
-  
-                })
+            var modalRef = this.modalService.open(GenericModalComponent, { centered: true })
             modalRef.componentInstance.title = modalInfo.title;
             modalRef.componentInstance.message = modalInfo.message;
             modalRef.result.then((result:any) => {

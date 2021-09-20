@@ -12,7 +12,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
         public CreateClientCommandValidator()
         {
             RuleFor(v => v.NewClient.Name)
-                .NotEmpty().WithMessage("Name input cannot be empty or null.");
+                .NotEmpty();
 
             RuleFor(v => v.NewClient)
                 .NotNull();
