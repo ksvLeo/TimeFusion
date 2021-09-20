@@ -31,6 +31,7 @@ namespace FusionIT.TimeFusion.Application.IntegrationTests.Clients.Commands
             {
                 Name = "test"
             };
+
             var command = new CreateClientCommand();
             command.NewClient = testClient;
             

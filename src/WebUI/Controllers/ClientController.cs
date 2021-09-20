@@ -1,7 +1,7 @@
 ﻿using FusionIT.TimeFusion.Application.Clients.Commands.CreateClient;
 using FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer;
+using FusionIT.TimeFusion.Application.Clients.Commands.ReactivateClient;
 using FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient;
-using FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer;
 using FusionIT.TimeFusion.Application.Clients.Dtos;
 using FusionIT.TimeFusion.Application.Clients.Queries;
 using FusionIT.TimeFusion.Application.Common.Models;

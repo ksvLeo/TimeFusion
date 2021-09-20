@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Domain\FusionIT.TimeFusion.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Projects\Commands\" />
-  </ItemGroup>
-
 </Project>

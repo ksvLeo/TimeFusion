@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer;
 using FusionIT.TimeFusion.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -15,7 +14,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.ReactivateClient
             _context = context;
             RuleFor(v => v.ClientId)
                 .NotEmpty()
-                .MustAsync(ClientIdShouldHaveMatch).WithMessage("Unable to find customer with input ID.");
+                .MustAsync(ClientIdShouldHaveMatch);
         }
 
         public async Task<bool> ClientIdShouldHaveMatch(int clientId, CancellationToken cancellationToken)

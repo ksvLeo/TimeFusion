@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateCustomer
+namespace FusionIT.TimeFusion.Application.Clients.Commands.ReactivateClient
 {
     public class ReactivateClientCommand : IRequest<ReactivateClientResult>
     {

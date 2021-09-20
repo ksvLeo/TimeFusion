@@ -28,7 +28,7 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.DeleteContact
 
         public async Task<DeleteContactResult> Handle(DeleteContactCommand request, CancellationToken cancellationToken)
         {
-            Contact contact = await _context.Contacts.FirstOrDefaultAsync(c => c.ClientId == request.ClientId && c.Id == request.ContactId);
+            Contact contact = await _context.Contacts.FirstOrDefaultAsync(c => c.ClientId == request.ClientId && c.Id == request.ContactId, cancellationToken);
 
             if (contact == null)
             {
