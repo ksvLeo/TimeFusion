@@ -2,9 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectInfo } from "src/app/shared/interfaces/selectInfo";
-import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateClientResult, CreateContactCommand, CreateContactResult, CreateContactResultDto, PaginatedListOfClientDto, UpdateContactCommand, UpdateContactResult } from "src/app/web-api-client";
+import { ClientClient, ClientDto, ContactClient, ContactDto, CreateClientCommand, CreateClientResult, CreateContactCommand, CreateContactResult, CreateContactResultDto, CurrencyDto, PaginatedListOfClientDto, UpdateContactCommand, UpdateContactResult } from "src/app/web-api-client";
 import { ToastrService } from 'ngx-toastr';
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { ModeParameter } from "src/app/shared/enums/modeParameter";
 
 @Component({
@@ -22,12 +22,12 @@ export class CreateEditContactComponent implements OnInit {
 
     // Data
     clients: ClientDto[] = [];
-    nameExist: boolean = false;
+    nameExists: boolean = false;
     clientId: number;
 
     selectInfo : SelectInfo = {
         buttonCreateName: "Create Client",
-        isButtonCreated: false,
+        canCreate: true,
         label: 'Client',
         required: true
     }
@@ -88,8 +88,10 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     contactFormChanges($values){
-        this.existsNameSelected(this.contact? this.contact.id : null, this.clientId, $values.name).then(() => { this.validatorsContact()});
-       
+        this.contactClient.validateName(this.contact? this.contact.id : null, this.clientId, $values.name).subscribe(res => { 
+            this.nameExists = res;
+            this.validatorsContact();
+        }, err => {});
     }
 
     validatorsContact(){
@@ -100,7 +102,7 @@ export class CreateEditContactComponent implements OnInit {
         
         if(this.contactEdit){
             this.isFormValid = false;
-            this.nameExist = false;
+            this.nameExists = false;
             if(this.contactEdit){
                 this.isFormValid = true;
             }
@@ -113,13 +115,7 @@ export class CreateEditContactComponent implements OnInit {
         }
         
         debugger;
-        this.isFormValid = this.contactForm.valid && !this.nameExist;
-    }
-
-    
-    existsNameSelected(contactId: number ,clientId: number, contactName: string): Promise<any>{
-        this.contactClient.validateName(contactId, clientId,contactName).toPromise().then(res => this.nameExist = res);
-        return this.clientClient.get(0,0,1,null,null).toPromise().then(res => this.clients = res.items);
+        this.isFormValid = this.contactForm.valid && !this.nameExists;
     }
 
     getContactForEdit(id: number, contactId: number){
@@ -204,9 +200,12 @@ export class CreateEditContactComponent implements OnInit {
     }
 
     processClientId(client: ClientDto){
-        debugger;
         if(!client){
             this.isFormValid = false;
+            this.clientId = null;
+            this.nameExists = false;
+            this.isNotSelectedClient = false;
+            return;
         }
         this.clientId = client.id;
         this.isNotSelectedClient = false;
@@ -215,17 +214,19 @@ export class CreateEditContactComponent implements OnInit {
     // Testing
     // Test integration select with createEntity
     createNewClient(newClient : ClientDto){
+        debugger;
         let client: ClientDto = new ClientDto({
             name : newClient.name,
             address: null,
-            currency: null,
+            currency: new CurrencyDto({id:1}),
             contactList: null
         });
         this.clientClient.createClient(new CreateClientCommand({newClient: client})).subscribe(res => {
             switch(res.result){
                 case CreateClientResult.Success:
-                    this.toastrService.success("The contact has been created successfully.");
+                    this.toastrService.success("The client has been created successfully.");
                     this.getClientsList();
+                    this.clientId = res.id;
                     break;
                 case CreateClientResult.Error_NameExists:
                     this.toastrService.warning("Already exists a client with name selected.");

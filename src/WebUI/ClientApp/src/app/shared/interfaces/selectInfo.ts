@@ -1,6 +1,6 @@
 export interface SelectInfo{
     buttonCreateName: string;
-    isButtonCreated: boolean;
+    canCreate: boolean;
     label: string;
     required: boolean;
 }

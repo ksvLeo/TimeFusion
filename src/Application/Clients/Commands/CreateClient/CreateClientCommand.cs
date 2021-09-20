@@ -39,15 +39,15 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 return result;
             }
 
-            Currency currency;
+            Currency currency = null;
 
             if(request.NewClient.Currency != null)
             {
                 currency = _context.Currencies.FirstOrDefault(c => c.Id == request.NewClient.Currency.Id);
             }
-            else
+            if(request.NewClient.Currency == null)
             {
-                currency = null;
+                currency = _context.Currencies.FirstOrDefault(c => c.Id == 1);
             }
 
             var contacts = new List<Contact>();

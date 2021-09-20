@@ -84,8 +84,7 @@ export class GridComponent {
     }
   }
 
-  itemPerPage(value){
-    this.pageSize = value;
+  itemPerPage(){
     this._pageIndex = 1;
     this.emitPaginate();
   }
