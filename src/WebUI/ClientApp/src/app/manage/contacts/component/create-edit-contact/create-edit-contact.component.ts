@@ -114,7 +114,6 @@ export class CreateEditContactComponent implements OnInit {
             return;
         }
         
-        debugger;
         this.isFormValid = this.contactForm.valid && !this.nameExists;
     }
 
@@ -122,7 +121,6 @@ export class CreateEditContactComponent implements OnInit {
         this.clientId = id;
         this.contactClient.getContact(contactId).subscribe(res =>{
             this.contactEdit = true;
-            debugger;
             this.contact = res;
             this.selectedItem.next(this.contact.clientId);
             this.contactForm.setValue({
@@ -214,7 +212,6 @@ export class CreateEditContactComponent implements OnInit {
     // Testing
     // Test integration select with createEntity
     createNewClient(newClient : ClientDto){
-        debugger;
         let client: ClientDto = new ClientDto({
             name : newClient.name,
             address: null,

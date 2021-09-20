@@ -52,41 +52,18 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
             }
 
             Currency currency = await _context.Currencies
-                .FirstOrDefaultAsync(c => c.Id == request.Client.Currency.Id);
+                .FirstOrDefaultAsync(c => c.Alpha3Code == request.Client.Currency.Alpha3Code);
 
             if (currency == null)
             {
                 return UpdateClientResult.Error;
             }
 
-            List<Contact> contacts = new List<Contact>();
-
-            request.Client.ContactList.ForEach(c =>
-            {
-                Contact referrer =  _context.Contacts
-                    .FirstOrDefault(r => r.Id == c.Id);
-
-                if(referrer == null)
-                {
-                    referrer = new Contact();
-                }
-
-                // Map referrer update
-                referrer.Title = c.Title;
-                referrer.Name = c.Name;
-                referrer.PhoneNumber = c.PhoneNumber;
-                referrer.Email = c.Email;
-                referrer.Active = c.Active;
-
-                // Add to list referrers
-                contacts.Add(referrer);
-            });
-
             // Map customer update
             client.Name = request.Client.Name;
             client.Address = request.Client.Address;
             client.Currency = currency;
-            client.ContactList = contacts;
+            client.ContactList = client.ContactList;
 
             await _context.SaveChangesAsync(cancellationToken);
 

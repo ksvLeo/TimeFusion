@@ -37,7 +37,6 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
             {
                 result.Result = Domain.Enums.CreateContactResult.EmptyName;
                 return result;
-                //throw new ArgumentException("Contact name can't be null.");
             }
 
             bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
@@ -47,7 +46,6 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
             {
                 result.Result = Domain.Enums.CreateContactResult.Error_NameExists;
                 return result;
-                //throw new ArgumentException("Contact attached to Client: " + request.ClientId + " already exists with that name.");
             }
 
             Contact contact = new Contact

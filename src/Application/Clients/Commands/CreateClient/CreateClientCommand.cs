@@ -39,7 +39,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
                 return result;
             }
 
-            Currency currency = null;
+            Currency currency = new Currency();
 
             if(request.NewClient.Currency != null)
             {
@@ -47,7 +47,22 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.CreateClient
             }
             if(request.NewClient.Currency == null)
             {
-                currency = _context.Currencies.FirstOrDefault(c => c.Id == 1);
+                currency = _context.Currencies.FirstOrDefault(c => c.Alpha3Code == "USD");
+
+                if(currency == null)
+                {
+                    Currency currencyDefault = new Currency()
+                    {
+                        Name = "US Dollar",
+                        Alpha3Code = "USD",
+                        Symbol = "U$S"
+                    };
+
+                    _context.Currencies.Add(currencyDefault);
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+
+                currency = _context.Currencies.FirstOrDefault(c => c.Alpha3Code == "USD");
             }
 
             var contacts = new List<Contact>();

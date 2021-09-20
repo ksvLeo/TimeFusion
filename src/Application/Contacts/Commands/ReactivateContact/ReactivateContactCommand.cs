@@ -34,12 +34,12 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
             if (contact == null)
             {
                 return ReactivateContactResult.Error_NotFound;
-                //throw new ArgumentException("No contact was found with ID #" + request.ContactId);
             }
 
             if (contact.Active == true)
             {
-                throw new ArgumentException($"Contact with ID # {request.ContactId} is already active");
+                return ReactivateContactResult.Error;
+                //throw new ArgumentException($"Contact with ID # {request.ContactId} is already active");
             }
 
             contact.Active = true;

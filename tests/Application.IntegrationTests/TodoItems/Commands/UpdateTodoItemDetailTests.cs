@@ -53,9 +53,9 @@ namespace FusionIT.TimeFusion.Application.IntegrationTests.TodoItems.Commands
                 Priority = PriorityLevel.High
             };
 
-            await SendAsync(command);
-
             var item = await FindAsync<TodoItem>(itemId);
+
+            await SendAsync(command);
 
             item.ListId.Should().Be(command.ListId);
             item.Note.Should().Be(command.Note);

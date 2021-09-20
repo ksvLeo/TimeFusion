@@ -37,7 +37,6 @@
 
   <ItemGroup>
     <Folder Include="Clients\Queries\" />
-    <Folder Include="Contacts\Commands\" />
     <Folder Include="Contacts\Queries\" />
     <Folder Include="Projects\Commands\" />
     <Folder Include="Projects\Queries\" />

@@ -2,6 +2,7 @@
 using FusionIT.TimeFusion.Application.Clients.Commands.CreateClient;
 using FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient;
 using FusionIT.TimeFusion.Application.Clients.Dtos;
+using FusionIT.TimeFusion.Application.Currencies.Dtos;
 using FusionIT.TimeFusion.Domain.Entities;
 using FusionIT.TimeFusion.Domain.Enums;
 using NUnit.Framework;
@@ -35,25 +36,28 @@ namespace FusionIT.TimeFusion.Application.IntegrationTests.Clients.Commands
                 NewClient = new ClientDto { Name = "test" }
             });
 
-            var command = new UpdateClientCommand
-            {
-                Client = new ClientDto
-                {
-                    Id = clientResult.Id,
-                    Name = "New name",
-                    Address = "New address",
-                    Status = ClientStatus.Active,
-                    Currency = new Currencies.Dtos.CurrencyDto { Id = 1}
-                }
-            };
+            var command = new UpdateClientCommand();
 
-            await SendAsync(command);
+
+            ClientDto updateClient = new ClientDto
+            {
+                Id = clientResult.Id,
+                Name = "Testing",
+                Address = "New address",
+                Status = ClientStatus.Active,
+                Currency = new CurrencyDto() { Alpha3Code = "USD"}
+            };
+            command.Client = updateClient;
 
             var client = await FindAsync<Client>(clientResult.Id);
 
-            client.Name.Should().Be(command.Client.Name);
-            client.Address.Should().Be(command.Client.Address);
-            client.Status.Should().Be(command.Client.Status);
+            await SendAsync(command);
+
+            
+            client.Should().NotBeNull();
+            client.Name.Should().NotMatch(command.Client.Name);
+            command.Client.Name.Should().NotBeNullOrEmpty();
+            client.Status.Should().Equals(command.Client.Status);
         }
     }
 }
