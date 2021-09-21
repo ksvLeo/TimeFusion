@@ -1955,7 +1955,7 @@ export interface IUpdateClientCommand {
 export enum DeleteClientResult {
     Error = 0,
     Success = 1,
-    Error_NotFound = 2,
+    Error_AlreadyInactive = 2,
     Error_ActiveProjects = 3,
 }
 
@@ -2103,6 +2103,7 @@ export enum ReactivateContactResult {
     Error = 0,
     Success = 1,
     Error_NotFound = 2,
+    Error_AlreadyActive = 3,
 }
 
 export class PaginatedListOfTodoItemDto implements IPaginatedListOfTodoItemDto {

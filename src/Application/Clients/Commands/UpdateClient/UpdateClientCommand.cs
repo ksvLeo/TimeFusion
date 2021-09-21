@@ -30,27 +30,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.UpdateClient
         {
             Client client = await _context.Clients.Include(c => c.ContactList).FirstOrDefaultAsync(c => c.Id == request.Client.Id);
 
-            if (client == null)
-            {
-                return UpdateClientResult.Error;
-                //throw new ArgumentException($"Unable to find client with ID #{ request.Client.Id }");
-            }
-
-            if (string.IsNullOrEmpty(request.Client.Name))
-            {
-                return UpdateClientResult.EmptyName;
-                //throw new ArgumentException("Name field can't be null.");
-            }
-
-            Client nameClientExist = await _context.Clients
-                .Where(c => c.Id != client.Id && c.Name == request.Client.Name)
-                .FirstOrDefaultAsync();
-
-            if(nameClientExist != null)
-            {
-                return UpdateClientResult.Error_NameExists;
-            }
-
             Currency currency = await _context.Currencies
                 .FirstOrDefaultAsync(c => c.Alpha3Code == request.Client.Currency.Alpha3Code);
 

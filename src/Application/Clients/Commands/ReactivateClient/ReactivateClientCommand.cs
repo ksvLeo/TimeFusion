@@ -30,11 +30,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.ReactivateClient
         {
             Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
 
-            if (client == null)
-            {
-               return ReactivateClientResult.Error_NotFound;
-            }
-
             if (client.Status == ClientStatus.Active)
             {
                 return ReactivateClientResult.Error_AlreadyActive;

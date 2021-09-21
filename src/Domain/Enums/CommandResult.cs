@@ -18,8 +18,9 @@ namespace FusionIT.TimeFusion.Domain.Enums
     {
         Error = 0,
         Success = 1,
-        Error_NotFound = 2,
+        Error_AlreadyInactive = 2,
         Error_ActiveProjects = 3
+        
     }
 
     public enum ReactivateClientResult
@@ -56,7 +57,8 @@ namespace FusionIT.TimeFusion.Domain.Enums
     {
         Error = 0,
         Success = 1,
-        Error_NotFound = 2
+        Error_NotFound = 2,
+        Error_AlreadyActive
     }
 
     public enum UpdateContactResult

@@ -29,11 +29,6 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
 
             Client client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
 
-            if (client == null)
-            {
-                return DeleteClientResult.Error_NotFound; 
-            }
-
             bool activeProject = await _context.Projects.AnyAsync(c => c.ClientId == request.ClientId && c.ProjectStatus.Id.Equals(1), cancellationToken);
 
             if (activeProject)
@@ -49,7 +44,7 @@ namespace FusionIT.TimeFusion.Application.Clients.Commands.DeleteCustomer
 
             if(client.Status.Equals(ClientStatus.Active))
             {
-                return DeleteClientResult.Error;
+                return DeleteClientResult.Error_AlreadyInactive;
             }
 
             return DeleteClientResult.Success;

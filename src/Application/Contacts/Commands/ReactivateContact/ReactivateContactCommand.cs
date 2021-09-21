@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
+namespace FusionIT.TimeFusion.Application.Contacts.Commands.ReactivateContact
 {
     public class ReactivateContactCommand : IRequest<ReactivateContactResult>
     {
@@ -31,15 +31,9 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
         {
             Contact contact = await _context.Contacts.FirstOrDefaultAsync(c => c.ClientId == request.ClientId && c.Id == request.ContactId);
 
-            if (contact == null)
-            {
-                return ReactivateContactResult.Error_NotFound;
-            }
-
             if (contact.Active == true)
             {
-                return ReactivateContactResult.Error;
-                //throw new ArgumentException($"Contact with ID # {request.ContactId} is already active");
+                return ReactivateContactResult.Error_AlreadyActive;
             }
 
             contact.Active = true;
@@ -49,6 +43,4 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
             return ReactivateContactResult.Success;
         }
     }
-
-
 }

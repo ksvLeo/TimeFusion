@@ -1,6 +1,7 @@
 ﻿using FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact;
 using FusionIT.TimeFusion.Application.Contacts.Commands.DeleteContact;
 using FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact;
+using FusionIT.TimeFusion.Application.Contacts.Commands.ReactivateContact;
 using FusionIT.TimeFusion.Application.Contacts.Dtos;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetClients;
 using FusionIT.TimeFusion.Application.Contacts.Queries.GetContacts;

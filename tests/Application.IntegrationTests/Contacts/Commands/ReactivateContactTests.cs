@@ -2,13 +2,9 @@
 using FusionIT.TimeFusion.Application.Clients.Commands.CreateClient;
 using FusionIT.TimeFusion.Application.Clients.Commands.ReactivateClient;
 using FusionIT.TimeFusion.Application.Clients.Dtos;
-using FusionIT.TimeFusion.Application.Common.Exceptions;
 using FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact;
-using FusionIT.TimeFusion.Application.Contacts.Commands.DeleteContact;
-using FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact;
+using FusionIT.TimeFusion.Application.Contacts.Commands.ReactivateContact;
 using FusionIT.TimeFusion.Application.Contacts.Dtos;
-using FusionIT.TimeFusion.Application.Projects.Commands.CreateProject;
-using FusionIT.TimeFusion.Domain.Entities;
 using FusionIT.TimeFusion.Domain.Enums;
 using NUnit.Framework;
 using System.Threading.Tasks;

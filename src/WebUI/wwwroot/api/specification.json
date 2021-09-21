@@ -1239,7 +1239,7 @@
         "x-enumNames": [
           "Error",
           "Success",
-          "Error_NotFound",
+          "Error_AlreadyInactive",
           "Error_ActiveProjects"
         ],
         "enum": [
@@ -1350,12 +1350,14 @@
         "x-enumNames": [
           "Error",
           "Success",
-          "Error_NotFound"
+          "Error_NotFound",
+          "Error_AlreadyActive"
         ],
         "enum": [
           0,
           1,
-          2
+          2,
+          3
         ]
       },
       "PaginatedListOfTodoItemDto": {
