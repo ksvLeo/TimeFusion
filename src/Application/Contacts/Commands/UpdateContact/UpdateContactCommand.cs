@@ -29,35 +29,19 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.UpdateContact
         }
         public async Task<UpdateContactResult> Handle(UpdateContactCommand request, CancellationToken cancellationToken)
         {
+            Contact contact = await _context.Contacts.FirstOrDefaultAsync(c => c.Id == request.newContact.Id);
 
-            if (string.IsNullOrEmpty(request.newContact.Name))
+            if (contact == null)
             {
-                return UpdateContactResult.EmptyName;
-                //throw new ArgumentException("Contact name must not be null.");
+                return UpdateContactResult.Error;
             }
 
-            bool nameExists = await _context.Contacts.AnyAsync(c => c.ClientId == request.ClientId &&
-                                                                    c.Id != request.newContact.Id &&
-                                                                    c.Name == request.newContact.Name);
+            contact.Name = request.newContact.Name;
+            contact.Title = request.newContact.Title;
+            contact.ClientId = request.ClientId;
+            contact.Email = request.newContact.Email;
+            contact.PhoneNumber = request.newContact.PhoneNumber;
 
-            if (nameExists)
-            {
-                return UpdateContactResult.Error_NameExists;
-                //throw new ArgumentException($"Contact name : {request.newContact.Name} already exists in client.");
-            }
-
-            Contact contact = new Contact
-            {
-                Id = request.newContact.Id,
-                Name = request.newContact.Name,
-                Title = request.newContact.Title,
-                ClientId = request.ClientId,
-                Email = request.newContact.Email,
-                PhoneNumber = request.newContact.PhoneNumber,
-                Active = true
-            };
-
-            _context.Contacts.Update(contact);
             await _context.SaveChangesAsync(cancellationToken);
 
             return UpdateContactResult.Success;
