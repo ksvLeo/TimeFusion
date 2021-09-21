@@ -13,6 +13,9 @@ namespace FusionIT.TimeFusion.Application.Contacts.Commands.CreateContact
         {
             RuleFor(v => v.ClientId)
                 .NotEmpty();
+
+            RuleFor(c => c.Contact.Name)
+                .NotEmpty().WithMessage("Name is required.");
         }
     }
 }
